@@ -1,6 +1,6 @@
 import { articles } from "@/data/mock/articles";
 import FeaturedArticles from "./components/home/featured-articles";
-// import TrendingTopics from "./components/home/trending-topics";
+import TrendingTopics from "./components/home/trending-topics";
 // import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       {/* Rich text Editor here!! */}
       {/* <RichTextEditor /> */}
       <FeaturedArticles articles={articles} />
-      {/* <TrendingTopics /> */}
+       <TrendingTopics />
     </div>
   );
 }
