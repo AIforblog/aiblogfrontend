@@ -11,7 +11,9 @@ import {
 import { PostMetrics, UserProfile } from "../shared";
 import { BlogType } from "@/types/blog";
 import Image from "next/image";
+import BlogExtraInfo from "./blog-extra-info";
 import Link from "next/link";
+
 
 interface MainBloyType {
   blog: BlogType;
@@ -60,11 +62,13 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
           </div>
         </CardContent>
 
-        <CardFooter className="p-0">
+        <CardFooter className="p-0 flex flex-row items-center justify-between">
           <PostMetrics
             item={blog.metrics}
             key={blog.user?.username + blog.title}
           />
+
+          <BlogExtraInfo items={blog.extra_info} />
         </CardFooter>
       </Card>
     </Link>

@@ -10,26 +10,31 @@ const dummyUsers: UserProps[] = [
     name: "Alice Johnson",
     profile_pic: "/profile.png",
     username: "alice_json",
+    timestamp: Date.now() - 1000 * 60 * 9,
   },
   {
     name: "Bob Smith",
     profile_pic: "/profile.png",
-    username: "@Bob_Sth",
+    username: "Bob_Sth",
+    timestamp: Date.now() - 1000 * 60 * 2,
   },
   {
     name: "Charlie Brown",
     profile_pic: "/profile.png",
-    username: "@chaR_brown",
+    username: "CharBrwn",
+    timestamp: Date.now() - 1000 * 60 * 10,
   },
   {
     name: "Diana Prince",
     profile_pic: "/profile.png",
-    username: "@diana_princek",
+    username: "diana_PR",
+    timestamp: Date.now() - 1000 * 60 * 2,
   },
   {
     name: "Ethan Hunt",
     profile_pic: "/profile.png",
-    username: "@ethan_hunt",
+    username: "ethan_",
+    timestamp: Date.now() - 1000 * 60 * 8,
   },
 ];
 

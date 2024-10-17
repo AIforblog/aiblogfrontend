@@ -19,7 +19,7 @@ const ArticleCard = memo<{ article: ArticleProps }>(({ article }) => {
       </CardHeader>
 
       <CardContent className="flex flex-col p-0 gap-y-3">
-        <div className="relative block w-full rounded-tl-xl rounded-tr-xl h-[140px] overflow-hidden">
+        <div className="relative block w-full rounded-xl overflow-hidden">
           <Image
             src={article.image}
             alt={`${article.title} article image`}

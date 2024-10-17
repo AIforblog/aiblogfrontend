@@ -32,7 +32,7 @@ export const MetricsItem = ({ icon, count, onIconClick }: MetricsItemProps) => {
       onClick={onIconClick}
     >
       {icon}
-      <p className="font-normal text-[#525252] text-base">
+      <p className="font-semibold text-[#737373] text-sm">
         {formatViews(count)}
       </p>
     </div>
@@ -46,17 +46,17 @@ const PostMetrics = memo<{ item: PostMetricsProps }>(({ item }) => {
   return (
     <div className="flex flex-row items-center gap-x-4">
       <MetricsItem
-        icon={<ThumbsUp size={18} color="#a3a3a3" />}
+        icon={<ThumbsUp size={16} color="#a3a3a3" />}
         count={item.likesCount}
         onIconClick={() => item.onLike}
       />
       <MetricsItem
-        icon={<MessagesSquare size={18} color="#a3a3a3" />}
+        icon={<MessagesSquare size={16} color="#a3a3a3" />}
         count={item.commentsCount}
         onIconClick={() => item.onComment}
       />
       <MetricsItem
-        icon={<Share2 size={18} color="#a3a3a3" />}
+        icon={<Share2 size={16} color="#a3a3a3" />}
         count={item.sharesCount}
         onIconClick={() => item.onShare}
       />
