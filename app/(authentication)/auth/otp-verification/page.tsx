@@ -7,24 +7,7 @@ import { Button } from "@/components/ui/button";
 import iconGmail from "../../../../public/assets/icons/iconGmail.svg";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-
-// MOCK API CALLS will change once api endpoints are ready
-const mockVerifyOtp = async (
-  email: string,
-  otp: string
-): Promise<{ success: boolean; message: string; isTokenExpired?: boolean }> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  if (otp === "123456") {
-    return { success: true, message: "OTP verified successfully" };
-  }
-  return { success: false, message: "Invalid OTP", isTokenExpired: false };
-};
-
-const mockRequestPasswordReset = async (): // email: string
-Promise<{ success: boolean; message: string }> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return { success: true, message: "New OTP has been sent to your email" };
-};
+import { requestNewOtp, validateOtp } from "@/actions/userAuth";
 
 const OtpVerificationPage = () => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
@@ -67,6 +50,101 @@ const OtpVerificationPage = () => {
     return `${censoredUser}@${domain}`;
   };
 
+  // const handleOtpSubmit = async () => {
+  //   const otpValue = otp.join("");
+
+  //   if (otpValue && email) {
+  //     setIsLoading(true);
+  //     setError("");
+
+  //     try {
+  //       const result = await mockVerifyOtp(email, otpValue);
+  //       if (result.success) {
+  //         toast({
+  //           title: "OTP Verified Successfully",
+  //           description: "You will be redirected shortly.",
+  //           className:
+  //             "bg-green-100 text-green-800 border border-green-300 rounded-lg p-4 shadow-md",
+  //         });
+  //         router.push("/");
+  //       } else {
+  //         setError(result.message);
+  //         setIsTokenExpired(result.isTokenExpired || false);
+  //         toast({
+  //           title: "Verification failed",
+  //           description: result.message,
+  //           variant: "destructive",
+  //           className:
+  //             "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //         });
+  //         if (result.isTokenExpired) {
+  //           setCountdown(0);
+  //         }
+  //       }
+  //     } catch (err) {
+  //       const errorMessage =
+  //         err instanceof Error ? err.message : "An unexpected error occurred";
+  //       setError(errorMessage);
+  //       toast({
+  //         title: "Verification failed",
+  //         description: "An unexpected error occurred",
+  //         variant: "destructive",
+  //         className:
+  //           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //       });
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
+
+  // const handleResendOtp = async () => {
+  //   if (countdown > 0) {
+  //     toast({
+  //       title: "Please wait",
+  //       description: `Please wait ${countdown} seconds before requesting a new OTP`,
+  //       className:
+  //         "bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-lg p-4 shadow-md",
+  //     });
+  //     return;
+  //   }
+  //   setResendLoading(true);
+  //   try {
+  //     const result = await mockRequestPasswordReset();
+  //     if (result.success) {
+  //       toast({
+  //         title: "Verification Email Sent",
+  //         description: "A new OTP has been sent to your email",
+  //         className:
+  //           "bg-green-100 text-green-800 border border-green-300 rounded-lg p-4 shadow-md",
+  //       });
+  //       setCountdown(60);
+  //     } else {
+  //       setError(result.message || "Failed to resend OTP");
+  //       toast({
+  //         title: "Failed to resend OTP",
+  //         description: result.message || "Failed to resend OTP",
+  //         variant: "destructive",
+  //         className:
+  //           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //       });
+  //     }
+  //   } catch (err) {
+  //     const errorMessage =
+  //       err instanceof Error ? err.message : "An unexpected error occurred";
+  //     setError(errorMessage);
+  //     toast({
+  //       title: "Error",
+  //       description: "An unexpected error occurred",
+  //       variant: "destructive",
+  //       className:
+  //         "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //     });
+  //   } finally {
+  //     setResendLoading(false);
+  //   }
+  // };
+
   const handleOtpSubmit = async () => {
     const otpValue = otp.join("");
 
@@ -75,7 +153,7 @@ const OtpVerificationPage = () => {
       setError("");
 
       try {
-        const result = await mockVerifyOtp(email, otpValue);
+        const result = await validateOtp(email, otpValue);
         if (result.success) {
           toast({
             title: "OTP Verified Successfully",
@@ -85,11 +163,11 @@ const OtpVerificationPage = () => {
           });
           router.push("/");
         } else {
-          setError(result.message);
+          setError(result.message || "OTP validation failed");
           setIsTokenExpired(result.isTokenExpired || false);
           toast({
             title: "Verification failed",
-            description: result.message,
+            description: result.message || "OTP validation failed",
             variant: "destructive",
             className:
               "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
@@ -104,7 +182,7 @@ const OtpVerificationPage = () => {
         setError(errorMessage);
         toast({
           title: "Verification failed",
-          description: "An unexpected error occurred",
+          description: errorMessage,
           variant: "destructive",
           className:
             "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
@@ -127,7 +205,7 @@ const OtpVerificationPage = () => {
     }
     setResendLoading(true);
     try {
-      const result = await mockRequestPasswordReset();
+      const result = await requestNewOtp(email);
       if (result.success) {
         toast({
           title: "Verification Email Sent",
@@ -152,7 +230,7 @@ const OtpVerificationPage = () => {
       setError(errorMessage);
       toast({
         title: "Error",
-        description: "An unexpected error occurred",
+        description: errorMessage,
         variant: "destructive",
         className:
           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",

@@ -8,7 +8,7 @@ import { Mail, CircleUserRound, Eye, EyeOff } from "lucide-react";
 import Google from "../../../public/assets/icons/iconGoogle.svg";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signupAuth } from "@/actions/userAuth";
+import { signupAuth, handleGoogleSignIn } from "@/actions/userAuth";
 import { SignUpParams } from "@/types/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -57,7 +57,19 @@ const SignUpForm = () => {
         });
         // Handle successful signup
         sessionStorage.setItem("userEmail", data.email);
+        // if (response.status_code === 200 || response.status_code === 201) {
+        //   const otpResponse = await sendOtp(data.email);
+
+        //   // If OTP sending fails, log the error but don't affect the signup process
+        //   if (otpResponse.error) {
+        //     console.error("Failed to send OTP:", otpResponse.error);
+        //   }
+        // }
         router.push("/auth/otp-verification");
+        return {
+          data: response.data,
+          status_code: response.status_code,
+        };
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
@@ -67,11 +79,19 @@ const SignUpForm = () => {
     }
   };
 
-  const handleGoogleSubmit = () => {
-    // Handle form submission
-    router.push("/");
+  const handleGoogleAuth = async () => {
+    try {
+      const result = await handleGoogleSignIn();
+      if (result.authUrl) {
+        window.location.href = result.authUrl;
+      } else {
+        setError("Failed to initiate Google sign-in");
+      }
+    } catch (error) {
+      console.error("Error initiating Google sign in:", error);
+      setError("An unexpected error occurred. Please try again.");
+    }
   };
-
   const handleFacebookSubmit = () => {
     // Handle form submission
     router.push("/");
@@ -90,7 +110,7 @@ const SignUpForm = () => {
 
           <button
             className="w-full bg-yellow-400 text-black py-3 rounded-r-lg mb-4 flex items-center justify-center"
-            onClick={handleGoogleSubmit}
+            onClick={handleGoogleAuth}
           >
             Sign up with Google
           </button>

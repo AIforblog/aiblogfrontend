@@ -119,7 +119,7 @@ const ForgotPasswordForm = () => {
           )}
           <div className="text-center mt-6">
             <a
-              href="/login"
+              href="/auth/sign-in"
               className="text-blue-500 hover:text-blue-700 text-sm"
             >
               Go to Login

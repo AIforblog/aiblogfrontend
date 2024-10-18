@@ -21,6 +21,22 @@ export interface SignUpResponse {
   status_code?: number;
 }
 
+export interface SignInParams {
+  email: string;
+  password: string;
+}
+
+export interface SignInResponse {
+  data?: {
+    user?: User;
+    accessToken?: string;
+    refreshToken?: string;
+  };
+  error?: string;
+  status_code?: number;
+  message?: string;
+}
+
 export interface ForgotPasswordParams {
   email: string;
 }
