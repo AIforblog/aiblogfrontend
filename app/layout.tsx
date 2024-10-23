@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import { Providers } from "./providers";
 
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${DmSans.className} antialiased bg-[#FAFAFA]`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
