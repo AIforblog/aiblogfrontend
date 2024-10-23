@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { cn, formatTime } from "@/lib/utils";
 import { RoundedImage } from "./rounded-image";
-import { UserProps } from "@/types/user";
+import type { UserProps } from "@/types/user";
 import { followAction } from "@/actions/follow";
 import { useServerAction } from "zsa-react";
 import { Loader } from "lucide-react";
@@ -11,12 +11,14 @@ interface ProfileCardProps {
 	user: UserProps;
 	isJobProfile?: boolean;
 	className?: string;
+	following?: boolean;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
 	user,
 	isJobProfile,
 	className,
+	following,
 }) => {
 	const { execute, isPending } = useServerAction(followAction, {
 		onError({ err }) {
@@ -28,7 +30,43 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 	});
 
 	const applyAction = async () => {
-		console.log("Apllication for job successful!");
+		console.log("Application for job successful!");
+	};
+
+	// Function to render the appropriate action button based on follow status
+	const renderFollowButton = () => {
+		if (following) {
+			return (
+				<form
+					onSubmit={async (e) => {
+						e.preventDefault();
+						await execute({
+							followeeId: user.userId,
+						});
+					}}
+				>
+					<Button className="text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
+						{isPending && <Loader className="animate-spin" size={18} />}
+						Unfollow
+					</Button>
+				</form>
+			);
+		}
+		return (
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault();
+					await execute({
+						followeeId: user.userId,
+					});
+				}}
+			>
+				<Button className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
+					{isPending && <Loader className="animate-spin" size={18} />}
+					Follow
+				</Button>
+			</form>
+		);
 	};
 
 	return (
@@ -58,8 +96,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 				</div>
 			</div>
 
-			{/* Button (Job or Blog) */}
-			<div className="">
+			{/* Render follow/unfollow button */}
+			<div>
 				{isJobProfile ? (
 					<Button
 						onClick={applyAction}
@@ -68,19 +106,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 						Apply
 					</Button>
 				) : (
-					<form
-						onSubmit={async (e) => {
-							e.preventDefault();
-							await execute({
-								followeeId: user.userId,
-							});
-						}}
-					>
-						<Button className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
-							{isPending && <Loader className="animate-spin" size={18} />}
-							Follow
-						</Button>
-					</form>
+					renderFollowButton()
 				)}
 			</div>
 		</div>

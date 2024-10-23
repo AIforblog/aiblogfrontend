@@ -5,7 +5,7 @@ import type { UserProps } from "@/types/user";
 /**
  * Dummy user data.
  */
-const dummyUsers: UserProps[] = [
+export const dummyUsers: UserProps[] = [
 	{
 		name: "Alice Johnson",
 		profile_pic: "/profile.png",

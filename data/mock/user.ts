@@ -1,4 +1,4 @@
-import { UserProps } from "@/types/user";
+import type { UserProps } from "@/types/user";
 
 export const UserData: UserProps = {
 	username: "@mira",
