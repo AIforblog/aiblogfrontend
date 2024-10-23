@@ -8,6 +8,19 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      sm: "357px",
+      md: "768px",
+      lg: "1440px",
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        md: "2.5rem",
+        lg: "5rem",
+      },
+    },
     extend: {
       fontFamily: {
         "dm-sans": ["var(--font-dm-sans)"],

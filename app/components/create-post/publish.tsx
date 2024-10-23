@@ -11,15 +11,26 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Check } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
-export default function Publish() {
+interface PublishProps {
+  onPublish: () => void;
+}
+
+export default function Publish({ onPublish }: PublishProps) {
+  const [open, setOpen] = useState(false);
+
+  const handlePublish = () => {
+    onPublish();
+    setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          type="submit"
           className="font-medium text-gray bg-cta-primary-normal rounded-full py-6 px-6 border border-transparent"
-          // disabled
+          type="button"
         >
           Publish
         </Button>
@@ -46,10 +57,14 @@ export default function Publish() {
           <Button
             className="border-text-color text-neutral-700 font-medium rounded-full"
             variant={"outline"}
+            onClick={() => setOpen(false)}
           >
             Cancel
           </Button>
-          <Button className="bg-cta-primary-normal flex items-center gap-3 rounded-full text-neutral-800 hover:text-white transition-colors duration-300">
+          <Button
+            onClick={handlePublish}
+            className="bg-cta-primary-normal flex items-center gap-3 rounded-full text-neutral-800 hover:text-white transition-colors duration-300"
+          >
             <Check className="h-4 w-4" />
             Publish
           </Button>

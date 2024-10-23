@@ -69,6 +69,7 @@
     "next-auth": "^4.24.8",
     "next-themes": "^0.3.0",
     "react": "^18",
+    "react-datepicker": "^7.5.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
@@ -83,7 +84,9 @@
     "vaul": "^1.0.0",
     "viem": "~2.21.19",
     "wagmi": "^2.12.17",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zsa": "^0.6.0",
+    "zsa-react": "^0.2.3"
   },
   "devDependencies": {
     "@types/is-hotkey": "^0.1.10",

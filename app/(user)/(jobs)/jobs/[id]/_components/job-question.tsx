@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Sidebar from "./sideBarForJobQuestion";
 import JobTextEditor from "@/components/shared/textAreaForJobQuestion";
+import Button from "@/components/shared/button";
 
 type Question = {
   id: string;
@@ -148,9 +149,9 @@ export default function TaskQuestionsUI() {
                 <span className="text-sm hidden md:block">Forward</span>
               </button>
             </div>
-            <button className="bg-[#FDC316] text-black px-6 py-2 rounded-full text-sm font-medium">
-              Publish <span className="hidden md:inline">Your Answers</span>
-            </button>
+            <Button variant="solid" color="secondary">
+              Publish <span className="pl-1 hidden md:inline">Your Answers</span>
+            </Button>
           </div>
         </div>
       </div>

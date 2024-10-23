@@ -3,10 +3,7 @@
 import { RoundedImage, SearchInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { UserData } from "@/data/mock/user";
-import {
-  Bell,
-  Edit3Icon
-} from "lucide-react";
+import { Bell, Edit3Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -44,7 +41,7 @@ const NavBar = () => {
 
   return (
     <>
-      <header className="hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] px-5 sm:px-12 2xl:px-[16rem] bg-white border-b border-[#E7E5E4]">
+      <header className="container hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] bg-white border-b border-[#E7E5E4]">
         <div className="flex flex-row items-center gap-x-16 mr-auto">
           {/* Logo */}
           <div>
@@ -55,7 +52,10 @@ const NavBar = () => {
           <nav>
             <ul className="md:flex flex-row items-center gap-x-11 hidden">
               {navLinks.map((link, index) => (
-                <li key={index} className="relative transition-transform duration-300 ease-in-out">
+                <li
+                  key={index}
+                  className="relative transition-transform duration-300 ease-in-out"
+                >
                   <p
                     onClick={handleRoute(link.route)}
                     className={`nav-link text-base capitalize hover:cursor-pointer hover:text-[#fdc316] transition-all duration-300 ease-in-out transform hover:scale-105 hover:tracking-wide ${
@@ -91,7 +91,9 @@ const NavBar = () => {
           <Link href={"/write"}>
             <Button className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] rounded-full py-3 gap-x-2 flex justify-center items-center transition duration-300 ease-in-out">
               <Edit3Icon className="h-4 w-4 text-[#262626]" />
-              <span className="font-medium text-[#262626] text-center">Write to earn</span>
+              <span className="font-medium text-[#262626] text-center">
+                Write to earn
+              </span>
             </Button>
           </Link>
 
@@ -112,6 +114,5 @@ const NavBar = () => {
     </>
   );
 };
-
 
 export default NavBar;

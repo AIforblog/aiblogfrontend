@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useRef, KeyboardEvent } from "react";
 import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";

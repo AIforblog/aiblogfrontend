@@ -7,6 +7,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Success() {
   return (
@@ -26,7 +27,7 @@ export default function Success() {
             Welcome to the winning team!
           </CardDescription>
         </div>
-        <Button className="rounded-xl text-2xl text-text-color bg-cta-primary-normal hover:text-white py-6 flex gap-3 items-center">
+        <Link href="/wallet"><Button className="rounded-xl text-2xl text-text-color bg-cta-primary-normal hover:text-white py-6 flex gap-3 items-center">
           LFG !!!
           <Image
             width={32}
@@ -34,7 +35,7 @@ export default function Success() {
             src={"/arrow-fatlines-right.svg"}
             height={32}
           />
-        </Button>
+        </Button></Link>
       </CardFooter>
     </Card>
   );

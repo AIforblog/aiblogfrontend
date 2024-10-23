@@ -21,7 +21,7 @@ export default function DashboardLayout({
       {/* Navigation */}
       <NavBar />
 
-      <main className="w-full maxHeight overflow-hidden md:pt-6 bg-[#FAFAFA] md:px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-1 md:grid-cols-4">
+      <main className="container w-full maxHeight overflow-hidden md:pt-6 bg-[#FAFAFA] gap-6 grid grid-cols-1 md:grid-cols-4">
         {/* Featured article */}
         <section className="hidden md:block col-span-1">
           <SectionTitle title="Featured Articles" />
