@@ -4,7 +4,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { BlogDummyData } from "@/data/mock/blog";
 import { UserProfile } from "../../../../components/shared";
-import Comments, { ItemComment } from "../../../../components/shared/comments";
+import { ItemComment } from "../../../../components/shared/comments";
+import { PostEngagement } from "../../../../components/shared/social/PostEngagement";
 // import { CommentType } from "../../../../types/comment";
 
 // type DOMComment = globalThis.Comment;
@@ -16,6 +17,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   if (!post) {
     notFound();
   }
+
+  const postUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/posts/${params.slug}`
+      : "";
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
@@ -94,13 +100,31 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
       )}
 
-      <div className="flex items-center space-x-4 mb-4">
+      <PostEngagement
+        postId={post.id ?? ""}
+        postTitle={post.title}
+        postUrl={postUrl}
+        initialLikes={post.metrics.likesCount}
+        initialComments={post.comments as ItemComment[]}
+        initialCommentsCount={post.metrics.commentsCount}
+        initialShares={post.metrics.sharesCount}
+        onLike={() => {
+          // Handle like analytics or API calls
+        }}
+        onComment={() => {
+          // Handle comment analytics or API calls
+        }}
+        onShare={() => {
+          // Handle share analytics or API calls
+        }}
+      />
+      {/* <div className="flex items-center space-x-4 mb-4">
         <Comments
           postId={post.id ?? ""}
           initialComments={(post.comments as ItemComment[]) ?? []}
           initialCommentsCount={post.metrics.commentsCount}
         />
-      </div>
+      </div> */}
     </article>
   );
 }

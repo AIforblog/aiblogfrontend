@@ -9,17 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  ThumbsUp,
-  MessageCircle,
-  Share2,
-  ImageIcon,
-  Link2Icon,
-  SmileIcon,
-  XIcon,
-} from "lucide-react";
+import { ThumbsUp, ImageIcon, Link2Icon, SmileIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { ShareModal } from "./share-modal";
 import { useMinimalTiptapEditor } from "../../app/components/minimal-tiptap/hooks/use-minimal-tiptap";
 import { EditorContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
@@ -68,6 +59,8 @@ interface CommentsProps {
   postId: string;
   initialComments: ItemComment[];
   initialCommentsCount: number;
+  isOpen?: boolean;
+  onCommentCountChange?: (count: number) => void;
 }
 
 interface CommentBoxProps {
@@ -194,19 +187,14 @@ const UserProfile: React.FC<{ user: User }> = ({ user }) => {
 const Comments: React.FC<CommentsProps> = ({
   initialComments = [],
   initialCommentsCount = 0,
+  onCommentCountChange,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState<ItemComment[]>(initialComments);
   const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
-  const [likes, setLikes] = useState(0);
-  const [shares, setShares] = useState(0);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  const postUrl =
-    typeof window !== "undefined" ? `${window.location.origin}/posts/` : "";
-
-  const handleToggleComments = () => {
-    setIsOpen(!isOpen);
+  const updateCommentCount = (newCount: number) => {
+    setCommentsCount(newCount);
+    onCommentCountChange?.(newCount);
   };
 
   const handleAddComment = (newComment: CommentFormData) => {
@@ -229,7 +217,7 @@ const Comments: React.FC<CommentsProps> = ({
       replyCount: 0,
     };
     setComments([createdComment, ...comments]);
-    setCommentsCount((prevCount) => prevCount + 1);
+    updateCommentCount(commentsCount + 1);
   };
 
   const handleReply = (
@@ -275,73 +263,19 @@ const Comments: React.FC<CommentsProps> = ({
     }
 
     setComments(updatedComments);
-    setCommentsCount((prevCount) => prevCount + 1);
-  };
-
-  const handleLike = () => {
-    setLikes((prevLikes) => prevLikes + 1);
-  };
-
-  const handleShare = () => {
-    setIsShareModalOpen(true);
-    setShares((prevShares) => prevShares + 1);
-  };
-
-  const handleCloseShareModal = () => {
-    setIsShareModalOpen(false);
+    updateCommentCount(commentsCount + 1);
   };
 
   return (
-    <div className="mt-8 w-full">
-      <div className="flex items-center space-x-4 mb-4">
-        <Button
-          variant="outline"
-          size="sm"
-          className="bg-transparent outline-none border-none active:bg-gray-400"
-          onClick={handleLike}
-        >
-          <ThumbsUp className="w-4 h-4 mr-2" />
-          {likes}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="bg-transparent outline-none border-none active:bg-gray-400"
-          onClick={handleToggleComments}
-        >
-          <MessageCircle className="w-4 h-4 mr-2" />
-          {commentsCount}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="bg-transparent outline-none border-none active:bg-gray-400"
-          onClick={handleShare}
-        >
-          <Share2 className="w-4 h-4 mr-2" />
-          {shares}
-        </Button>
-      </div>
-
-      <ShareModal
-        isOpen={isShareModalOpen}
-        onClose={handleCloseShareModal}
-        postTitle="Share this post" // You might want to pass this as a prop
-        postUrl={postUrl}
+    <div className="mt-4 rounded-xl p-4 w-full">
+      <CommentList
+        comments={comments}
+        onReply={handleReply}
+        commentChain={[]}
       />
-
-      {isOpen && (
-        <div className="mt-4  rounded-xl p-4 w-full">
-          <CommentList
-            comments={comments}
-            onReply={handleReply}
-            commentChain={[]}
-          />
-          <div className="bg-[#FDF9D9] mt-4 p-3">
-            <CommentBox onAddComment={handleAddComment} />
-          </div>
-        </div>
-      )}
+      <div className="bg-[#FDF9D9] mt-4 p-3">
+        <CommentBox onAddComment={handleAddComment} />
+      </div>
     </div>
   );
 };

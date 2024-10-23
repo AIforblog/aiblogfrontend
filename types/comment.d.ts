@@ -4,8 +4,19 @@ export interface User {
   id: string;
   name: string;
   avatar?: string;
-  profile_pic?: string;
-  username?: string;
+  profile_pic: string;
+  username: string;
+}
+
+interface ItemComment {
+  id: string;
+  user: User;
+  content: string;
+  images: Image[];
+  createdAt: string;
+  likes: number;
+  replies: ItemComment[];
+  replyCount: number;
 }
 
 export interface Image {

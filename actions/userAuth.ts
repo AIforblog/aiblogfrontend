@@ -10,13 +10,14 @@ import {
 } from "../types/auth";
 // import { cookies } from "next/headers";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_AUTH_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
 
 export const signupAuth = async (
   params: SignUpParams
 ): Promise<SignUpResponse> => {
   try {
-    const response = await axios.post(`${API_BASE_URL}auth/register`, params);
+    const response = await axios.post(`${API_AUTH_URL}auth/register`, params);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -33,45 +34,6 @@ export const signupAuth = async (
   }
 };
 
-// export const signInAuth = async (
-//   params: SignInParams
-// ): Promise<SignInResponse> => {
-//   const payload = {
-//     email: params.email, // or username, depending on your backend
-//     password: params.password,
-//   };
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}auth/login`, payload);
-//     const { user, access_token, refresh_token } = response.data;
-
-//     cookies().set("access_token", access_token, {
-//       httpOnly: true,
-//       secure: true,
-//     });
-//     cookies().set("refresh_token", refresh_token, {
-//       httpOnly: true,
-//       secure: true,
-//     });
-
-//     return {
-//       data: { user },
-//       status_code: response.status,
-//     };
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       return {
-//         error:
-//           error.response?.data?.message || "An error occurred during sign in",
-//         status_code: error.response?.status || 500,
-//       };
-//     }
-//     return {
-//       error: "An unexpected error occurred",
-//       status_code: 500,
-//     };
-//   }
-// };
-
 export const signInAuth = async (
   params: SignInParams
 ): Promise<SignInResponse> => {
@@ -80,7 +42,7 @@ export const signInAuth = async (
     password: params.password,
   };
   try {
-    const response = await axios.post(`${API_BASE_URL}auth/login`, payload);
+    const response = await axios.post(`${API_AUTH_URL}auth/login`, payload);
     const { data } = response;
 
     if (data.statusCode === 200 && data.data) {
@@ -138,7 +100,7 @@ export const signInAuth = async (
 
 export const validateOtp = async (email: string, otp: string): Promise<any> => {
   try {
-    const response = await axios.post(`${API_BASE_URL}auth/otp/validate`, {
+    const response = await axios.post(`${API_AUTH_URL}auth/otp/validate`, {
       email,
       otp,
     });
@@ -166,7 +128,7 @@ export const validateOtp = async (email: string, otp: string): Promise<any> => {
 
 export const requestNewOtp = async (email: string): Promise<any> => {
   try {
-    const response = await axios.post(`${API_BASE_URL}auth/otp/sent`, {
+    const response = await axios.post(`${API_AUTH_URL}auth/otp/sent`, {
       email,
     });
     if (response.status === 200) {
@@ -213,7 +175,7 @@ export const refreshToken = async () => {
       throw new Error("No refresh token available");
     }
 
-    const response = await axios.post(`${API_BASE_URL}auth/refresh-token`, {
+    const response = await axios.post(`${API_AUTH_URL}auth/refresh-token`, {
       refresh_token: refreshToken,
     });
     const { access_token, refresh_token } = response.data;
@@ -231,7 +193,7 @@ export const refreshToken = async () => {
 
 export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}auth/google`);
+    const response = await axios.get(`${API_AUTH_URL}auth/google`);
     if (response.data.authUrl) {
       return { authUrl: response.data.authUrl };
     }
@@ -244,7 +206,7 @@ export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
 
 export const handleGoogleCallback = async (code: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}auth/google/callback`, {
+    const response = await axios.post(`${API_AUTH_URL}auth/google/callback`, {
       code,
     });
     if (response.data.user) {
@@ -263,7 +225,7 @@ export const forgotPasswordAuth = async (
 ): Promise<ForgotPasswordResponse> => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}auth/password/forgot`,
+      `${API_AUTH_URL}auth/password/forgot`,
       params
     );
     return {
