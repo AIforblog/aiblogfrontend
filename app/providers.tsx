@@ -8,11 +8,6 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 
-// Validate the project ID exists
-if (!projectId) {
-  throw new Error("Missing NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID");
-}
-
 const config = getDefaultConfig({
   appName: "Drello",
   projectId,
