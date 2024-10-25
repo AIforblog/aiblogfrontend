@@ -10,7 +10,7 @@ import {
 } from "../types/auth";
 // import { cookies } from "next/headers";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
 
 export const signupAuth = async (
   params: SignUpParams

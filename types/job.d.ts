@@ -21,4 +21,5 @@ export interface JobType {
   date: string;
   metrics: PostMetrics;
   extra_info: JobExtraInfoProps;
+  status: string;
 }
