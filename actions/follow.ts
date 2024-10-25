@@ -16,9 +16,9 @@ export const followAction = authenticatedAction
 		const user = await assertUserAuthenticated();
 		try {
 			const res = await makeFetch(
-				"blog",
-				`/auth/follow/${followeeId}`,
-				user.accessToken,
+				"auth",
+				`/follow/${followeeId}`,
+				user.accessToken as string,
 				{
 					method: "POST",
 				},
@@ -29,4 +29,3 @@ export const followAction = authenticatedAction
 		}
 		console.log(followeeId);
 	});
-

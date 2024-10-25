@@ -33,10 +33,11 @@ import Image from "next/image";
 
 interface PostConfigProps {
 	form: UseFormReturn<FormValues>;
+	isPending: boolean;
 	onPublish: () => void;
 }
 
-export const PostConfig = ({ form, onPublish }: PostConfigProps) => {
+export const PostConfig = ({ form, onPublish, isPending }: PostConfigProps) => {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
 	const handleImageChange = useCallback(
@@ -185,10 +186,11 @@ export const PostConfig = ({ form, onPublish }: PostConfigProps) => {
 							}}
 							className="border-text-color text-neutral-700 font-medium rounded-full py-6 px-6"
 							variant={"outline"}
+							disabled={isPending}
 						>
 							Save to draft
 						</Button>
-						<Publish onPublish={onPublish} />
+						<Publish onPublish={onPublish} isPending={isPending} />
 					</CardFooter>
 				</Card>
 			</CardContent>

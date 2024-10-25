@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import MinimalTiptapOne from "../minimal-tiptap/minimal-tiptap-one";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
-import { FormValues } from "./create-post";
+import type { UseFormReturn } from "react-hook-form";
+import type { FormValues } from "./create-post";
 import {
 	FormControl,
 	FormField,
@@ -53,6 +53,7 @@ export default function PostEditor({ form }: PostConfigProps) {
 								editable={true}
 								editorClassName="!focus:outline-none px-5 py-4 h-full"
 								onChange={field.onChange}
+								value={"Content that is very loong"}
 							/>
 						</FormControl>
 						<FormMessage />

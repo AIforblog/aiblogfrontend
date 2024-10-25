@@ -8,45 +8,50 @@ import { Form } from "@/components/ui/form";
 import { createBlogSchema } from "@/schemas/blog";
 import { postBlogAction } from "@/actions/blog";
 import { useServerAction } from "zsa-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export type FormValues = z.infer<typeof createBlogSchema>;
 
 const CreatePost = () => {
-	const { execute, isPending } = useServerAction(postBlogAction, {
-		onError({ err }) {
-			console.log("something went wrong", err);
-		},
-		onSuccess() {
-			console.log("Successful");
-		},
-	});
+	const { execute, isPending } = useServerAction(postBlogAction);
+	const router = useRouter();
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(createBlogSchema),
 		defaultValues: {
-			title: "",
-			content: "",
-			tags: "",
-			category: "",
-			status: "",
+			title: "Test Title",
+			content: "Just testing the content",
+			tags: "Hello Hi Sup",
+			category: "Football",
+			status: "published",
 		},
 	});
-
 	const onSubmit = async (values: FormValues) => {
-		console.log(values);
-		navigator.clipboard.writeText(values.content);
-
 		const formData = new FormData();
 		if (values.coverImage) {
 			formData.append("file", values.coverImage);
 		}
-		await execute({
+		const [data, err] = await execute({
 			fileWrapper: formData,
 			status: "published",
 			category: values.category,
 			tags: values.tags,
 			content: values.content,
 			title: values.title,
-		}).then(() => {});
+		});
+
+		console.log(data);
+		if (data?.statusCode === 201) {
+			toast.success("Post Created Successfully");
+		}
+
+		if (err) {
+			console.error(err);
+		}
+
+		form.reset();
+		router.push("/");
 	};
 
 	return (
@@ -54,10 +59,13 @@ const CreatePost = () => {
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] mt-8 gap-5">
 					<PostEditor form={form} />
-					<PostConfig form={form} onPublish={form.handleSubmit(onSubmit)} />
+					<PostConfig
+						isPending={isPending}
+						form={form}
+						onPublish={form.handleSubmit(onSubmit)}
+					/>
 				</div>
 			</form>
-			{isPending && "Loading.."}
 		</Form>
 	);
 };
