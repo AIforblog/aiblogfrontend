@@ -60,7 +60,6 @@ const Profile = async () => {
 				</div>
 
 				<div className="flex justify-end gap-2 items-center px-4">
-					{/* Pass token , profileId , and setUserData */}
 					<EditProfile
 						userData={userData.data}
 						token={user.accessToken.value as string}

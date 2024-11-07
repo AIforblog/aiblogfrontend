@@ -13,16 +13,8 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Sparkles, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import Publish from "./publish";
 import TagsInput from "./tags-input";
@@ -62,32 +54,6 @@ export const PostConfig = ({ form, onPublish, isPending }: PostConfigProps) => {
 
 	return (
 		<Card className="order-1 md:order-2 bg-transparent border-none md:border shadow-none md:bg-neutral-50 flex flex-col gap-3 font-dm-sans md:shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] rounded-2xl">
-			<CardHeader className="px-0 md:px-6">
-				<Card className="shadow-none bg-palegoldenrod rounded-xl border-transparent flex flex-col gap-0">
-					<CardHeader className="pb-4">
-						<Select>
-							<SelectTrigger className="bg-white rounded-xl py-6">
-								<SelectValue placeholder="Ai Generated Content" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="other">Other things</SelectItem>
-							</SelectContent>
-						</Select>
-					</CardHeader>
-					<CardContent className="pb-4">
-						<Label>Paste Your Link here</Label>
-						<Input
-							className="rounded-xl bg-white text-neutral-400 mt-2 py-6"
-							placeholder="https//Chatgpt.com/share"
-						/>
-					</CardContent>
-					<CardFooter>
-						<Button className="rounded-full py-6 bg-text-color text-neutral-50">
-							<Sparkles className="mr-2 h-5 w-5" /> Generate
-						</Button>
-					</CardFooter>
-				</Card>
-			</CardHeader>
 			<CardContent className="px-0 md:px-6">
 				<Card className="shadow-none bg-neutral-100 border-transparent rounded-xl">
 					<CardHeader className="">
