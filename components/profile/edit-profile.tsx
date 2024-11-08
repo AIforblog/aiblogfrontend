@@ -134,9 +134,11 @@ function EditProfile({
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+			
 			<DialogTrigger asChild>
+				
 				<Button variant={"outline"} className="rounded-full">
-					<Pencil className="mr-2 h-4 w-4" /> Edit Profile
+					<Pencil className="mr-2 h-4 w-4 hidden md:block" /> Edit Profile
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">

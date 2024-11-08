@@ -11,7 +11,7 @@ interface ExtraInfoItemProps {
 }
 
 interface InfoProps {
-  items: string[];
+  items?: string[]; // Made optional to handle undefined case
 }
 
 const ExtraInfoItem = ({ title, onClick }: ExtraInfoItemProps) => {
@@ -29,16 +29,22 @@ const ExtraInfoItem = ({ title, onClick }: ExtraInfoItemProps) => {
   );
 };
 
-const BlogExtraInfo = memo<InfoProps>(({ items }) => {
+const BlogExtraInfo = memo<InfoProps>(({ items = [] }) => {
+  // Added default empty array
   const handleClick = (item: string) => {
-    console.log(item); //Click event for each item.
+    console.log(item); // Click event for each item
   };
+
+  // If no items, don't render anything
+  if (!items?.length) {
+    return null;
+  }
 
   return (
     <div className="flex items-center gap-x-2">
       {items.map((item, index) => (
         <ExtraInfoItem
-          key={index}
+          key={`${item}-${index}`} // Better key composition
           title={item}
           onClick={() => handleClick(item)}
         />
@@ -46,5 +52,8 @@ const BlogExtraInfo = memo<InfoProps>(({ items }) => {
     </div>
   );
 });
+
+// Add display name for debugging purposes
+BlogExtraInfo.displayName = "BlogExtraInfo";
 
 export default BlogExtraInfo;

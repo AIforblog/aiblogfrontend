@@ -1,3 +1,4 @@
+
 import {
 	API_BASE_URL,
 	AUTH_API_BASE_URL,
@@ -65,3 +66,15 @@ export default function makeFetch<T>(
 		return (await res.text()) as unknown as T;
 	};
 }
+/**
+ * Formats a given date string or Date object to "Month, Year".
+ * @param date - The date to format (as a Date object or an ISO date string).
+ * @returns The formatted date as "Month, Year".
+ */
+ export function formatJoinDate(date: string | number | undefined): string {
+	const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+	if(!date) return ""
+	return new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+  }
+  
+  

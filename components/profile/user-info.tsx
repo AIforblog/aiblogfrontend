@@ -2,64 +2,75 @@
 
 import { cn } from "@/lib/utils";
 import type { UserProps } from "@/types/user";
-import Link from "next/link";
 import { Link2 } from "lucide-react";
 import { CalendarDays } from "lucide-react";
-import { Separator } from "../ui/separator";
+import { formatJoinDate } from "@/lib/helper";
 
 interface ProfileCardProps {
-	user: UserProps;
-	isJobProfile?: boolean;
-	className?: string;
+  user: UserProps;
+  isJobProfile?: boolean;
+  className?: string;
 }
 
+const demouser = {
+  firstName: "Olajumoke",
+  lastName: "Adelosoye",
+  userName: "jumjum",
+  link: "https://www.linkedin.com/in/jumjum",
+  bio: "maiores explicabo placeat exercitationem nihil architecto unde id quisquam quo? Dicta, voluptate velit animi eveniet cum recusandae molestiae facere explicabo delectus!",
+};
+
 const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
-	return (
-		<div className={cn("flex flex-col  justify-between gap-2 px-4", className)}>
-			<div className="md:w-[60%] flex gap-2 items-center">
-				<div className="flex-1 gap-y-1">
-					<h4 className="text-lg font-bold  text-[#262626] capitalize pb-1">
-						{user.name}
-					</h4>
-					<p className="text-xs font-normal  text-[#262626] pb-2">
-						{user.username}
-					</p>
-					<p className="text-xs font-normal  text-[#262626]">{user.bio}</p>
-				</div>
-			</div>
+  const DateJoined = formatJoinDate(user.createdAt);
+  return (
+    <div className={cn("flex flex-col  justify-between gap-2 px-4", className)}>
+      <div className="md:w-[70%] flex gap-2 mb-3 items-center">
+        <div className="flex-1 gap-y-1">
+          <h4 className="text-lg font-bold  text-[#262626] capitalize pb-1">
+            {user.name || `${demouser.firstName} ${demouser.lastName}`}
+          </h4>
+          <p className="text-xs font-normal mb-3 mt-1 text-[#262626] pb-2">
+            @{user.username}
+          </p>
+          <p className="text-xs font-normal  text-[#262626]">
+            {user.bio || demouser?.bio}
+          </p>
+        </div>
+      </div>
 
-			<div className="flex justify-between max-w-fit gap-6">
-				{user.externalLink && (
-					<Link
-						href={user.externalLink}
-						className="flex items-center space-x-2"
-					>
-						<Link2 size={16} className=" text-[#262626]" />
-						<p className="text-xs  text-[#262626] font-bold">
-							{user.externalLink}
-						</p>
-					</Link>
-				)}
+      <div className="flex justify-between max-w-fit gap-6">
+        {(user.externalLink || demouser.link) && (
+          <a
+            href={user.externalLink || demouser.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-2 md:text-xs cursor-pointer text-[#262626] font-bold text-[9px]"
+          >
+            <Link2 size={16} className="text-[#262626] mr-2" />
+            {user.externalLink || demouser.link}
+          </a>
+        )}
 
-				<div className="flex items-center space-x-2">
-					<CalendarDays size={16} className=" text-[#262626]" />
-					<p className="text-xs font-normal  text-[#262626]">
-						Joined {user.createdAt}
-					</p>
-				</div>
-			</div>
+        <div className="flex items-center space-x-2">
+          <CalendarDays size={10} className=" text-[#262626]" />
+          <p className="md:text-xs text-[9px] font-normal  text-[#262626]">
+            Joined {DateJoined}
+          </p>
+        </div>
+      </div>
 
-			<div className="flex justify-between max-w-fit gap-6">
-				<p className="text-xs font-bold  text-[#262626]">
-					{user.followingCount} <span className="font-normal"> Following</span>
-				</p>
-				<Separator />
-				<p className="text-xs font-bold text-[#262626]">
-					{user.followersCount} <span className="font-normal"> Followers </span>
-				</p>
-			</div>
-		</div>
-	);
+      <div className="flex justify-start  gap-4 my-3">
+        <p className="text-xs font-bold flex items-center gap-2  text-[#262626]">
+          {user.followingCount} <span className="font-normal"> Following</span>
+        </p>
+        {/* <Separator /> */}
+        <span className="w-2 h-full bg-white/30" />
+        <p className="text-xs font-bold flex items-center gap-2 text-[#262626]">
+          {user.followersCount} <span className="font-normal"> Followers </span>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default UserInfo;

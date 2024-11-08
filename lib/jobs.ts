@@ -7,8 +7,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const fetchJobWithComments = async (id: string) => {
   try {
     const [jobRes, commentsRes] = await Promise.all([
-      fetch(`${API_URL}jobs/${id}`),
-      fetch(`${API_URL}jobs/${id}/comments`),
+      fetch(`${API_URL}jobs/${id}`, { cache: "no-store" }),
+      fetch(`${API_URL}jobs/${id}/comments`, { cache: "no-store" }),
     ]);
 
     if (jobRes.status === 404) {
@@ -39,9 +39,9 @@ export const fetchJobWithComments = async (id: string) => {
   }
 };
 
-export const fetchJobs = async () => {
+export const fetchJobs = async ({ page }: { page: number }) => {
   try {
-    const res = await fetch(`${API_URL}jobs/`);
+    const res = await fetch(`${API_URL}jobs/?page=${page}`, { cache: "no-store" });
 
     if (!res.ok) {
       return {

@@ -134,3 +134,8 @@ body {
 	background-repeat: repeat-x;
 	background-position: 0 100%;
 }
+
+ .bg-wallet-balance {
+	border-radius: 0px 0px 10px 10px;
+	background: linear-gradient(90deg, #7D7D7D 0%, #171717 82.86%);
+}

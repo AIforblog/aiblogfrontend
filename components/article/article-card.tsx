@@ -4,7 +4,6 @@ import { memo } from "react";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "../ui/card";
@@ -28,7 +27,7 @@ const ArticleCard = memo<{ article: ArticleProps }>(({ article }) => {
 					/>
 				</div>
 
-				<CardDescription className="flex flex-col p-0 gap-y-3">
+				<div className="flex flex-col p-0 gap-y-3">
 					{/* Title */}
 					<CardTitle className="text-xl font-bold leading-7 text-[#262626] p-0">
 						{article.title}
@@ -38,7 +37,7 @@ const ArticleCard = memo<{ article: ArticleProps }>(({ article }) => {
 					<p className="text-base font-normal leading-6 text-[#737373]">
 						{article.description}
 					</p>
-				</CardDescription>
+				</div>
 			</CardContent>
 		</Card>
 	);

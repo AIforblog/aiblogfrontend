@@ -21,40 +21,42 @@ export default function DashboardLayout({
 			{/* Navigation */}
 			<NavBar />
 
-			<main className="container px-4 md:px-12 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] gap-6 grid grid-cols-1 md:grid-cols-4">
-				{/* Featured article */}
-				<section className="hidden md:block col-span-1">
-					<SectionTitle title="Featured Articles" />
-					<FeaturedArticles />
-				</section>
+			<main className="flex justify-center">
+				<div className="container mx-auto px-4 md:px-12 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] gap-6 grid grid-cols-1 md:grid-cols-4 place-content-center place-items-center">
+					{/* Featured article */}
+					<section className="hidden md:block col-span-1">
+						<SectionTitle title="Featured Articles" />
+						<FeaturedArticles />
+					</section>
 
-				{/* Blog | Jobs */}
-				<section className="w-full flex-1 h-full md:col-span-2 md:px-6 mt-10 md:pt-6 bg-white md:bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
-					{children}
-				</section>
+					{/* Blog | Jobs */}
+					<section className="w-full flex-1 h-full md:col-span-2 md:px-6 mt-10 md:pt-6 bg-white md:bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
+						{children}
+					</section>
 
-				{/* Trending topics | Top writers */}
-				<section className="hidden md:block col-span-1">
-					<div
-						className={`h-[88vh] grid ${
-							user === "authenticated" ? "grid-rows-2" : "grid-rows-3"
-						} gap-y-6 overflow-hidden`}
-					>
-						<section className="row-span-1 overflow-hidden">
-							<SectionTitle title="Trending Topics" />
-							<TrendingTopics />
-						</section>
-
-						<section
-							className={`${
-								user === "authenticated" ? "row-span-2" : "row-span-1"
-							}`}
+					{/* Trending topics | Top writers */}
+					<section className="hidden md:block col-span-1">
+						<div
+							className={`h-[88vh] grid ${
+								user === "authenticated" ? "grid-rows-2" : "grid-rows-3"
+							} gap-y-6 overflow-hidden`}
 						>
-							<SectionTitle title="Top Writers" />
-							<TopWriters />
-						</section>
-					</div>
-				</section>
+							<section className="row-span-1 overflow-hidden">
+								<SectionTitle title="Trending Topics" />
+								<TrendingTopics />
+							</section>
+
+							<section
+								className={`${
+									user === "authenticated" ? "row-span-2" : "row-span-1"
+								}`}
+							>
+								<SectionTitle title="Top Writers" />
+								<TopWriters />
+							</section>
+						</div>
+					</section>
+				</div>
 			</main>
 		</>
 	);

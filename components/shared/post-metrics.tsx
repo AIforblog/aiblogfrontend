@@ -11,7 +11,8 @@ import { memo } from "react";
  */
 interface PostMetricsProps extends PostMetricsInterface {
   /** Callback function to handle metric functionalities */
-  onLike?: (() => void) | undefined;
+  isLiked?: boolean;
+  onLike?: () => Promise<void>;
   onComment?: (() => void) | undefined;
   onShare?: (() => void) | undefined;
 }
@@ -46,9 +47,17 @@ const PostMetrics = memo<{ item: PostMetricsProps }>(({ item }) => {
   return (
     <div className="flex flex-row items-center gap-x-4">
       <MetricsItem
-        icon={<ThumbsUp className="size-4" color="#A3A3A3" />}
+        icon={
+          <ThumbsUp
+            className="size-4"
+            color={item.isLiked ? "black" : "#A3A3A3"}
+            fill={item.isLiked ? "black" : "none"}
+          />
+        }
         count={item.likesCount}
-        onIconClick={() => item.onLike}
+        onIconClick={() => {
+          item.onLike?.();
+        }}
       />
       <MetricsItem
         icon={<MessagesSquare className="size-4" color="#A3A3A3" />}

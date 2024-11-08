@@ -13,6 +13,27 @@ export function slugify(text: string) {
 		.replace(/^-+|-+$/g, "");
 }
 
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+}
+
+export function matchSlug(slug1: string, slug2: string): boolean {
+  const normalizeSlug = (s: string) =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+
+  return normalizeSlug(slug1) === normalizeSlug(slug2);
+}
+
 // Function to capitalize the first letter
 export const capitalizeFirstLetter = (string: string): string => {
 	return string.charAt(0).toUpperCase() + string.slice(1);

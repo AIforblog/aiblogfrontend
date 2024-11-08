@@ -10,4 +10,7 @@ export interface PostMetrics {
 
   /** The number of shares of the post */
   sharesCount: number;
+
+  /** Indicates whether the post is liked by the current user */
+  isLiked?: boolean;
 }

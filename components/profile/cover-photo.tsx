@@ -96,17 +96,17 @@ export default function CoverPhoto({
 		setPosition({ x: 0, y: 0 });
 	};
 
-	const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files?.[0]) {
-			const file = e.target.files[0];
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setSelectedProfileImage(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-			setIsEditingProfile(true);
-		}
-	};
+	// const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	if (e.target.files?.[0]) {
+	// 		const file = e.target.files[0];
+	// 		const reader = new FileReader();
+	// 		reader.onloadend = () => {
+	// 			setSelectedProfileImage(reader.result as string);
+	// 		};
+	// 		reader.readAsDataURL(file);
+	// 		setIsEditingProfile(true);
+	// 	}
+	// };
 
 	const closeProfileOverlay = () => {
 		setIsEditingProfile(false);
@@ -165,10 +165,10 @@ export default function CoverPhoto({
 	return (
 		<div className={cn("relative", className)}>
 			<div className="w-full h-40 md:h-56 bg-cover bg-center rounded-2xl overflow-hidden">
-				{user.coverPhoto}
+				{user?.coverPhoto}
 				<CoverImage
-					src={selectedCoverImage || user.coverPhoto}
-					alt={`${user.username} cover pic`}
+					src={selectedCoverImage || user?.coverPhoto || "/images/coverPhoto.png"}
+					alt={`${user?.username} cover pic`}
 				/>
 			</div>
 			<div className="absolute mb-4 top-4 right-4 flex gap-2 group">
@@ -180,7 +180,7 @@ export default function CoverPhoto({
 									document.getElementById("cover-photo-upload")?.click()
 								}
 								size="icon"
-								className="rounded-full"
+								className="rounded-full" 
 							>
 								<PencilLine size={18} />
 							</Button>
@@ -216,7 +216,7 @@ export default function CoverPhoto({
 						onMouseLeave={stopDragging}
 					>
 						<Image
-							src={selectedCoverImage || user.coverPhoto}
+							src={selectedCoverImage || user?.coverPhoto}
 							alt="Selected Cover"
 							layout="fill"
 							objectFit="cover"
@@ -246,24 +246,9 @@ export default function CoverPhoto({
 					</DialogClose>
 				</DialogContent>
 			</Dialog>
-			<div className="bottom-12 left-8 flex gap-2 relative">
+			<div className="bottom-12 left-4 flex gap-2 relative md:left-8">
 				<div className="relative">
 					<ProfilePic user={UserData} />
-					<div
-						onClick={() =>
-							document.getElementById("profile-photo-upload")?.click()
-						}
-						className="absolute bottom-2 left-15 p-2 bg-[#171717] hover:bg-[#404040] rounded-full cursor-pointer transition-colors duration-300"
-					>
-						<PencilLine className="w-4 h-4 text-white" />
-					</div>
-					<input
-						type="file"
-						id="profile-photo-upload"
-						className="hidden"
-						accept="image/*"
-						onChange={handleProfileImageChange}
-					/>
 				</div>
 			</div>
 			<Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
