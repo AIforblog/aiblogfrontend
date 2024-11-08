@@ -87,7 +87,7 @@ const Profile = async () => {
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default Profile;
