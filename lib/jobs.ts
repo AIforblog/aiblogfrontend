@@ -32,7 +32,7 @@ export const fetchJobWithComments = async (id: string) => {
       commentsRes.status === 404 ? { data: [] } : commentsRes.json(),
     ])) as [{ data: APIJobType }, { data: Array<APIJobCommentType> }];
 
-    return { data: { ...job, comments }, status: jobRes.status };
+    return { data: { ...job, replies: comments }, status: jobRes.status };
   } catch (e) {
     console.log(e);
     return { error: { message: "An error occured" } };

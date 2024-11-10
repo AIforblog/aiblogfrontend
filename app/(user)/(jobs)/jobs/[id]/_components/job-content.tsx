@@ -5,7 +5,7 @@ import { APIJobCommentType, APIJobType } from "@/types/job";
 // import DOMPurify from "dompurify";
 
 interface JobContentProps {
-  job: APIJobType & { comments: Array<APIJobCommentType> };
+  job: APIJobType & { replies: Array<APIJobCommentType> };
 }
 
 const JobContent = ({ job }: JobContentProps) => {
@@ -53,9 +53,9 @@ const JobContent = ({ job }: JobContentProps) => {
       <div className='flex gap-2 items-center flex-wrap'>
         <p className='flex items-center font-medium bg-[#FCF4AA] text-black text-sm px-2 py-1 leading-[1.6] rounded-full w-fit'>
           <span>Replies</span>
-          {job.comments.length > 0 && (
+          {job.replies.length > 0 && (
             <span className='ml-1 p-1 leading-none bg-white rounded-full text-neutral-600'>
-              {job.comments.length}
+              {job.replies.length}
             </span>
           )}
         </p>

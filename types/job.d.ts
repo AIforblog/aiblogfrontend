@@ -42,7 +42,7 @@ export type APIJobType = {
   }>;
   customActions: Array<{
     questionText: string;
-    actionType: "checkbox";
+    actionType: string;
     checkboxChoices: string[];
     id: string;
     createdAt: string;
@@ -50,9 +50,11 @@ export type APIJobType = {
   id: string;
   userId: string;
   username: string;
+  firstName: string;
+  lastName: string;
   profilePic: string;
-  likes: Array<string>; // array of user ids that liked job
-  likes_count: number;
+  likes: number;
+  comments: number;
 };
 
 export type APIJobCommentType = {

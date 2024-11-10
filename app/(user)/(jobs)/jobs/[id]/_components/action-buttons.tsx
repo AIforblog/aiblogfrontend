@@ -1,7 +1,6 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import { isAuthenticated } from "@/lib/auth";
 import { likeJob } from "@/lib/jobs";
 import iconComment from "@/public/assets/icons/comment.svg";
@@ -41,10 +40,7 @@ function ActionButtons({ job }: { job: APIJobType }) {
 const LikeButton = ({ job }: { job: APIJobType }) => {
   const { toast } = useToast();
   const router = useRouter();
-  const { user } = useAuth();
   const [isLikeLoading, setIsLikeLoading] = useState(false);
-
-  const [isJobLiked, setIsJobLiked] = useState(user?.id ? job.likes.includes(user.id) : false);
 
   const handleLike = async () => {
     try {
@@ -63,7 +59,6 @@ const LikeButton = ({ job }: { job: APIJobType }) => {
       }
 
       toast({ title: data.message });
-      setIsJobLiked((v) => !v); // optimistic update
     } catch (e) {
       console.error(e);
       toast({ title: "An error occured", variant: "destructive" });
@@ -81,7 +76,7 @@ const LikeButton = ({ job }: { job: APIJobType }) => {
       {isLikeLoading ? (
         <Loader2Icon className="w-6 h-6 text-neutral-500 animate-spin" />
       ) : (
-        <span className="leading-none hidden sm:inline">{isJobLiked ? "Liked" : "Like"}</span>
+        <span className="leading-none hidden sm:inline">Like</span>
       )}
     </button>
   );
