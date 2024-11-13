@@ -1,14 +1,43 @@
 "use client";
 
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ComponentProps } from "react";
+import { MenuIcon } from "lucide-react";
 
-export const Aside = () => {
+interface AsideProps {
+  sidebarContainer?: HTMLElement;
+}
+export const Aside = ({ sidebarContainer }: AsideProps) => {
+  return (
+    <>
+      {/* Desktop */}
+      <AsideContent className="hidden md:flex" />
+
+      {/* mobile menu */}
+      <DialogPrimitive.Root>
+        <DialogPrimitive.Trigger className="p-1 rounded hover:bg-neutral-50 md:hidden">
+          <MenuIcon />
+        </DialogPrimitive.Trigger>
+        <DialogPrimitive.DialogPortal container={sidebarContainer}>
+          <DialogPrimitive.Content className="absolute inset-0 px-4 bg-white pb-4 overflow-y-auto custom-scroll md:hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-left-1/2 data-[state=closed]:slide-out-to-left-1/2 [animation-duration:500ms]">
+            <AsideContent />
+          </DialogPrimitive.Content>
+        </DialogPrimitive.DialogPortal>
+      </DialogPrimitive.Root>
+    </>
+  );
+};
+
+const AsideContent = ({ className }: { className?: string }) => {
   return (
     <aside
-      className="w-[400px] rounded-[16px] border bg-neutral-50 py-6 px-4 flex flex-col gap-6 overflow-y-auto custom-scroll"
+      className={cn(
+        "flex h-full w-full rounded-[16px] border bg-neutral-50 py-6 px-4 flex-col gap-6",
+        className
+      )}
       style={{
         boxShadow: "0px 10px 15px -3px #1018281A, 0px 4px 6px -4px #1018281A",
       }}
@@ -47,7 +76,6 @@ export const Aside = () => {
     </aside>
   );
 };
-
 const AsideLink = ({ className, href, ...restProps }: ComponentProps<typeof Link>) => {
   const pathname = usePathname();
   const isActive = pathname === href;
