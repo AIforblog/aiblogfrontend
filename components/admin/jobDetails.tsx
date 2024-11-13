@@ -1,17 +1,64 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, Eye, Flag, MessageCircle, Share2, ThumbsUp } from "lucide-react"
+} from "@/components/ui/select";
+import StatCard from "./ui/statCard";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Flag,
+  MessageCircle,
+  Share2,
+  ThumbsUp,
+} from "lucide-react";
+
+const stats = [
+  {
+    icon: <Eye />,
+    value: "4,000",
+    percentageChange: "+10% from last month",
+    label: "Total Views",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <ThumbsUp />,
+    value: "1,500",
+    percentageChange: "+20% from last month",
+    label: "Total Likes",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <MessageCircle />,
+    value: "2,500",
+    percentageChange: "-50% from last month",
+    label: "Total Comments",
+    changeColor: "text-red-500",
+  },
+  {
+    icon: <Share2 />,
+    value: "2,500",
+    percentageChange: "+5% from last month",
+    label: "Total Shares",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <Flag />,
+    value: "2,500",
+    percentageChange: "-30% from last month",
+    label: "Flagged Users",
+    changeColor: "text-red-500",
+  },
+];
 
 export function JobDetails() {
   return (
@@ -32,46 +79,16 @@ export function JobDetails() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-5 gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">4,000</span>
-              </div>
-              <div className="text-sm text-green-500">+10% from last month</div>
-              <div className="text-sm text-muted-foreground">Total Views</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">1500</span>
-              </div>
-              <div className="text-sm text-green-500">+20% from last month</div>
-              <div className="text-sm text-muted-foreground">Total Likes</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
-              </div>
-              <div className="text-sm text-red-500">-50% from last month</div>
-              <div className="text-sm text-muted-foreground">Total Comments</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Share2 className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
-              </div>
-              <div className="text-sm text-green-500">+5% from last month</div>
-              <div className="text-sm text-muted-foreground">Total Shared</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Flag className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
-              </div>
-              <div className="text-sm text-red-500">-30% from last month</div>
-              <div className="text-sm text-muted-foreground">Flagged Users</div>
-            </div>
+            {stats.map((stat, index) => (
+              <StatCard
+                key={index}
+                icon={stat.icon}
+                value={stat.value}
+                percentageChange={stat.percentageChange}
+                label={stat.label}
+                changeColor={stat.changeColor}
+              />
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -82,7 +99,8 @@ export function JobDetails() {
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-semibold">
-                  Data-Driven Growth: How Legacy Ltd Harnesses Insights for Business Success
+                  Data-Driven Growth: How Legacy Ltd Harnesses Insights for
+                  Business Success
                 </h3>
                 <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
                   <span>Igho Faith Auguston</span>
@@ -92,23 +110,34 @@ export function JobDetails() {
               </div>
               <div className="space-y-4 text-sm text-muted-foreground">
                 <p>
-                  In the ever-evolving business landscape, where volatile markets and burgeoning technologies perpetually
-                  redefine the game, one steadfast titan has consistently outstripped the competition...
+                  In the ever-evolving business landscape, where volatile
+                  markets and burgeoning technologies perpetually redefine the
+                  game, one steadfast titan has consistently outstripped the
+                  competition...
                 </p>
-                <h4 className="text-lg font-semibold text-foreground">The Forefront of Analytical Excellence</h4>
+                <h4 className="text-lg font-semibold text-foreground">
+                  The Forefront of Analytical Excellence
+                </h4>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
-                    <span>Advanced Predictive Analytics: Enabling the forecasting of market trends, and consumer behavior.</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
-                    <span>Customer Data Platforms (CDP): Aggregating and organizing customer data across multiple touchpoints.</span>
+                    <span>
+                      Advanced Predictive Analytics: Enabling the forecasting of
+                      market trends, and consumer behavior.
+                    </span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
                     <span>
-                      Artificial Intelligence (AI): Empowering decision-making with algorithms of inconceivable sophistication
+                      Customer Data Platforms (CDP): Aggregating and organizing
+                      customer data across multiple touchpoints.
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
+                    <span>
+                      Artificial Intelligence (AI): Empowering decision-making
+                      with algorithms of inconceivable sophistication
                     </span>
                   </li>
                 </ul>
@@ -130,7 +159,7 @@ export function JobDetails() {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
-                
+
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="declined">Declined</SelectItem>
               </SelectContent>
@@ -153,7 +182,9 @@ export function JobDetails() {
                     </Avatar>
                     <div>
                       <div className="font-semibold">Olamide</div>
-                      <div className="text-sm text-muted-foreground">@olamide • 3hrs ago</div>
+                      <div className="text-sm text-muted-foreground">
+                        @olamide • 3hrs ago
+                      </div>
                     </div>
                   </div>
                   <Badge
@@ -175,5 +206,5 @@ export function JobDetails() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

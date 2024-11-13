@@ -113,12 +113,52 @@ const SignInForm = () => {
     }
   };
 
+  // const handleGoogleAuth = async () => {
+  //   setIsGoogleLoading(true);
+  //   try {
+  //     const { authUrl, error } = await initiateGoogleSignIn();
+
+  //     if (error) {
+  //       setError(error);
+  //       toast({
+  //         title: "Google Sign In Failed",
+  //         description: error,
+  //         variant: "destructive",
+  //         className:
+  //           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //       });
+  //       return;
+  //     }
+
+  //     if (authUrl) {
+  //       // Redirect to Google auth URL
+  //       window.location.href = authUrl;
+  //     }
+  //   } catch (error) {
+  //     console.error("Error initiating Google sign in:", error);
+  //     setError("Failed to initiate Google sign in. Please try again.");
+  //     toast({
+  //       title: "Google Sign In Failed",
+  //       description: "An unexpected error occurred. Please try again.",
+  //       variant: "destructive",
+  //       className:
+  //         "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+  //     });
+  //   } finally {
+  //     setIsGoogleLoading(false);
+  //   }
+  // };
+
   const handleGoogleAuth = async () => {
+    console.log("handleGoogleAuth started");
     setIsGoogleLoading(true);
+
     try {
       const { authUrl, error } = await initiateGoogleSignIn();
+      console.log("initiateGoogleSignIn response:", { authUrl, error });
 
       if (error) {
+        console.error("Error returned from initiateGoogleSignIn:", error);
         setError(error);
         toast({
           title: "Google Sign In Failed",
@@ -131,15 +171,23 @@ const SignInForm = () => {
       }
 
       if (authUrl) {
-        // Redirect to Google auth URL
+        console.log("Redirecting to Google auth URL:", authUrl);
+        // Store the current URL as the return URL
+        sessionStorage.setItem("returnUrl", window.location.href);
+        // Redirect to the Google auth URL
         window.location.href = authUrl;
+      } else {
+        throw new Error("No authentication URL received");
       }
     } catch (error) {
-      console.error("Error initiating Google sign in:", error);
+      console.error("Error in handleGoogleAuth:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
       setError("Failed to initiate Google sign in. Please try again.");
       toast({
         title: "Google Sign In Failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: errorMessage,
         variant: "destructive",
         className:
           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",

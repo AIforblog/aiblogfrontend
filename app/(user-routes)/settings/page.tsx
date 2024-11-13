@@ -1,11 +1,8 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
 const Settings = () => {
-  return (
-    <div className=' flex justify-center items-center'>
-      <div className='p-16 bg-gray-400'>Settings</div>
-    </div>
-  );
+  redirect("/settings/general");
+ 
 };
 
 export default Settings;

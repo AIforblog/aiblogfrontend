@@ -18,8 +18,10 @@ const JobData: APIJobType = {
   socialActions: [],
   userId: "userIDhere",
   username: "chris_wood",
-  likes: [],
-  likes_count: 0,
+  firstName: "Chris",
+  lastName: "Wood",
+  likes: 0,
+  comments: 0,
   profilePic: "",
 };
 

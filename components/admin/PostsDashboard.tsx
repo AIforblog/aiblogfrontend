@@ -12,6 +12,47 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ChevronLeft, ChevronRight, Eye, Flag, MessageCircle, Share2, ThumbsUp } from "lucide-react"
+import StatCard from "./ui/statCard"
+
+const stats = [
+  {
+    icon: <Eye />,
+    value: "4,000",
+    percentageChange: "+10% from last month",
+    label: "Total Views",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <ThumbsUp />,
+    value: "1,500",
+    percentageChange: "+20% from last month",
+    label: "Total Likes",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <MessageCircle />,
+    value: "2,500",
+    percentageChange: "-50% from last month",
+    label: "Total Comments",
+    changeColor: "text-red-500",
+  },
+  {
+    icon: <Share2 />,
+    value: "2,500",
+    percentageChange: "+5% from last month",
+    label: "Total Shares",
+    changeColor: "text-green-500",
+  },
+  {
+    icon: <Flag />,
+    value: "2,500",
+    percentageChange: "-30% from last month",
+    label: "Flagged Users",
+    changeColor: "text-red-500",
+  },
+];
+
+
 
 export function PostDetails() {
   return (
@@ -32,62 +73,17 @@ export function PostDetails() {
       <Card>
         <CardContent>
           <div className="grid grid-cols-5 gap-4 p-4">
-            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
-              <div className="flex items-start relative gap-2 w-full justify-between">
-              <div className="text-sm text-muted-foreground">Total Views</div>
-                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
-                <Eye size={24}  className="text-muted-foreground" />
-                </div>
-              </div>
-              <span className="text-lg relative -top-4 font-semibold">4,000</span>
-              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
-              
-            </div>
-            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
-              <div className="flex items-start relative gap-2 w-full justify-between">
-              <div className="text-sm text-muted-foreground">Total Likes</div>
-                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
-                <ThumbsUp size={24}  className="text-muted-foreground" />
-                </div>
-              </div>
-              <span className="text-lg relative -top-4 font-semibold">4,000</span>
-              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
-              
-            </div>
-            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
-              <div className="flex items-start relative gap-2 w-full justify-between">
-              <div className="text-sm text-muted-foreground">Total Comments</div>
-                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
-                <MessageCircle size={24}  className="text-muted-foreground" />
-                </div>
-              </div>
-              <span className="text-lg relative -top-4 font-semibold">4,000</span>
-              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
-              
-            </div>
-            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
-              <div className="flex items-start relative gap-2 w-full justify-between">
-              <div className="text-sm text-muted-foreground">Total Shared</div>
-                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
-                <Share2 size={24}  className="text-muted-foreground" />
-                </div>
-              </div>
-              <span className="text-lg relative -top-4 font-semibold">4,000</span>
-              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
-              
-            </div>
-           
-            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
-              <div className="flex items-start relative gap-2 w-full justify-between">
-              <div className="text-sm text-muted-foreground">Flagged Users</div>
-                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
-                <Flag size={24}  className="text-muted-foreground" />
-                </div>
-              </div>
-              <span className="text-lg relative -top-4 font-semibold">4,000</span>
-              <div className="text-sm text-red-500 relative -top-4">-10% from last month</div>
-              
-            </div>
+            
+            {stats.map((stat, index) => (
+              <StatCard
+                key={index}
+                icon={stat.icon}
+                value={stat.value}
+                percentageChange={stat.percentageChange}
+                label={stat.label}
+                changeColor={stat.changeColor}
+              />
+            ))}
            
           </div>
         </CardContent>

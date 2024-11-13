@@ -4,6 +4,7 @@ import { User } from "@/types/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { refreshToken } from "../actions/userAuth";
+import { authConfig, deleteSecureCookie } from "@/config/auth.config";
 
 export const assertUserAuthenticated = async () => {
   const cookieStore = cookies();
@@ -37,9 +38,9 @@ export const assertUserAuthenticated = async () => {
 // Utility function to delete auth-related cookies
 const clearAuthCookies = () => {
   const cookieStore = cookies();
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
-  cookieStore.delete("userData");
+  deleteSecureCookie(cookieStore, authConfig.accessTokenKey);
+  deleteSecureCookie(cookieStore, authConfig.refreshTokenKey);
+  deleteSecureCookie(cookieStore, authConfig.userDataKey);
 };
 
 export const getAuthHeaders = async () => {

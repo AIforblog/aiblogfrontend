@@ -9,20 +9,23 @@ import type {
   ForgotPasswordResponse,
   UpdatePasswordParams,
   UpdatePasswordResponse,
+  GoogleSignInResponse,
 } from "../types/auth";
 import { cookies } from "next/headers";
-import { authConfig } from "@/config/auth.config";
-
+import {
+  authConfig,
+  setSecureCookie,
+  deleteSecureCookie,
+} from "@/config/auth.config";
 import { redirect } from "next/navigation";
 
-const API_AUTH_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const signupAuth = async (
   params: SignUpParams
 ): Promise<SignUpResponse> => {
   try {
-    const response = await axios.post(`${API_AUTH_URL}auth/register`, params);
+    const response = await axios.post(`${API_URL}auth/register`, params);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -55,15 +58,13 @@ export const signInAuth = async (
       const { accessToken, refreshToken, user } = data.data;
 
       const cookieStore = cookies();
-      cookieStore.set(authConfig.accessTokenKey, accessToken, {
-        ...authConfig.COOKIE_OPTIONS,
-      });
-      cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
-        ...authConfig.COOKIE_OPTIONS,
-      });
-      cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
-        ...authConfig.COOKIE_OPTIONS,
-      });
+      setSecureCookie(cookieStore, authConfig.accessTokenKey, accessToken);
+      setSecureCookie(cookieStore, authConfig.refreshTokenKey, refreshToken);
+      setSecureCookie(
+        cookieStore,
+        authConfig.userDataKey,
+        JSON.stringify(user)
+      );
 
       // Return the full response data
       return {
@@ -98,7 +99,7 @@ export const signInAuth = async (
 
 export const validateOtp = async (email: string, otp: string): Promise<any> => {
   try {
-    const response = await axios.post(`${API_AUTH_URL}auth/otp/validate`, {
+    const response = await axios.post(`${API_URL}auth/otp/validate`, {
       email,
       otp,
     });
@@ -125,7 +126,7 @@ export const validateOtp = async (email: string, otp: string): Promise<any> => {
 
 export const requestNewOtp = async (email: string): Promise<any> => {
   try {
-    const response = await axios.post(`${API_AUTH_URL}auth/otp/sent`, {
+    const response = await axios.post(`${API_URL}auth/otp/sent`, {
       email,
     });
     if (response.status === 200) {
@@ -157,32 +158,38 @@ export const refreshToken = async () => {
       throw new Error("No refresh token available");
     }
 
-    const response = await axios.post(`${API_AUTH_URL}auth/refresh-token`, {
+    const response = await axios.post(`${API_URL}auth/refresh-token`, {
       refresh_token: refreshToken.value,
     });
 
     const { access_token, refresh_token } = response.data;
-    cookieStore.set("accessToken", access_token, {
-      ...authConfig.COOKIE_OPTIONS,
-    });
-    cookieStore.set("refreshToken", refresh_token, {
-      ...authConfig.COOKIE_OPTIONS,
-    });
+    setSecureCookie(cookieStore, authConfig.accessTokenKey, access_token);
+    setSecureCookie(cookieStore, authConfig.refreshTokenKey, refresh_token);
     return access_token;
   } catch (error) {
     console.error("Failed to refresh token:", error);
     const cookieStore = cookies();
-    cookieStore.delete(authConfig.accessTokenKey);
-    cookieStore.delete(authConfig.refreshTokenKey);
-    cookieStore.delete(authConfig.userDataKey);
+    deleteSecureCookie(cookieStore, authConfig.accessTokenKey);
+    deleteSecureCookie(cookieStore, authConfig.refreshTokenKey);
+    deleteSecureCookie(cookieStore, authConfig.userDataKey);
     redirect("/auth/sign-in");
   }
 };
 
-export const initiateGoogleSignIn = async () => {
+export const initiateGoogleSignIn = async (): Promise<GoogleSignInResponse> => {
+  console.log("Initiating Google Sign In");
+
   try {
+    const authUrl = `${API_URL}auth/google`;
+
+    if (!API_URL) {
+      throw new Error("API URL is not configured");
+    }
+
+    console.log("Generated auth URL:", authUrl);
+
     return {
-      authUrl: `${API_URL}auth/google`,
+      authUrl,
       error: null,
     };
   } catch (error) {
@@ -196,7 +203,7 @@ export const initiateGoogleSignIn = async () => {
 
 export const handleGoogleCallback = async (code: string) => {
   try {
-    const response = await axios.get(`${API_AUTH_URL}auth/google/callback`, {
+    const response = await axios.get(`${API_URL}auth/google/callback`, {
       params: { code },
       withCredentials: true,
     });
@@ -237,14 +244,12 @@ export const handleGoogleCallback = async (code: string) => {
     };
   }
 };
+
 export const forgotPasswordAuth = async (
   params: ForgotPasswordParams
 ): Promise<ForgotPasswordResponse> => {
   try {
-    const response = await axios.post(
-      `${API_AUTH_URL}auth/password/forgot`,
-      params
-    );
+    const response = await axios.post(`${API_URL}auth/password/forgot`, params);
     return {
       message: response.data.message,
       status_code: response.status,
@@ -269,10 +274,7 @@ export const updatePasswordAuth = async (
   params: UpdatePasswordParams
 ): Promise<UpdatePasswordResponse> => {
   try {
-    const response = await axios.post(
-      `${API_AUTH_URL}auth/password/reset`,
-      params
-    );
+    const response = await axios.post(`${API_URL}auth/password/reset`, params);
     return {
       message: response.data.message,
       status_code: response.status,
@@ -291,4 +293,15 @@ export const updatePasswordAuth = async (
       status_code: 500,
     };
   }
+};
+
+export const logout = async () => {
+  const cookieStore = cookies();
+
+  // Securely delete all auth cookies
+  deleteSecureCookie(cookieStore, authConfig.accessTokenKey);
+  deleteSecureCookie(cookieStore, authConfig.refreshTokenKey);
+  deleteSecureCookie(cookieStore, authConfig.userDataKey);
+
+  redirect("/auth/sign-in");
 };

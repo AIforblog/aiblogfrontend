@@ -1,241 +1,275 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Pencil, XIcon } from "lucide-react";
-import { toast, Toaster } from "sonner";
-import type { UserProps } from "@/types/user";
+import { Pencil } from "lucide-react";
+import { toast } from "sonner";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import makeFetch from "@/lib/helper";
+import type { SuccessResponse } from "@/types/api";
+import { PhoneInput } from "../ui/phone-input";
+import CountrySelect from "../ui/country-select";
+import RegionSelect from "../ui/state-select";
+import { revalidateTagServer } from "@/actions/common";
 
-const API_BASE_URL = "https://drellouserauth.onrender.com/api/v1/"; //Base URL 
-
-interface EditProfileProps {
-  userData?: UserProps;
-  setUserData: (data: UserProps) => void;
-  token: string;
-  profileId: string;
+interface UserProps {
+	name?: string;
+	firstName?: string;
+	lastName?: string;
+	bio?: string;
+	country?: string;
+	state?: string;
+	phoneNumber?: string;
+	username?: string;
+	externalLink?: string;
+	profilePic?: string;
+	coverPhoto?: string;
 }
 
-function EditProfile({ userData = {} as UserProps, setUserData, token, profileId }: EditProfileProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: userData?.name?.split(" ")[0] || "",
-    lastName: userData?.name?.split(" ")[1] || "",
-    bio: userData?.bio || "",
-    country: userData?.country || "",
-    state: userData?.state || "",
-    phoneNumber: userData?.phoneNumber || "",
-    username: userData?.username || "",
-    externalLink: userData?.externalLink || "",
-    profilePic: "",
-    coverPhoto: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface EditProfileProps {
+	userData?: UserProps;
+	token: string;
+	profileId: string;
+}
 
-  useEffect(() => {
-    if (userData) {
-      setFormData({
-        firstName: userData.name?.split(" ")[0] || "",
-        lastName: userData.name?.split(" ")[1] || "",
-        bio: userData.bio || "",
-        country: userData.country || "",
-        state: userData.state || "",
-        phoneNumber: userData.phoneNumber || "",
-        username: userData.username || "",
-        externalLink: userData.externalLink || "",
-        profilePic: "",
-        coverPhoto: "",
-      });
-    }
-  }, [userData]);
+const formSchema = z.object({
+	username: z.string().min(2, "Username must be at least 2 characters."),
+	firstName: z.string().min(1, "First name is required."),
+	lastName: z.string().min(1, "Last name is required."),
+	bio: z.string().optional(),
+	externalLink: z
+		.string()
+		.url("Must be a valid URL.")
+		.optional()
+		.or(z.literal("")),
+	country: z.string().optional(),
+	state: z.string().optional(),
+	phoneNumber: z.string().optional(),
+});
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+function EditProfile({
+	userData = {} as UserProps,
+	token,
+	profileId,
+}: EditProfileProps) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
+	console.log(userData)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			username: userData.username || "",
+			firstName: userData.firstName || "",
+			lastName: userData.lastName || "",
+			bio: userData.bio || "",
+			externalLink: userData.externalLink || "",
+			country: userData.country || "",
+			state: userData.state || "",
+			phoneNumber: userData.phoneNumber || "",
+		},
+	});
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+	const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-    try {
-      const response = await axios.put(
-        `${API_BASE_URL}auth/profile/${profileId}`,
-        {
-          username: formData.username,
-          profilePic: formData.profilePic,
-          coverPic: formData.coverPhoto,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          bio: formData.bio,
-          external_link: formData.externalLink, 
-          country: formData.country,
-          state: formData.state, 
-          phoneNumber: formData.phoneNumber,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		console.log(values);
+		setLoading(true);
 
-      if (response.status === 200) {
-        setUserData({
-          ...userData,
-          name: `${formData.firstName} ${formData.lastName}`,
-          bio: formData.bio,
-          country: formData.country,
-          state: formData.state,
-          phoneNumber: formData.phoneNumber,
-          username: formData.username,
-          profilePic: formData.profilePic,
-          coverPhoto: formData.coverPhoto,
-        });
-        toggleModal();
-        toast.success("Profile updated successfully!");
-      } else {
-        setError("Failed to update profile.");
-        toast.error("Failed to update profile.");
-      }
-    } catch (error) {
-      setError("An error occurred while updating the profile.");
-      console.error("Error updating profile:", error);
-      toast.error("An error occurred while updating the profile.");
-    } finally {
-      setLoading(false);
-    }
-  };
+		try {
+			const updateUserProfile = makeFetch<SuccessResponse<Partial<UserProps>>>(
+				"general",
+				`/auth/profile/${profileId}`,
+				token,
+				{
+					method: "PUT",
+					body: {
+						username: values.username,
+						firstName: values.firstName,
+						lastName: values.lastName,
+						bio: values.bio,
+						country: values.country,
+						state: values.state,
+						phoneNumber: values.phoneNumber,
+						externalLink: values.externalLink,
+					},
+				},
+			);
 
-  return (
-    <>
-      <Button
-        onClick={toggleModal}
-        className="bg-[#FAFAFA] hover:bg-white hover:border-[#171717] text-[#171717] font-medium rounded-full transition duration-300 ease-in-out border"
-      >
-        <Pencil className="pr-2" /> Edit Profile
-      </Button>
+			const res = await updateUserProfile();
+			console.log(res, "response");
+			if (res.statusCode === 200) {
+				await revalidateTagServer(`profile-${profileId}`);
+				toggleModal();
+				toast.success("Profile updated successfully!");
+			} else {
+				toast.error(res?.message);
+			}
+		} catch (error) {
+			console.error(error);
+			console.error("Error updating profile:", error);
+			toast.error("An error occurred while updating the profile.");
+		} finally {
+			setLoading(false);
+		}
+	};
 
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black opacity-50" />
-          <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-lg z-10 overflow-hidden">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold">Edit Profile</h2>
-              <button onClick={toggleModal} className="text-gray-500 hover:text-gray-700">
-                <XIcon className="w-6 h-6" />
-              </button>
-            </div>
+	return (
+		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+			
+			<DialogTrigger asChild>
+				
+				<Button variant={"outline"} className="rounded-full">
+					<Pencil className="mr-2 h-4 w-4 hidden md:block" /> Edit Profile
+				</Button>
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>Edit Profile</DialogTitle>
+				</DialogHeader>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+						<FormField
+							control={form.control}
+							name="username"
+							render={({ field }) => (
+								<FormItem className="space-y-1">
+									<FormLabel>Username</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<div className="flex flex-col gap-1 md:flex-row md:gap-3">
+							<FormField
+								control={form.control}
+								name="firstName"
+								render={({ field }) => (
+									<FormItem className="space-y-1">
+										<FormLabel>First Name</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="lastName"
+								render={({ field }) => (
+									<FormItem className="space-y-1">
+										<FormLabel>Last Name</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<FormField
+							control={form.control}
+							name="bio"
+							render={({ field }) => (
+								<FormItem className="space-y-1">
+									<FormLabel>Bio</FormLabel>
+									<FormControl>
+										<Textarea {...field} className="resize-none" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="externalLink"
+							render={({ field }) => (
+								<FormItem className="space-y-1">
+									<FormLabel>External Link</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-
-            <form onSubmit={handleSubmit} className="max-h-96 overflow-y-auto custom-scroll">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Username</label>
-                  <input 
-                    type="text" 
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">First Name</label>
-                  <input 
-                    type="text" 
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                  <input 
-                    type="text" 
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Bio</label>
-                  <textarea 
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">External Link</label>
-                  <input 
-                    type="text" 
-                    name="externalLink"
-                    value={formData.externalLink}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Location</label>
-                  <div className="flex space-x-4">
-                    <div className="w-full">
-                      <label className="block text-sm font-medium text-gray-700">Country</label>
-                      <input 
-                        type="text" 
-                        name="country"
-                        value={formData.country}
-                        onChange={handleChange}
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                      />
-                    </div>
-                    <div className="w-full">
-                      <label className="block text-sm font-medium text-gray-700">State</label>
-                      <input 
-                        type="text" 
-                        name="state"
-                        value={formData.state}
-                        onChange={handleChange}
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                  <input 
-                    type="text" 
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md" disabled={loading}>
-                  {loading ? "Updating..." : "Update Profile"}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <Toaster />
-    </>
-  );
+						<div className="flex items-center gap-4">
+							<FormField
+								control={form.control}
+								name="country"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Country</FormLabel>
+										<FormControl>
+											<CountrySelect {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="state"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>State</FormLabel>
+										<FormControl>
+											<RegionSelect
+												{...field}
+												countryCode={form.getValues("country") as string}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							{/* <CountryDropdown /> */}
+							{/* <StateDropdown /> */}
+						</div>
+						<FormField
+							control={form.control}
+							name="phoneNumber"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Phone Number</FormLabel>
+									<FormControl>
+										<PhoneInput {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Button type="submit" className="w-full" disabled={loading}>
+							{loading ? "Updating..." : "Update Profile"}
+						</Button>
+					</form>
+				</Form>
+			</DialogContent>
+		</Dialog>
+	);
 }
 
 export default EditProfile;

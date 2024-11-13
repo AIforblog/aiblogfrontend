@@ -9,7 +9,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   return (
     <div className="min-h-screen bg-[#D4D4D4]">
       <Navbar />
-      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         {children}
       </main>
     </div>

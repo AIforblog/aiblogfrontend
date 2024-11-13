@@ -44,6 +44,7 @@ const CreatePost = () => {
 		console.log(data);
 		if (data?.statusCode === 201) {
 			toast.success("Post Created Successfully");
+			router.push("/");
 		}
 
 		if (err) {
@@ -51,7 +52,6 @@ const CreatePost = () => {
 		}
 
 		form.reset();
-		router.push("/");
 	};
 
 	return (

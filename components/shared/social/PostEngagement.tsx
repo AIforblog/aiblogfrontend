@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { LikeButton } from "./LikeButton";
 import { CommentButton } from "./CommentButton";

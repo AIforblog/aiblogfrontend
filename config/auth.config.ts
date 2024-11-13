@@ -75,9 +75,31 @@ export const authConfig = {
     requestOtp: "auth/otp/sent",
   },
   COOKIE_OPTIONS: {
+    httpOnly: true,
     path: "/",
     maxAge: 86000, // 24 hours
     sameSite: "strict" as const,
     secure: process.env.NODE_ENV === "production",
   },
+};
+
+export const setSecureCookie = (
+  cookieStore: any,
+  key: string,
+  value: string,
+  options = {}
+) => {
+  cookieStore.set(key, value, {
+    ...authConfig.COOKIE_OPTIONS,
+    ...options,
+  });
+};
+
+// Function to handle secure cookie deletion
+export const deleteSecureCookie = (cookieStore: any, key: string) => {
+  cookieStore.delete(key, {
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
 };

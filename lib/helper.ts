@@ -1,4 +1,9 @@
-import { AUTH_API_BASE_URL, BLOG_API_BASE_URL } from "./constants";
+
+import {
+	API_BASE_URL,
+	AUTH_API_BASE_URL,
+	BLOG_API_BASE_URL,
+} from "./constants";
 
 export function formatNumber(num: number): string {
 	return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
@@ -17,7 +22,7 @@ interface FetchOptions extends Omit<RequestInit, "method" | "body"> {
 }
 
 export default function makeFetch<T>(
-	service: "blog" | "auth",
+	service: "blog" | "auth" | "general",
 	path: string,
 	accessToken: string | null,
 	options: FetchOptions = {},
@@ -50,7 +55,7 @@ export default function makeFetch<T>(
 		}
 
 		const res = await fetch(
-			`${service === "blog" ? BLOG_API_BASE_URL : AUTH_API_BASE_URL}${path}`,
+			`${service === "blog" ? BLOG_API_BASE_URL : service === "general" ? API_BASE_URL : AUTH_API_BASE_URL}${path}`,
 			fetchOptions,
 		);
 
@@ -61,3 +66,15 @@ export default function makeFetch<T>(
 		return (await res.text()) as unknown as T;
 	};
 }
+/**
+ * Formats a given date string or Date object to "Month, Year".
+ * @param date - The date to format (as a Date object or an ISO date string).
+ * @returns The formatted date as "Month, Year".
+ */
+ export function formatJoinDate(date: string | number | undefined): string {
+	const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+	if(!date) return ""
+	return new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+  }
+  
+  

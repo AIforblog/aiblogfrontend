@@ -1,11 +1,17 @@
+"use client"
 import React from "react";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 import { Search, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import navImg from "../../public/assets/nav-profile.png";
 import styles from "./Navbar.module.css";
+import Link from "next/link";
 
 const Navbar = () => {
+  const  pathname = usePathname().split("/")[2];
+  console.log(pathname,"pathname")
   return (
     <nav className="border-b border-gray-200 bg-white">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,33 +19,57 @@ const Navbar = () => {
           {/* Left section - Logo and Navigation */}
           <div className="flex items-center">
             {/* Logo */}
-            <a href="/" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <span className={styles.logoText}>drello</span>
-            </a>
+            </Link>
 
             {/* Navigation Links */}
             <div className="ml-10 flex items-center space-x-8">
-              <a href="/overview" className="text-gray-500 hover:text-gray-900">
+              <Link
+                href="overview"
+                className={cn(
+                  "text-gray-500 hover:text-gray-900",
+                  pathname === "overview" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                )}
+              >
                 Overview
-              </a>
-              <a href="/user" className="text-gray-500 hover:text-gray-900">
+              </Link>
+              <Link
+                href="user"
+                className={cn(
+                  "text-gray-500 hover:text-gray-900",
+                  pathname === "user" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                )}
+              >
                 User
-              </a>
-              <a href="/content" className="text-gray-500 hover:text-gray-900">
+              </Link>
+              <Link
+                href="content"
+                className={cn(
+                  "text-gray-500 hover:text-gray-900",
+                  pathname === "content" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                )}
+              >
                 Content
-              </a>
-              <a
-                href="/jobs"
-                className="text-yellow-500 hover:text-gray-900 border-b-2 border-yellow-400 pb-4"
+              </Link>
+              <Link
+                href="dashboard"
+                className={cn(
+                  "text-gray-500 hover:text-gray-900",
+                  pathname === "dashboard" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                )}
               >
                 Jobs/Post
-              </a>
-              <a
-                href="/transactions"
-                className="text-gray-500 hover:text-gray-900"
+              </Link>
+              <Link
+                href="transactions"
+                className={cn(
+                  "text-gray-500 hover:text-gray-900",
+                  pathname === "transactions" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                )}
               >
                 Transactions
-              </a>
+              </Link>
             </div>
           </div>
 

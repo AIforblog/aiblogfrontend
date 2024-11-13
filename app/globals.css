@@ -134,3 +134,50 @@ body {
 	background-repeat: repeat-x;
 	background-position: 0 100%;
 }
+
+ .bg-wallet-balance {
+	border-radius: 0px 0px 10px 10px;
+	background: linear-gradient(90deg, #7D7D7D 0%, #171717 82.86%);
+}
+.loading-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000; /* Ensure it appears above other content */
+  }
+  
+  .loading-modal {
+	background: #fff;
+	padding: 20px 30px;
+	border-radius: 8px;
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .spinner {
+	width: 40px;
+	height: 40px;
+	border: 4px solid rgba(0, 0, 0, 0.1);
+	border-top: 4px solid #3498db; /* Customize color */
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 0 auto 10px;
+  }
+  
+  @keyframes spin {
+	to {
+	  transform: rotate(360deg);
+	}
+  }
+  
+  .loading-message {
+	font-size: 16px;
+	color: #333;
+  }
+  
