@@ -3,15 +3,17 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "../../../schemas/index";
-import Image from "next/image";
+
 import { Mail, Eye, EyeOff } from "lucide-react";
-import Google from "../../../public/assets/icons/iconGoogle.svg";
+// import Google from "../../../public/assets/icons/iconGoogle.svg";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signInAuth, initiateGoogleSignIn } from "@/actions/userAuth";
+import { signInAuth } from "@/actions/userAuth";
 import { SignInParams } from "@/types/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import GoogleLoginButton from "../../components/auth/googleLoginButton";
+import GoogleOAuthProviderWrapper from "./GoogleOAuthProvider";
 
 type FormData = {
   email: string;
@@ -113,81 +115,82 @@ const SignInForm = () => {
     }
   };
 
-  // const handleGoogleAuth = async () => {
-  //   setIsGoogleLoading(true);
-  //   try {
-  //     const { authUrl, error } = await initiateGoogleSignIn();
+  const clearPreviousAuth = () => {
+    // Clear any existing Google auth tokens
+    sessionStorage.removeItem("userData");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
 
-  //     if (error) {
-  //       setError(error);
-  //       toast({
-  //         title: "Google Sign In Failed",
-  //         description: error,
-  //         variant: "destructive",
-  //         className:
-  //           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
-  //       });
-  //       return;
-  //     }
+    // Clear cookies related to Google auth
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+  };
 
-  //     if (authUrl) {
-  //       // Redirect to Google auth URL
-  //       window.location.href = authUrl;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error initiating Google sign in:", error);
-  //     setError("Failed to initiate Google sign in. Please try again.");
-  //     toast({
-  //       title: "Google Sign In Failed",
-  //       description: "An unexpected error occurred. Please try again.",
-  //       variant: "destructive",
-  //       className:
-  //         "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
-  //     });
-  //   } finally {
-  //     setIsGoogleLoading(false);
-  //   }
-  // };
-
-  const handleGoogleAuth = async () => {
-    console.log("handleGoogleAuth started");
-    setIsGoogleLoading(true);
-
+  const handleGoogleAuth = async (id_token: string) => {
     try {
-      const { authUrl, error } = await initiateGoogleSignIn();
-      console.log("initiateGoogleSignIn response:", { authUrl, error });
+      const response = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id_token, isNewLogin: true }),
+        credentials: "include", // Important for handling cookies
+      });
 
-      if (error) {
-        console.error("Error returned from initiateGoogleSignIn:", error);
-        setError(error);
-        toast({
-          title: "Google Sign In Failed",
-          description: error,
-          variant: "destructive",
-          className:
-            "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
-        });
-        return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed");
       }
 
-      if (authUrl) {
-        console.log("Redirecting to Google auth URL:", authUrl);
-        // Store the current URL as the return URL
-        sessionStorage.setItem("returnUrl", window.location.href);
-        // Redirect to the Google auth URL
-        window.location.href = authUrl;
+      return data;
+    } catch (error) {
+      console.error("Google auth API error:", error);
+      throw error;
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    setIsGoogleLoading(true);
+    try {
+      clearPreviousAuth();
+
+      const result = await handleGoogleAuth(credentialResponse.credential);
+
+      if (result.success) {
+        // Store user data in session storage as backup
+        if (result.user) {
+          sessionStorage.setItem("userData", JSON.stringify(result.user));
+        }
+        if (result.accessToken) {
+          sessionStorage.setItem("accessToken", result.accessToken);
+        }
+        if (result.refreshToken) {
+          sessionStorage.setItem("refreshToken", result.refreshToken);
+        }
+
+        toast({
+          title: "Sign in successful",
+          description: "Welcome! Your account has been connected.",
+          className:
+            "bg-green-100 text-green-800 border border-green-300 rounded-lg p-4 shadow-md",
+        });
+
+        router.push("/");
       } else {
-        throw new Error("No authentication URL received");
+        throw new Error(result.error || "Authentication failed");
       }
     } catch (error) {
-      console.error("Error in handleGoogleAuth:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
-
-      setError("Failed to initiate Google sign in. Please try again.");
+      console.error("Google authentication failed:", error);
       toast({
-        title: "Google Sign In Failed",
-        description: errorMessage,
+        title: "Authentication Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to sign in with Google. Please try again.",
         variant: "destructive",
         className:
           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
@@ -203,7 +206,16 @@ const SignInForm = () => {
         <h2 className="text-sm text-gray-500 mb-2">WELCOME BACK</h2>
         <h1 className="text-2xl font-bold mb-6">Sign In to Your Account</h1>
 
-        <div className="flex mb-4">
+        <div className="flex mb-4 justify-center items-center">
+          <GoogleOAuthProviderWrapper>
+            <GoogleLoginButton
+              onSuccess={handleGoogleLogin}
+              onError={(error) => console.error(error)}
+              disabled={isGoogleLoading}
+            />
+          </GoogleOAuthProviderWrapper>
+        </div>
+        {/* <div className="flex mb-4">
           <div className="w-12 h-12 bg-transparent border border-yellow-400 rounded-l-lg flex items-center justify-center">
             <Image src={Google} alt="Google Icon" width={24} height={24} />
           </div>
@@ -239,7 +251,7 @@ const SignInForm = () => {
               "Sign in with Google"
             )}
           </button>
-        </div>
+        </div> */}
 
         <div className="flex items-center mb-4">
           <div className="flex-grow h-px bg-gray-300"></div>
