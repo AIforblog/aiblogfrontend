@@ -32,6 +32,7 @@ import {
 interface User {
   id: string;
   name: string;
+  avatar?: string;
   profile_pic: string;
   username: string;
 }

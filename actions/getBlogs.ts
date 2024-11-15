@@ -2,7 +2,6 @@
 "use server";
 import type { BlogResponse, SingleBlogResponse } from "@/types/blog";
 import { cookies } from "next/headers";
-import { getAuthHeaders } from "@/lib/auth";
 import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -11,7 +10,6 @@ export async function getBlogs(page = 1, featured = false, search = "") {
   const cookieStore = cookies();
 
   try {
-    const headers = await getAuthHeaders();
     const queryParams = new URLSearchParams({
       page: page.toString(),
       ...(featured && { featured: "true" }),
@@ -19,10 +17,7 @@ export async function getBlogs(page = 1, featured = false, search = "") {
     });
 
     const response = await axios.get<BlogResponse>(
-      `${API_BASE_URL}blog?${queryParams}`,
-      {
-        headers,
-      }
+      `${API_BASE_URL}blog?${queryParams}`
     );
 
     if (!response.data || !response.data.data?.results) {
@@ -76,12 +71,8 @@ export async function getBlogPost(postId: string) {
   const cookieStore = cookies();
 
   try {
-    const headers = await getAuthHeaders();
     const response = await axios.get<SingleBlogResponse>(
-      `${API_BASE_URL}blog/${postId}`,
-      {
-        headers,
-      }
+      `${API_BASE_URL}blog/${postId}`
     );
 
     if (!response.data || !response.data.data) {

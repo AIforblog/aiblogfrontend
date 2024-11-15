@@ -97,6 +97,93 @@ export const signInAuth = async (
   }
 };
 
+export const signOutAuth = async (): Promise<{
+  status_code: number;
+  message?: string;
+  error?: string;
+}> => {
+  try {
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get(authConfig.accessTokenKey);
+
+    if (!accessToken) {
+      return {
+        status_code: 401,
+        error: "No access token found",
+      };
+    }
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      // Clear all cookies
+      deleteSecureCookie(cookieStore, authConfig.accessTokenKey);
+      deleteSecureCookie(cookieStore, authConfig.refreshTokenKey);
+      deleteSecureCookie(cookieStore, authConfig.userDataKey);
+
+      return {
+        status_code: response.status,
+        // message: "Logout successful",
+      };
+    } else {
+      return {
+        status_code: response.status,
+        error: response.data.message || "Unexpected response structure",
+      };
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error response:", error.response);
+      console.error("Axios error message:", error.message);
+      console.error("Axios error config:", error.config);
+      return {
+        status_code: error.response?.status || 500,
+        error:
+          error.response?.data?.message || "An error occurred during sign out",
+      };
+    }
+    console.error("Unexpected sign out error:", error);
+    return {
+      status_code: 500,
+      error: "An unexpected error occurred",
+    };
+  }
+};
+
+export const logOutAuth = async (): Promise<{
+  status_code: number;
+  message?: string;
+  error?: string;
+}> => {
+  try {
+    const cookieStore = cookies();
+
+    // Clear all cookies
+    deleteSecureCookie(cookieStore, authConfig.accessTokenKey);
+    deleteSecureCookie(cookieStore, authConfig.refreshTokenKey);
+    deleteSecureCookie(cookieStore, authConfig.userDataKey);
+
+    return {
+      status_code: 200,
+      message: "Logout successful",
+    };
+  } catch (error) {
+    console.error("Unexpected sign out error:", error);
+    return {
+      status_code: 500,
+      error: "An unexpected error occurred",
+    };
+  }
+};
+
 export const validateOtp = async (email: string, otp: string): Promise<any> => {
   try {
     const response = await axios.post(`${API_URL}auth/otp/validate`, {

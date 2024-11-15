@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,7 @@ export const CommentButton = ({
       )}
       onClick={onClick}
     >
-      <MessageCircle className="w-4 h-4 mr-2" />
+      <MessageSquare className="w-4 h-4 mr-2" />
       {commentsCount}
     </Button>
   );
