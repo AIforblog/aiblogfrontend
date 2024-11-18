@@ -54,7 +54,7 @@ export interface BlogType {
   user: UserProps;
   id: string;
   title: string;
-  username: string;
+  username?: string;
   profilePic?: string;
   subtitle?: string;
   bio?: string;
