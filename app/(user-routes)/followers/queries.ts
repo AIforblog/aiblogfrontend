@@ -6,48 +6,54 @@ import type { UserProps } from "@/types/user";
 type FollowResponse = SuccessResponse<UserProps[]> | ErrorResponse | undefined;
 
 export const getFollowers = async (): Promise<FollowResponse> => {
-	const user = await assertUserAuthenticated();
-	const fetchFollowers = makeFetch<SuccessResponse<UserProps[]>>(
-		"auth",
-		"/auth/followers",
-		user?.accessToken.value,
-		{
-			next: {
-				tags: ["followers"],
-			},
-		},
-	);
+  const user = await assertUserAuthenticated();
+  if (!user) {
+    throw new Error("User authentication failed");
+  }
+  const fetchFollowers = makeFetch<SuccessResponse<UserProps[]>>(
+    "auth",
+    "/auth/followers",
+    user?.accessToken.value,
+    {
+      next: {
+        tags: ["followers"],
+      },
+    }
+  );
 
-	try {
-		const response = await fetchFollowers();
-		if ("data" in response) {
-			return response as SuccessResponse<UserProps[]>;
-		}
-		return response as ErrorResponse;
-	} catch (err) {
-		console.log(err);
-		return undefined;
-	}
+  try {
+    const response = await fetchFollowers();
+    if ("data" in response) {
+      return response as SuccessResponse<UserProps[]>;
+    }
+    return response as ErrorResponse;
+  } catch (err) {
+    console.log(err);
+    return undefined;
+  }
 };
 
 export const getFollowees = async (): Promise<FollowResponse> => {
-	const user = await assertUserAuthenticated();
-	const fetchFollowees = makeFetch<
-		SuccessResponse<UserProps[]> | ErrorResponse
-	>("auth", "/auth/followees", user?.accessToken.value, {
-		next: {
-			tags: ["followees"],
-		},
-	});
+  const user = await assertUserAuthenticated();
+  if (!user) {
+    throw new Error("User authentication failed");
+  }
+  const fetchFollowees = makeFetch<
+    SuccessResponse<UserProps[]> | ErrorResponse
+  >("auth", "/auth/followees", user?.accessToken.value, {
+    next: {
+      tags: ["followees"],
+    },
+  });
 
-	try {
-		const response = await fetchFollowees();
-		if ("data" in response) {
-			return response as SuccessResponse<UserProps[]>;
-		}
-		return response as ErrorResponse;
-	} catch (err) {
-		console.log(err);
-		return undefined;
-	}
+  try {
+    const response = await fetchFollowees();
+    if ("data" in response) {
+      return response as SuccessResponse<UserProps[]>;
+    }
+    return response as ErrorResponse;
+  } catch (err) {
+    console.log(err);
+    return undefined;
+  }
 };
