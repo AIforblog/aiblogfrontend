@@ -85,7 +85,14 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
       } rounded-xl`}
     >
       <CardHeader className="p-0">
-        <UserProfile user={blog.user} />
+        <UserProfile
+          user={{
+            username: blog.username,
+            profilePic: blog.profilePic, // Add a default avatar
+            name: blog.username,
+            id: blog.id,
+          }}
+        />
       </CardHeader>
 
       <CardContent

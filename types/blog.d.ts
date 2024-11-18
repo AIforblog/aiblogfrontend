@@ -54,6 +54,8 @@ export interface BlogType {
   user: UserProps;
   id: string;
   title: string;
+  username: string;
+  profilePic?: string;
   subtitle?: string;
   bio?: string;
   externalLink?: string;
@@ -83,6 +85,7 @@ export type BlogPost = {
   username: string;
   category: string;
   status: string;
+  profilePic?: string;
   views: number;
   likes: number;
   comments: number;
