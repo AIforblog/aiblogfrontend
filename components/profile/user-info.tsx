@@ -21,7 +21,7 @@ interface ProfileCardProps {
 // };
 
 const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
-  const DateJoined = formatJoinDate(user.createdAt);
+  const DateJoined = formatJoinDate(user?.createdAt);
   return (
     <div className={cn("flex flex-col  justify-between gap-2 px-4", className)}>
       <div className="md:w-[70%] flex gap-2 mb-3 items-center">
@@ -30,7 +30,7 @@ const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
             { user?.firstName || user?.firstName ? `${user?.firstName} ${user?.lastName} ` : "Your Full Name"}
           </h4>
           <p className="text-xs font-normal mb-3 mt-1 text-[#262626] pb-2">
-            @{user.username}
+            @{user?.username}
           </p>
           <p className="text-xs font-normal  text-[#262626]">
             {user?.bio}

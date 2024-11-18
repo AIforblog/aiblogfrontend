@@ -35,7 +35,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <Aside />
               </div>
               <div
-                className="grow md:bg-neutral-50 md:border p-4 md:p-6 rounded-[24px] overflow-y-auto"
+                className="grow md:bg-neutral-50 md:border p-4 md:p-6 rounded-[24px] overflow-y-auto custom-scroll"
                 style={{
                   boxShadow: isDesktop
                     ? "0px 10px 15px -3px #1018281A, 0px 4px 6px -4px #1018281A"
