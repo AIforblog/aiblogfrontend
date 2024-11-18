@@ -20,6 +20,8 @@ import { generateSlug } from "@/lib/utils";
 import { fetchBlogPost } from "@/hooks/useBlogPost";
 import he from "he";
 import { useRouter } from "next/navigation";
+import { AuthRequiredModal } from "@/components/shared/unauthenticatedUserActions";
+import { assertUserAuthenticated } from "@/lib/auth";
 
 interface MainBloyType {
   blog: BlogType;
@@ -42,6 +44,7 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
   const id = generateSlug(blog.id);
   const [isLiked, setIsLiked] = useState(blog.metrics.isLiked || false);
   const [likesCount, setLikesCount] = useState(blog.metrics.likesCount);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const router = useRouter();
   useEffect(() => {
     // Store the mapping when component mounts
@@ -54,6 +57,13 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
   }
 
   const handleLikeToggle = async () => {
+    const authResult = await assertUserAuthenticated();
+
+    if (!authResult) {
+      setShowAuthModal(true);
+      return;
+    }
+
     try {
       // Toggle the local like state and count
       setIsLiked((prev) => !prev);
@@ -76,65 +86,74 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
   };
 
   return (
-    <Card
-      className={`w-full  flex flex-col gap-y-3 border-none ${
-        hasBackground ? "bg-white" : "bg-transparent"
-      } ${hasBackground ? "mb-0" : "mb-6"}
+    <>
+      <Card
+        className={`w-full  flex flex-col gap-y-3 border-none ${
+          hasBackground ? "bg-white" : "bg-transparent"
+        } ${hasBackground ? "mb-0" : "mb-6"}
        ${hasBackground ? "p-4" : "p-0"} ${
-        hasShadow ? "bg-white" : "shadow-none"
-      } rounded-xl`}
-    >
-      <CardHeader className="p-0">
-        <UserProfile
-          user={{
-            username: blog.username as string,
-            profilePic: blog.profilePic, // Add a default avatar
-            name: blog.username as string,
-            id: blog.id,
-          }}
-        />
-      </CardHeader>
-
-      <CardContent
-        className="flex flex-col p-0 gap-y-3 cursor-pointer"
-        onClick={handleClick}
+          hasShadow ? "bg-white" : "shadow-none"
+        } rounded-xl`}
       >
-        <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
-          {blog.title}
-        </CardTitle>
-
-        {/* Description */}
-        <CardDescription className="text-base font-normal leading-6 text-[#737373]">
-          {previewText}
-        </CardDescription>
-
-        <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] rounded-xl overflow-hidden">
-          <Image
-            src={blog.image || "/default-blog-image.jpg"}
-            alt={`${blog.title} blog image`}
-            width={1000}
-            height={1000}
-            objectFit="cover"
-            className="rounded-lg"
+        <CardHeader className="p-0">
+          <UserProfile
+            user={{
+              username: blog.username as string,
+              profilePic: blog.profilePic, // Add a default avatar
+              name: blog.username as string,
+              id: blog.id,
+            }}
           />
-        </div>
-      </CardContent>
+        </CardHeader>
 
-      <CardFooter className="p-0 flex flex-row items-center justify-between">
-        <PostMetrics
-          item={{
-            ...blog.metrics,
-            isLiked,
-            likesCount,
-            commentsCount: blog.metrics.commentsCount,
-            sharesCount: blog.metrics.sharesCount,
-            onLike: handleLikeToggle,
-          }}
+        <CardContent
+          className="flex flex-col p-0 gap-y-3 cursor-pointer"
+          onClick={handleClick}
+        >
+          <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
+            {blog.title}
+          </CardTitle>
+
+          {/* Description */}
+          <CardDescription className="text-base font-normal leading-6 text-[#737373]">
+            {previewText}
+          </CardDescription>
+
+          <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] rounded-xl overflow-hidden">
+            <Image
+              src={blog.image || "/default-blog-image.jpg"}
+              alt={`${blog.title} blog image`}
+              width={1000}
+              height={1000}
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
+        </CardContent>
+
+        <CardFooter className="p-0 flex flex-row items-center justify-between">
+          <PostMetrics
+            item={{
+              ...blog.metrics,
+              isLiked,
+              likesCount,
+              commentsCount: blog.metrics.commentsCount,
+              sharesCount: blog.metrics.sharesCount,
+              onLike: handleLikeToggle,
+            }}
+          />
+
+          <BlogExtraInfo items={blog.extra_info} />
+        </CardFooter>
+      </Card>
+
+      {showAuthModal && (
+        <AuthRequiredModal
+          action="like this post"
+          onClose={() => setShowAuthModal(false)}
         />
-
-        <BlogExtraInfo items={blog.extra_info} />
-      </CardFooter>
-    </Card>
+      )}
+    </>
   );
 });
 

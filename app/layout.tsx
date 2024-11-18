@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { Providers } from "./Providers";
+import { AuthWrapper } from "./AuthWrapper";
 
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
@@ -24,8 +25,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${DmSans.className} antialiased bg-[#FAFAFA]`}>
         <Providers>
-          {children}
-          <Toaster />
+          <AuthWrapper>
+            {children}
+            <Toaster />
+          </AuthWrapper>
         </Providers>
       </body>
     </html>

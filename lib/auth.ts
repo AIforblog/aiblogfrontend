@@ -12,7 +12,8 @@ export const assertUserAuthenticated = async () => {
   const userDataCookie = cookieStore.get("userData");
 
   if (!accessToken || !userDataCookie) {
-    throw new Error("User not authenticated");
+    // throw new Error("User not authenticated");
+    return null;
   }
 
   try {
