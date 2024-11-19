@@ -20,9 +20,6 @@ export const action = authenticatedAction
     };
 
     const user = await assertUserAuthenticated();
-    if (!user) {
-      throw new Error("User authentication failed");
-    }
     const followUser = makeFetch<Success>(
       "auth",
       `/auth/${path}/${followeeId}`,

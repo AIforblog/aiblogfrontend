@@ -6,15 +6,19 @@ import { assertUserAuthenticated } from "@/lib/auth";
 import { usePathname } from "next/navigation";
 
 export function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const authResult = await assertUserAuthenticated();
-      setIsAuthenticated(!!authResult);
+      try {
+        await assertUserAuthenticated();
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+        console.error(error);
+      }
     };
-
     checkAuthentication();
 
     // Listen for custom authentication event

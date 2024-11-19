@@ -34,6 +34,29 @@ const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const handleSuccessfulAuth = () => {
+    const returnPath = sessionStorage.getItem("authReturnPath");
+    const hadCallback = sessionStorage.getItem("authCallback");
+
+    // Clear auth-related storage
+    sessionStorage.removeItem("authReturnPath");
+    sessionStorage.removeItem("pendingAuthAction");
+    sessionStorage.removeItem("authCallback");
+
+    // If there was a callback registered, dispatch the auth success event
+    if (hadCallback === "true") {
+      window.dispatchEvent(new Event("auth-success"));
+    }
+
+    // Navigate back to the return path if it exists
+    if (returnPath) {
+      router.push(returnPath);
+    } else {
+      // Default redirect if no return path
+      router.push("/");
+    }
+  };
+
   const onSubmit = async (data: SignInParams) => {
     console.log("FUnction called");
     setIsLoading(true);
@@ -66,6 +89,7 @@ const SignInForm = () => {
               className:
                 "bg-green-100 text-green-800 border border-green-300 rounded-lg p-4 shadow-md",
             });
+            handleSuccessfulAuth();
             router.push("/");
           } catch (storageError) {
             console.error(

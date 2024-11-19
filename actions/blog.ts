@@ -32,9 +32,6 @@ export const postBlogAction = authenticatedAction
       input: { title, content, fileWrapper, tags, category },
       ctx: { user },
     }) => {
-      if (!user) {
-        throw new Error("User authentication failed");
-      }
       try {
         const coverImageFile = fileWrapper.get("file") as File;
         if (!coverImageFile) {

@@ -35,9 +35,6 @@ export const getFollowers = async (): Promise<FollowResponse> => {
 
 export const getFollowees = async (): Promise<FollowResponse> => {
   const user = await assertUserAuthenticated();
-  if (!user) {
-    throw new Error("User authentication failed");
-  }
   const fetchFollowees = makeFetch<
     SuccessResponse<UserProps[]> | ErrorResponse
   >("auth", "/auth/followees", user?.accessToken.value, {

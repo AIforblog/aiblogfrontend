@@ -57,25 +57,27 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
   }
 
   const handleLikeToggle = async () => {
-    const authResult = await assertUserAuthenticated();
-
-    if (!authResult) {
-      setShowAuthModal(true);
-      return;
-    }
-
     try {
-      // Toggle the local like state and count
-      setIsLiked((prev) => !prev);
-      setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
+      await assertUserAuthenticated();
 
-      // Call the API to like or unlike the post
-      await reactToPost(blog.id);
+      // If we get here, user is authenticated, proceed with like action
+      try {
+        // Toggle the local like state and count
+        setIsLiked((prev) => !prev);
+        setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
+
+        // Call the API to like or unlike the post
+        await reactToPost(blog.id);
+      } catch (error) {
+        // Revert state if API call fails
+        setIsLiked((prev) => !prev);
+        setLikesCount((prev) => (isLiked ? prev + 1 : prev - 1));
+        console.error("Error liking post:", error);
+      }
     } catch (error) {
-      setIsLiked((prev) => !prev);
-      setLikesCount((prev) => (isLiked ? prev + 1 : prev - 1));
-      throw error;
-      // Revert state if API call fails
+      // Show auth modal if authentication failed
+      setShowAuthModal(true);
+      console.error("Authentication failed:", error);
     }
   };
 
@@ -151,6 +153,11 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
         <AuthRequiredModal
           action="like this post"
           onClose={() => setShowAuthModal(false)}
+          redirectPath={`/explore/${blog.id}`} // Add this to return to the same post
+          onAuthenticated={() => {
+            setShowAuthModal(false);
+            handleLikeToggle(); // Retry the like action after authentication
+          }}
         />
       )}
     </>
