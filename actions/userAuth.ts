@@ -263,6 +263,26 @@ export const refreshToken = async () => {
   }
 };
 
+export const handleGoogleAuth = async (id_token: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/google`, {
+      id_token,
+    });
+
+    const { user, accessToken, refreshToken } = response.data;
+
+    const cookieStore = cookies();
+    setSecureCookie(cookieStore, authConfig.accessTokenKey, accessToken);
+    setSecureCookie(cookieStore, authConfig.refreshTokenKey, refreshToken);
+    setSecureCookie(cookieStore, authConfig.userDataKey, JSON.stringify(user));
+
+    return { user, accessToken, refreshToken };
+  } catch (error) {
+    console.error("Error in Google authentication:", error);
+    throw error;
+  }
+};
+
 export const initiateGoogleSignIn = async (): Promise<GoogleSignInResponse> => {
   console.log("Initiating Google Sign In");
 

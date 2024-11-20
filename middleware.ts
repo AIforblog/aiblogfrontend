@@ -13,6 +13,8 @@ const publicRoutes = [
   "/explore",
   "/explore/[id]/page.tsx",
   "/jobs",
+  "/auth/google/callback",
+  "/auth/error",
 ];
 
 export async function middleware(request: NextRequest) {
