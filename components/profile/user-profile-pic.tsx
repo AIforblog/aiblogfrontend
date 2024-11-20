@@ -23,7 +23,7 @@ const ProfilePic: React.FC<ProfileCardProps> = ({ user, className ,handleProfile
         <RoundedImage
           size={120}
           src={selectedProfileImage ||  user?.profilePic|| '/images/blank-profile-picture.png'}
-          alt={`${user.username} profile pic`}
+          alt={`${user?.username} profile pic`}
           className="border-4 border-white cursor-pointer"
         />
      

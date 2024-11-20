@@ -92,12 +92,12 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
         className="flex flex-col p-0 gap-y-3 cursor-pointer"
         onClick={handleClick}
       >
-        <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
+        <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] dark:text-neutral-100">
           {blog.title}
         </CardTitle>
 
         {/* Description */}
-        <CardDescription className="text-base font-normal leading-6 text-[#737373]">
+        <CardDescription className="text-base font-normal leading-6 text-[#737373] dark:text-neutral-300">
           {previewText}
         </CardDescription>
 

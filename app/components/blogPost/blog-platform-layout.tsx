@@ -68,7 +68,7 @@ export default function BlogPlatformLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full relative max-w-[1440px] mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-black w-full relative px-6 pt-6">
       <div className="md:hidden mb-4">
         <SearchInput placeholder="Find blogs..." onSearch={handleSearch} />
       </div>
@@ -80,8 +80,9 @@ export default function BlogPlatformLayout() {
             <Button
               key={category}
               className={cn(
-                "bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] rounded-[20px]",
-                category === currentCategory && "bg-black"
+                "bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] dark:text-neutral-500 dark:bg-transparent dark:border-neutral-800 rounded-[20px]",
+                category === currentCategory &&
+                  "bg-black dark:bg-neutral-800 dark:text-neutral-200"
               )}
               variant={category === currentCategory ? "default" : "outline"}
               size="sm"
@@ -95,7 +96,7 @@ export default function BlogPlatformLayout() {
 
       <CategoryItem />
 
-      <div className="flex flex-wrap -mx-4 w-full mb-12">
+      <div className="flex flex-wrap w-full mb-12">
         <div className="w-full">
           <h2 className="text-2xl font-bold mb-4">Recent Blogs</h2>
 
@@ -191,7 +192,9 @@ export default function BlogPlatformLayout() {
               </div>
             </div>
           )}
-          {error && <div className="text-red-500 text-center">{error}</div>}
+          {error && (
+            <div className="text-red-500 mt-24 text-center">{error}</div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {blogs.map((blog: BlogPost) => (

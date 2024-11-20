@@ -1,14 +1,31 @@
 "use client";
 
-import { SearchInput } from "@/components/shared";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { RoundedImage, SearchInput, ThemeToggle } from "@/components/shared";
 import { Button } from "@/components/ui/button";
-// import { UserData } from "@/data/mock/user";
-import { Bell, Edit3Icon } from "lucide-react";
+import { UserData } from "@/data/mock/user";
+import {
+  Bell,
+  ChevronDown,
+  Edit3Icon,
+  LogOut,
+  Settings,
+  UserIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MobileNav from "./mobile-nav";
-import SignProfileComponent from "@/app/components/auth/SignInprofile";
+import Image from "next/image";
+import LogoDark from "@/public/assets/icons/logo-dark.svg";
 
 interface NavLinksProps {
   routeName: string;
@@ -42,12 +59,12 @@ const NavBar = () => {
 
   return (
     <>
-      <header className="md:px-12 2xl:px-[8rem] hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] bg-white border-b border-[#E7E5E4]">
+      <header className="md:px-12 2xl:px-[8rem] hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] bg-white dark:bg-black/90 border-b border-[#E7E5E4] dark:border-neutral-800">
         <div className="flex flex-row items-center gap-x-16 mr-auto">
           {/* Logo */}
-          <div>
-            <h2>Logo</h2>
-          </div>
+          <a href="/">
+            <Image src={LogoDark} alt="Drello" className="w-16" />
+          </a>
 
           {/* Nav links */}
           <nav>
@@ -62,7 +79,7 @@ const NavBar = () => {
                     className={`nav-link text-base capitalize hover:cursor-pointer hover:text-[#fdc316] transition-all duration-300 ease-in-out transform hover:scale-105 hover:tracking-wide ${
                       activeLink === link.route
                         ? "text-[#fdc316] font-bold"
-                        : "text-[#171717] font-normal "
+                        : "text-[#171717] dark:text-neutral-50 font-normal"
                     }`}
                   >
                     {link.routeName}
@@ -87,7 +104,6 @@ const NavBar = () => {
           <div className="hidden md:block">
             <SearchInput onSearch={handleSearch} placeholder="Find..." />
           </div>
-
           {/* Write to earn btn */}
           <Link href={"/create"}>
             <Button className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] rounded-full py-3 gap-x-2 flex justify-center items-center transition duration-300 ease-in-out">
@@ -97,19 +113,68 @@ const NavBar = () => {
               </span>
             </Button>
           </Link>
-
           {/* Notification */}
-          <div className="flex-1 border rounded-full w-10 h-10 flex items-center justify-center hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
-            <Bell className="h-[18px] w-[18px] text-[#262626] " />
+          <div className="flex-1 border border-[#262626] dark:border-neutral-800 rounded-full w-9 h-9 flex items-center justify-center group hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
+            <Bell className="h-[18px] w-[18px] text-[#262626] dark:text-neutral-400 group-hover:dark:text-black/60" />
           </div>
-
           {/* User profile */}
-          {/* <RoundedImage
-						size={40}
-						src={UserData.profilePic}
-						alt={`${UserData.username} profile pic`}
-					/> */}
-          <SignProfileComponent />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              className="p-0 hover:cursor-pointer ring-0 outline-0 focus-within:ring-0 focus-within:outline-0 focus-visible:outline-0 focus-visible:ring-0"
+            >
+              <div className="flex flex-row gap-x-1 items-center">
+                <RoundedImage
+                  size={40}
+                  src={UserData.profilePic}
+                  alt={`${UserData.username} profile pic`}
+                />
+
+                <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
+              </div>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent className="w-[10rem] rounded-lg flex flex-col  mt-4 mr-12 border  bg-white dark:bg-black">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup className="flex flex-col">
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <div className="flex items-center gap-x-1.5 py-1">
+                    <UserIcon className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316] group-hover:fill-[#fdc316]" />
+                    <span className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]">
+                      Profile
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <div className="flex items-center gap-x-1.5 py-1">
+                    <Settings className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316]" />
+                    <span className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]">
+                      Settings
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuGroup>
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <ThemeToggle />
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <div className="flex items-center gap-x-1.5 py-1">
+                    <LogOut className="w-5 h-5 text-red-500" />
+                    <span className="text-sm font-medium text-red-500 leading-none -mb-[0.5px]">
+                      Log out
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
       <MobileNav />
