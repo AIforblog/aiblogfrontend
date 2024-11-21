@@ -59,8 +59,14 @@ const Profile = async () => {
           />
         </div>
 
-        <div className="flex justify-end relative bottom-[100px]  gap-2 items-center px-4">
-          {/* Pass token , profileId , and setUserData */}
+				<div className="flex justify-end gap-2 items-center px-4">
+					<EditProfile
+						userData={userData.data}
+						token={user.accessToken.value as string}
+						profileId={user.user.profileId}
+					/>
+					<ViewWallet />
+				</div>
 
           <button className="border rounded-full w-10 h-10 flex justify-center items-center md:hidden">
             <span className="text-3xl leading-none">⋮</span>
