@@ -1,4 +1,5 @@
 export type SuccessResponse<T> = {
+  isFollowing?: boolean | PromiseLike<boolean>;
 	statusCode: number;
 	message: string;
 	data: T;

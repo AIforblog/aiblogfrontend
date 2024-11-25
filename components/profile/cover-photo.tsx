@@ -31,14 +31,14 @@ interface CoverPhotoProps {
   user: UserProps;
   className?: string;
   token?: string;
-  profileId?: string;
+  userId?: string;
 }
 
 export default function CoverPhoto({
   user,
   className,
   token,
-  profileId,
+  userId,
 }: CoverPhotoProps) {
   const [isEditingCover, setIsEditingCover] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -121,7 +121,7 @@ export default function CoverPhoto({
       setIsLoading(true);
       const updateCoverImage = makeFetch<SuccessResponse<Partial<UserProps>>>(
         "general",
-        `/auth/profile/${profileId}`,
+        `/auth/profile/${userId}`,
         token as string,
         {
           method: "PUT",
@@ -133,7 +133,7 @@ export default function CoverPhoto({
 
       const res = await updateCoverImage();
       if (res.statusCode === 200) {
-        await revalidateTagServer(`profile-${profileId}`);
+        await revalidateTagServer(`profile-${userId}`);
         toast.success("Profile updated successfully!");
         closeCoverOverlay();
       } else if ((res.statusCode = 413)) {
@@ -157,7 +157,7 @@ export default function CoverPhoto({
       setIsLoading(true);
       const updateProfileImage = makeFetch<SuccessResponse<Partial<UserProps>>>(
         "general",
-        `/auth/profile/${profileId}`,
+        `/auth/profile/${userId}`,
         token as string,
         {
           method: "PUT",
@@ -169,7 +169,7 @@ export default function CoverPhoto({
 
       const res = await updateProfileImage();
       if (res.statusCode === 200) {
-        await revalidateTagServer(`profile-${profileId}`);
+        await revalidateTagServer(`profile-${userId}`);
         toast.success("Profile picture updated successfully!");
         closeProfileOverlay();
       } else if ((res.statusCode = 413)) {

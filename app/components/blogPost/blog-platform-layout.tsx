@@ -1,43 +1,41 @@
 //aiblogfrontend\app\components\blogPost\blog-platform-layout.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { MessageCircle, Home, Briefcase, User } from "lucide-react";
+import { getCategories } from "@/actions/categories";
 import { BlogCard } from "@/components/blog";
 import { SearchInput } from "@/components/shared";
 import { CategoryItem } from "@/components/shared/category";
+import { Button } from "@/components/ui/button";
 import { cn, generateSlug } from "@/lib/utils";
-import { getBlogs } from "../../../actions/getBlogs";
 import type { BlogPost } from "@/types/blog";
+import { Category } from "@/types/categories";
+import { Briefcase, Home, Loader2Icon, MessageCircle, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getBlogs } from "../../../actions/getBlogs";
 
 export default function BlogPlatformLayout() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Array<Category>>([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [currentCategory, setCurrentCategory] = useState("All");
-
-  const categories = [
-    "All",
-    "Technology",
-    "Politics",
-    "Flutter",
-    "Nigeria",
-    "AWS",
-    "Crypto",
-    "5G Connectivity",
-  ];
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
 
   useEffect(() => {
-    fetchBlogs();
+    fetchCategories();
   }, []);
 
-  const fetchBlogs = async () => {
+  useEffect(() => {
+    fetchBlogs({ category: currentCategory?.name });
+  }, [currentCategory?.name]);
+
+  const fetchBlogs = async (params?: { category?: string; page?: number }) => {
     try {
       setLoading(true);
-      const response = await getBlogs(1, false, "");
+      const response = await getBlogs(params || {});
       const blogData = response.data.results;
-
+      console.log(blogData)
       // Store blog posts in state
       setBlogs(blogData);
       blogData.forEach((blog: BlogPost) => {
@@ -54,10 +52,26 @@ export default function BlogPlatformLayout() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      setIsCategoriesLoading(true);
+      const response = await getCategories();
+      const categoriesData = response.data;
+
+      setCategories(categoriesData);
+      setCategoryError(null);
+    } catch (error) {
+      setError("Failed to load categories. Please try again later.");
+      throw error;
+    } finally {
+      setIsCategoriesLoading(false);
+    }
+  };
+
   const handleSearch = async (searchTerm: string) => {
     try {
       setLoading(true);
-      const response = await getBlogs(1, false, searchTerm);
+      const response = await getBlogs({ search: searchTerm });
       setBlogs(response.data.results);
     } catch (error) {
       setError("Search failed. Please try again.");
@@ -68,7 +82,7 @@ export default function BlogPlatformLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full relative max-w-[1440px] mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-black w-full relative px-6 pt-6">
       <div className="md:hidden mb-4">
         <SearchInput placeholder="Find blogs..." onSearch={handleSearch} />
       </div>
@@ -76,18 +90,37 @@ export default function BlogPlatformLayout() {
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-2">CATEGORY</h2>
         <div className="flex space-x-2 overflow-x-auto custom-scroll pb-2">
+          {isCategoriesLoading && (
+            <div className="w-full p-1 grid place-items-center">
+              <Loader2Icon className="animate-spin" />
+            </div>
+          )}
+          {categoryError && <p className="text-destructive text-sm">{categoryError}</p>}
+
+          <Button
+            className={cn(
+              "bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] rounded-[20px]",
+              currentCategory === null && "bg-black hover:bg-black/80"
+            )}
+            variant={currentCategory === null ? "default" : "outline"}
+            size="sm"
+            onClick={() => setCurrentCategory(null)}
+          >
+            All
+          </Button>
           {categories.map((category) => (
             <Button
-              key={category}
+              key={category.id}
               className={cn(
-                "bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] rounded-[20px]",
-                category === currentCategory && "bg-black"
+                "bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] dark:text-neutral-500 dark:bg-transparent dark:border-neutral-800 rounded-[20px] capitalize",
+                category.id === currentCategory?.id &&
+                  "bg-black hover:bg-black/80 dark:bg-neutral-800 dark:text-neutral-200"
               )}
-              variant={category === currentCategory ? "default" : "outline"}
+              variant={category.id === currentCategory?.id ? "default" : "outline"}
               size="sm"
               onClick={() => setCurrentCategory(category)}
             >
-              {category}
+              {category.name}
             </Button>
           ))}
         </div>
@@ -95,22 +128,15 @@ export default function BlogPlatformLayout() {
 
       <CategoryItem />
 
-      <div className="flex flex-wrap -mx-4 w-full mb-12">
+      <div className="flex flex-wrap w-full mb-12">
         <div className="w-full">
           <h2 className="text-2xl font-bold mb-4">Recent Blogs</h2>
 
           {loading && (
             <div className="text-center">
               <div className="flex items-center justify-center min-h-screen ">
-                <div
-                  aria-label="Loading..."
-                  role="status"
-                  className="flex items-center space-x-2"
-                >
-                  <svg
-                    className="h-20 w-20 animate-spin stroke-[#9e9e9e]"
-                    viewBox="0 0 256 256"
-                  >
+                <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
+                  <svg className="h-20 w-20 animate-spin stroke-[#9e9e9e]" viewBox="0 0 256 256">
                     <line
                       x1="128"
                       y1="32"
@@ -184,14 +210,12 @@ export default function BlogPlatformLayout() {
                       stroke-width="24"
                     ></line>
                   </svg>
-                  <span className="text-4xl font-medium text-gray-500">
-                    Loading Blogs
-                  </span>
+                  <span className="text-4xl font-medium text-gray-500">Loading Blogs</span>
                 </div>
               </div>
             </div>
           )}
-          {error && <div className="text-red-500 text-center">{error}</div>}
+          {error && <div className="text-red-500 mt-24 text-center">{error}</div>}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {blogs.map((blog: BlogPost) => (
@@ -204,15 +228,17 @@ export default function BlogPlatformLayout() {
                   blogContent: blog.content, // Full content if needed
                   extra_info: [], // Add an empty array as a default for extra_info
                   user: {
-                    username: blog.userId,
-                    profilePic: "/default-avatar.png",
-                    name: blog.userId,
+                    username: blog.username,
+                    profilePic: blog.profilePic || "/default-avatar.png",
+                    name: blog.firstName ? `${blog.firstName} ${blog.lastName}` : blog.username,
                     id: blog.userId,
                     bio: "", // Add default values
                     externalLink: "",
                     followersCount: 0,
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
+                    userId: "",
+            
                   },
                   metrics: {
                     likesCount: blog.likes,

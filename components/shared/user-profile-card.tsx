@@ -1,89 +1,26 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { RoundedImage } from "./rounded-image";
-import { useServerAction } from "zsa-react";
-import { Loader } from "lucide-react";
-import { action } from "@/actions/follow";
-import { revalidateTagServer } from "@/actions/common";
+import { DefaultImage, RoundedImage } from "./rounded-image";
+import { UserProps } from "@/types/user";
+import FollowButton from "@/app/components/follow-button";
 
 interface ProfileCardProps {
-  user: { id: string; name: string; username: string; profilePic?: string };
+  user: UserProps;
   isJobProfile?: boolean;
   className?: string;
   following?: boolean;
+  isFollowing?: boolean;
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   user,
   isJobProfile,
   className,
-  following,
+  isFollowing,
 }) => {
-  const { execute, isPending } = useServerAction(action, {
-    onError({ err }) {
-      console.log("something went wrong", err);
-    },
-    onSuccess() {
-      console.log("Successful");
-    },
-  });
-
-  async function onSubmit(path: "follow" | "unfollow") {
-    const [data, err] = await execute({
-      followeeId: user.id,
-      path,
-    });
-
-    if (err) {
-      console.error(err);
-    }
-    if (data) {
-      await revalidateTagServer(path === "follow" ? "followers" : "followees");
-      console.log(data);
-    }
-  }
-
   const applyAction = async () => {
     console.log("Application for job successful!");
-  };
-
-  // Function to render the appropriate action button based on follow status
-  const renderFollowButton = () => {
-    if (following) {
-      return (
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            onSubmit("unfollow");
-          }}
-        >
-          <Button
-            className="text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4"
-            disabled={isPending}
-          >
-            {isPending && <Loader className="animate-spin" size={18} />}
-            Unfollow
-          </Button>
-        </form>
-      );
-    }
-    return (
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          onSubmit("follow");
-        }}
-      >
-        <Button
-          className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4"
-          disabled={isPending}
-        >
-          {isPending && <Loader className="animate-spin" size={18} />}
-          Follow
-        </Button>
-      </form>
-    );
   };
 
   return (
@@ -96,17 +33,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             alt={`${user.username} profile pic`}
           />
         ) : (
-          <div className="bg-yellow-500 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">
-            {user?.username?.[0].toUpperCase()}
-          </div>
+          <DefaultImage letter="A" />
         )}
         <div className="flex-1 gap-y-1">
-          <h4 className="text-sm font-medium text-[#404040] capitalize">
-            {user.name}
+          <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
+            {`${user?.firstName}  ${user?.lastName}`}
           </h4>
 
           <div className="w-fit flex items-center gap-x-2">
-            <p className="text-xs font-normal text-[#A3A3A3]">
+            <p className="text-xs font-normal text-[#A3A3A3] dark:text-neutral-200">
               {user.username}
             </p>
 
@@ -130,7 +65,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             Apply
           </Button>
         ) : (
-          renderFollowButton()
+          // renderFollowButton()
+
+          <FollowButton userId={user.userId} isFollowing={isFollowing} />
         )}
       </div>
     </div>

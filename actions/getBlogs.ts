@@ -6,7 +6,17 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function getBlogs(page = 1, featured = false, search = "") {
+export async function getBlogs({
+  page = 1,
+  featured = false,
+  search = "",
+  category,
+}: {
+  page?: number;
+  featured?: boolean;
+  search?: string;
+  category?: string;
+}) {
   const cookieStore = cookies();
 
   try {
@@ -14,11 +24,10 @@ export async function getBlogs(page = 1, featured = false, search = "") {
       page: page.toString(),
       ...(featured && { featured: "true" }),
       ...(search && { search }),
+      ...(category && { category }),
     });
 
-    const response = await axios.get<BlogResponse>(
-      `${API_BASE_URL}blog?${queryParams}`
-    );
+    const response = await axios.get<BlogResponse>(`${API_BASE_URL}blog?${queryParams}`);
 
     if (!response.data || !response.data.data?.results) {
       throw new Error("Invalid blog data received");
@@ -71,9 +80,7 @@ export async function getBlogPost(postId: string) {
   const cookieStore = cookies();
 
   try {
-    const response = await axios.get<SingleBlogResponse>(
-      `${API_BASE_URL}blog/${postId}`
-    );
+    const response = await axios.get<SingleBlogResponse>(`${API_BASE_URL}blog/${postId}`);
 
     if (!response.data || !response.data.data) {
       throw new Error("Post not found");

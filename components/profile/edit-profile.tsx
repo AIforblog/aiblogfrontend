@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -30,6 +30,7 @@ import { PhoneInput } from "../ui/phone-input";
 import CountrySelect from "../ui/country-select";
 import RegionSelect from "../ui/state-select";
 import { revalidateTagServer } from "@/actions/common";
+import Button from "@/components/shared/button";
 
 interface UserProps {
 	name?: string;
@@ -48,7 +49,7 @@ interface UserProps {
 interface EditProfileProps {
 	userData?: UserProps;
 	token: string;
-	profileId: string;
+	userId: string;
 }
 
 const formSchema = z.object({
@@ -69,7 +70,7 @@ const formSchema = z.object({
 function EditProfile({
 	userData = {} as UserProps,
 	token,
-	profileId,
+	userId,
 }: EditProfileProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -98,7 +99,7 @@ function EditProfile({
 		try {
 			const updateUserProfile = makeFetch<SuccessResponse<Partial<UserProps>>>(
 				"general",
-				`/auth/profile/${profileId}`,
+				`/auth/profile/${userId}`,
 				token,
 				{
 					method: "PUT",
@@ -118,7 +119,7 @@ function EditProfile({
 			const res = await updateUserProfile();
 			console.log(res, "response");
 			if (res.statusCode === 200) {
-				await revalidateTagServer(`profile-${profileId}`);
+				await revalidateTagServer(`profile-${userId}`);
 				toggleModal();
 				toast.success("Profile updated successfully!");
 			} else {
@@ -138,8 +139,8 @@ function EditProfile({
 			
 			<DialogTrigger asChild>
 				
-				<Button variant={"outline"} className="rounded-full">
-					<Pencil className="mr-2 h-4 w-4 hidden md:block" /> Edit Profile
+				<Button variant={"outline"} className="rounded-full hover:bg-transparent hover:text-black">
+					<Pencil className="mr-2  hidden md:block" /> Edit Profile
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">

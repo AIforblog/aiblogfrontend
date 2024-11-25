@@ -2,8 +2,8 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
-import { Providers } from "./Providers";
-import { AuthWrapper } from "./AuthWrapper";
+import { ThemeProvider } from "@/components/theme.provider";
+import ProfileProvider from "@/context/contextProvider";
 
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
@@ -22,14 +22,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${DmSans.className} antialiased bg-[#FAFAFA]`}>
-        <Providers>
-          <AuthWrapper>
-            {children}
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${DmSans.className} antialiased bg-[#FAFAFA] dark:bg-black/90`}
+      >
+        <ProfileProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <Toaster />
-          </AuthWrapper>
-        </Providers>
+            {children}
+          </ThemeProvider>
+        </ProfileProvider>
       </body>
     </html>
   );

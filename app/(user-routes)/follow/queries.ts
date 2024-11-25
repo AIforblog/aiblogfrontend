@@ -1,3 +1,4 @@
+import { CheckFollowing } from "@/actions/follow";
 import { assertUserAuthenticated } from "@/lib/auth";
 import makeFetch from "@/lib/helper";
 import type { ErrorResponse, SuccessResponse } from "@/types/api";
@@ -7,12 +8,9 @@ type FollowResponse = SuccessResponse<UserProps[]> | ErrorResponse | undefined;
 
 export const getFollowers = async (): Promise<FollowResponse> => {
   const user = await assertUserAuthenticated();
-  if (!user) {
-    throw new Error("User authentication failed");
-  }
   const fetchFollowers = makeFetch<SuccessResponse<UserProps[]>>(
     "auth",
-    "/auth/followers",
+    "auth/followers",
     user?.accessToken.value,
     {
       next: {
@@ -26,6 +24,7 @@ export const getFollowers = async (): Promise<FollowResponse> => {
     if ("data" in response) {
       return response as SuccessResponse<UserProps[]>;
     }
+    console.log(response);
     return response as ErrorResponse;
   } catch (err) {
     console.log(err);
@@ -37,7 +36,7 @@ export const getFollowees = async (): Promise<FollowResponse> => {
   const user = await assertUserAuthenticated();
   const fetchFollowees = makeFetch<
     SuccessResponse<UserProps[]> | ErrorResponse
-  >("auth", "/auth/followees", user?.accessToken.value, {
+  >("auth", "auth/followees", user?.accessToken.value, {
     next: {
       tags: ["followees"],
     },
@@ -48,9 +47,14 @@ export const getFollowees = async (): Promise<FollowResponse> => {
     if ("data" in response) {
       return response as SuccessResponse<UserProps[]>;
     }
+    console.log(response);
     return response as ErrorResponse;
   } catch (err) {
     console.log(err);
     return undefined;
   }
+};
+export const isFollowing = async () => {
+  const user = await assertUserAuthenticated();
+  await CheckFollowing(user.accessToken.value as string, user.userId as string);
 };

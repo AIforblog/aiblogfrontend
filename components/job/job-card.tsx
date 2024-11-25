@@ -9,6 +9,7 @@ import JobExtraInfo from "./job-extra-info";
 // import DOMPurify from "dompurify";
 import { sanitizeContent } from "@/hooks/sanitize";
 
+
 const JobCard = memo<{ job: APIJobType }>(({ job }) => {
   const {
     id,
@@ -43,6 +44,12 @@ const JobCard = memo<{ job: APIJobType }>(({ job }) => {
             id: userId,
             profilePic: profilePic,
             name: firstName && lastName ? firstName + " " + lastName : username,
+            userId: userId,
+            followersCount: 0,
+            followingCount:0,
+            bio: "",
+            externalLink: "",
+            coverPhoto: ""
           }}
           isJobProfile
         />

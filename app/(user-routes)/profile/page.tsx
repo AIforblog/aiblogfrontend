@@ -1,4 +1,4 @@
-import { MoveLeft } from "lucide-react";
+import { WalletMinimal } from "lucide-react";
 import CoverPhoto from "@/components/profile/cover-photo";
 import EditProfile from "@/components/profile/edit-profile";
 import UserInfo from "@/components/profile/user-info";
@@ -8,17 +8,20 @@ import { assertUserAuthenticated } from "@/lib/auth";
 import type { SuccessResponse } from "@/types/api";
 import type { UserProps } from "@/types/user";
 import { notFound } from "next/navigation";
-import WalletBalance from "@/components/profile/wallet-balance";
+import Button from "@/components/shared/button";
+import BackArrow from "../follow/_components/back-arrow";
 
-const getUserProfile = async (accessToken: string, profileId: string) => {
+
+
+const getUserProfile = async (accessToken: string, userId: string) => {
   try {
     const fetchUserProfile = makeFetch<SuccessResponse<UserProps>>(
       "general",
-      `/auth/profile/${profileId}`,
+      `/auth/profile/${userId}`,
       accessToken,
       {
         next: {
-          tags: [`profile-${profileId}`],
+          tags: [`profile-${userId}`],
         },
       }
     );
@@ -33,7 +36,7 @@ const Profile = async () => {
   const user = await assertUserAuthenticated();
   const userData = await getUserProfile(
     user.accessToken.value as string,
-    user.user.profileId as string
+    user.userId as string
   );
   console.log(user);
 
@@ -46,7 +49,7 @@ const Profile = async () => {
       <div className="bg-white">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <span>
-            <MoveLeft />
+            <BackArrow />
           </span>
           Profile
         </div>
@@ -55,32 +58,35 @@ const Profile = async () => {
           <CoverPhoto
             user={userData.data}
             token={user.accessToken.value as string}
-            profileId={user.user.profileId}
+            userId={user.userId}
           />
         </div>
 
         <div className="flex justify-end relative bottom-[100px]  gap-2 items-center px-4">
-          {/* Pass token , profileId , and setUserData */}
+          {/* Pass token , userId , and setUserData */}
 
-          <button className="border rounded-full w-10 h-10 flex justify-center items-center md:hidden">
-            <span className="text-3xl leading-none">⋮</span>
+          <button className="rounded-full w-10 h-10 flex justify-center items-center md:hidden text-3xl">
+            <span className="text-3xl leading-none">...</span>
           </button>
 
           <EditProfile
             userData={userData.data}
             token={user.accessToken.value as string}
-            profileId={user.user.profileId}
+            userId={user?.userId || ""}
           />
-          {/* <ViewWallet /> */}
+          <Button className="border rounded-full md:flex justify-center items-center bg-black hidden">
+          <WalletMinimal className="mr-2"/>
+            View wallet
+          </Button>
         </div>
 
         <div className="rounded-b-lg pb-5 -top-[70px] relative">
           <UserInfo user={userData.data} />
         </div>
       </div>
-      <div className="rounded-b-lg pb-5 -top-[90px] relative">
+      {/* <div className="rounded-b-lg pb-5 -top-[90px] relative">
         <WalletBalance />
-      </div>
+      </div> */}
       <div className="bg-white rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <ContentTab />

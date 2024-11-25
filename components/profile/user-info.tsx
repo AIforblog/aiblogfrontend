@@ -5,6 +5,7 @@ import type { UserProps } from "@/types/user";
 import { Link2 } from "lucide-react";
 import { CalendarDays } from "lucide-react";
 import { formatJoinDate } from "@/lib/helper";
+import Link from "next/link";
 
 interface ProfileCardProps {
   user: UserProps;
@@ -12,13 +13,7 @@ interface ProfileCardProps {
   className?: string;
 }
 
-// const demouser = {
-//   firstName: "Olajumoke",
-//   lastName: "Adelosoye",
-//   userName: "jumjum",
-//   link: "https://www.linkedin.com/in/jumjum",
-//   bio: "maiores explicabo placeat exercitationem nihil architecto unde id quisquam quo? Dicta, voluptate velit animi eveniet cum recusandae molestiae facere explicabo delectus!",
-// };
+
 
 const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
   const DateJoined = formatJoinDate(user?.createdAt);
@@ -60,14 +55,14 @@ const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
       </div>
 
       <div className="flex justify-start  gap-4 my-3">
-        <p className="text-xs font-bold flex items-center gap-2  text-[#262626]">
+        <Link href="/follow" className="text-xs font-bold flex items-center gap-2  text-[#262626]">
           {user?.followingCount} <span className="font-normal"> Following</span>
-        </p>
+        </Link>
         {/* <Separator /> */}
         <span className="w-2 h-full bg-white/30" />
-        <p className="text-xs font-bold flex items-center gap-2 text-[#262626]">
+        <Link href="/follow" className="text-xs font-bold flex items-center gap-2 text-[#262626]">
           {user?.followersCount} <span className="font-normal"> Followers </span>
-        </p>
+        </Link>
       </div>
     </div>
   );
