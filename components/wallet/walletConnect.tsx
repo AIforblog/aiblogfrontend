@@ -1,10 +1,8 @@
-// components/wallet/WalletConnect.tsx
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Button } from "@/components/ui/button";
-import { Plus, RefreshCw, Wallet } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
 import { useWallet } from "@/context/walletContext";
+import { Wallet, Plus, RefreshCw } from "lucide-react";
 
 export const WalletConnectButton = () => {
   const { address, isConnected } = useAccount();
@@ -29,44 +27,42 @@ export const WalletConnectButton = () => {
         const isUnsupportedChain = chain && chain.unsupported;
 
         return (
-          <div className="w-full space-y-2">
-            <Button
-              variant="secondary"
-              className="flex items-center justify-between w-full hover:bg-gray-100 transition-colors"
-              onClick={mounted && account ? openAccountModal : openConnectModal}
-            >
-              <span className="flex items-center space-x-2">
-                {mounted && account ? (
-                  <Wallet size={18} color="#FFCD00" />
-                ) : (
-                  <Plus size={18} color="#FFCD00" />
-                )}
-                <span>
-                  {mounted && account
-                    ? `${account.address.substring(
-                        0,
-                        6
-                      )}...${account.address.substring(
-                        account.address.length - 4
-                      )}`
-                    : "Connect Wallet"}
-                </span>
+          <>
+            <div className="flex items-center gap-x-1.5 py-1 w-full cursor-pointer group">
+              {mounted && account ? (
+                <Wallet className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316] group-hover:fill-[#fdc316]" />
+              ) : (
+                <Plus className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316] group-hover:fill-[#fdc316]" />
+              )}
+              <span
+                onClick={
+                  mounted && account ? openAccountModal : openConnectModal
+                }
+                className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]"
+              >
+                {mounted && account
+                  ? `${account.address.substring(
+                      0,
+                      6
+                    )}...${account.address.substring(
+                      account.address.length - 4
+                    )}`
+                  : "Connect Wallet"}
               </span>
-            </Button>
+            </div>
 
             {isUnsupportedChain && (
-              <Button
-                variant="destructive"
-                className="flex items-center justify-between w-full"
+              <div
                 onClick={openChainModal}
+                className="flex items-center gap-x-1.5 py-1 w-full cursor-pointer group text-red-500"
               >
-                <span className="flex items-center space-x-2">
-                  <RefreshCw size={18} />
-                  <span>Switch Network</span>
+                <RefreshCw className="w-5 h-5 text-red-500" />
+                <span className="text-sm font-medium leading-none -mb-[0.5px]">
+                  Switch Network
                 </span>
-              </Button>
+              </div>
             )}
-          </div>
+          </>
         );
       }}
     </ConnectButton.Custom>

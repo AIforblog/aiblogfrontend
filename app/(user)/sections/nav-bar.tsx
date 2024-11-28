@@ -19,6 +19,7 @@ import {
   LogOut,
   Settings,
   UserIcon,
+  Dot,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,11 @@ import MobileNav from "./mobile-nav";
 import Image from "next/image";
 import LogoDark from "@/public/assets/icons/logo-dark.svg";
 import { useUser } from "@/context/userProfilectx";
-
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { logOutAuth } from "@/actions/userAuth";
+import { WalletConnectButton } from "@/components/wallet/walletConnect";
+import { useWallet } from "@/context/walletContext";
 
 interface NavLinksProps {
   routeName: string;
@@ -42,9 +47,12 @@ const NavBar = () => {
     { route: "/jobs", routeName: "Jobs" },
   ];
 
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const {user, loading} = useUser()
-  console.log(user)
+  const { toast } = useToast();
+  const { disconnectWallet } = useWallet();
+  const { user, loading } = useUser();
+  console.log(user);
   useEffect(() => {
     setActiveLink(window.location.pathname);
   }, []);
@@ -58,6 +66,30 @@ const NavBar = () => {
   // Re-implement your search functionality here! 🌚
   const handleSearch = (searchTerm: string) => {
     console.log({ searchTerm });
+  };
+
+  const handleSignOut = async () => {
+    setIsLoading(true);
+    const { status_code, message, error } = await logOutAuth();
+    if (status_code === 200) {
+      console.log(message);
+
+      // Disconnect wallet
+      disconnectWallet();
+
+      router.push("/auth/sign-in");
+    } else {
+      console.error(error);
+      // Handle the error, e.g., display a notification to the user
+      toast({
+        title: "Sign Out failed",
+        description: error || "An unknown error occurred",
+        variant: "destructive",
+        className:
+          "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -126,18 +158,17 @@ const NavBar = () => {
               asChild
               className="p-0 hover:cursor-pointer ring-0 outline-0 focus-within:ring-0 focus-within:outline-0 focus-visible:outline-0 focus-visible:ring-0"
             >
-              {!loading &&
-              <div className="flex flex-row gap-x-1 items-center">
-                <RoundedImage
-                  size={40}
-                  src={user?.profilePic || UserData.profilePic}
-                  alt={`${UserData.username} profile pic`}
-            
-                />
+              {!loading && (
+                <div className="flex flex-row gap-x-1 items-center">
+                  <RoundedImage
+                    size={40}
+                    src={user?.profilePic || UserData.profilePic}
+                    alt={`${UserData.username} profile pic`}
+                  />
 
-                <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
-              </div>
-              }
+                  <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
+                </div>
+              )}
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="w-[10rem] rounded-lg flex flex-col  mt-4 mr-12 border  bg-white dark:bg-black">
@@ -145,12 +176,21 @@ const NavBar = () => {
               <DropdownMenuSeparator />
               <DropdownMenuGroup className="flex flex-col">
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
-                  <Link className="flex items-center gap-x-1.5 py-1" href="/profile">
+                  <Link
+                    className="flex items-center gap-x-1.5 py-1"
+                    href="/profile"
+                  >
                     <UserIcon className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316] group-hover:fill-[#fdc316]" />
                     <span className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]">
                       Profile
                     </span>
                   </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <div className="flex items-center gap-x-1.5 py-1">
+                    <WalletConnectButton />
+                  </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
@@ -170,12 +210,28 @@ const NavBar = () => {
                   <ThemeToggle />
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
-                  <div className="flex items-center gap-x-1.5 py-1">
-                    <LogOut className="w-5 h-5 text-red-500" />
-                    <span className="text-sm font-medium text-red-500 leading-none -mb-[0.5px]">
-                      Log out
-                    </span>
+                <DropdownMenuItem
+                  className="px-2 rounded-none cursor-pointer group"
+                  onClick={handleSignOut}
+                >
+                  <div className="flex items-center justify-between w-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors">
+                    <div className="flex items-center space-x-2">
+                      {isLoading ? (
+                        <span className="animate-spin">
+                          <Dot size={44} color="#text-red-500" />
+                        </span>
+                      ) : (
+                        <LogOut className="w-5 h-5 text-red-500" />
+                      )}
+                      <span className="text-sm font-medium text-red-500 leading-none -mb-[0.5px]">
+                        {isLoading ? "Signing Out..." : "Log out"}
+                      </span>
+                    </div>
+                    <Dot
+                      size={18}
+                      color="#FFCD00"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -184,6 +240,7 @@ const NavBar = () => {
         </div>
       </header>
       <MobileNav />
+      <Toaster />
     </>
   );
 };

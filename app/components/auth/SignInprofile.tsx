@@ -24,7 +24,7 @@ const SignProfileComponent: React.FC = () => {
           setIsAuthenticated(true);
           setUser(authResult.user);
           // Remove console.log of accessToken if not needed
-          console.log(authResult.accessToken?.value);
+          // console.log(authResult.accessToken?.value);
         } else {
           setIsAuthenticated(false);
           setUser(null);
