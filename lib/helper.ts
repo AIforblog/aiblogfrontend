@@ -1,8 +1,7 @@
 
 import {
 	API_BASE_URL,
-	AUTH_API_BASE_URL,
-	BLOG_API_BASE_URL,
+	
 } from "./constants";
 
 export function formatNumber(num: number): string {
@@ -55,7 +54,7 @@ export default function makeFetch<T>(
 		}
 
 		const res = await fetch(
-			`${service === "blog" ? BLOG_API_BASE_URL : service === "general" ? API_BASE_URL : AUTH_API_BASE_URL}${path}`,
+			`${API_BASE_URL}${path}`,
 			fetchOptions,
 		);
 

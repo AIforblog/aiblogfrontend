@@ -1,8 +1,13 @@
+import PasswordReset from "../_components/password-reset";
+import GoogleAuth from "../_components/google-auth";
+import ConnectedDevice from "../_components/connected-device";
 
 const Security = () => {
   return (
-    <div className="bg-white flex justify-center items-center">
-      <div className="p-16 bg-gray-400">Security</div>
+    <div className="w-full gap-6">
+      <PasswordReset />
+      <GoogleAuth />
+      <ConnectedDevice />
     </div>
   );
 };

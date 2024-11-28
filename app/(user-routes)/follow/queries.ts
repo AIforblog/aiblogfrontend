@@ -54,7 +54,7 @@ export const getFollowees = async (): Promise<FollowResponse> => {
     return undefined;
   }
 };
-export const isFollowing = async () => {
+export const isFollowing = async (followId: string) => {
   const user = await assertUserAuthenticated();
-  await CheckFollowing(user.accessToken.value as string, user.userId as string);
+  return await CheckFollowing(user.accessToken.value as string, followId);
 };

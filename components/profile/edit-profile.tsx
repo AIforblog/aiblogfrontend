@@ -99,7 +99,7 @@ function EditProfile({
 		try {
 			const updateUserProfile = makeFetch<SuccessResponse<Partial<UserProps>>>(
 				"general",
-				`/auth/profile/${userId}`,
+				`auth/profile/${userId}`,
 				token,
 				{
 					method: "PUT",

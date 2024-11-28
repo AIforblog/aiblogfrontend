@@ -14,10 +14,12 @@ import { CheckFollowing } from "@/actions/follow";
 
 import BackArrow from "../../follow/_components/back-arrow";
 
+
 export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
 	statusCode: number;
 	message: string;
+  isFollowedBy?:boolean | boolean | PromiseLike<boolean>
 };
 
 const getUserProfile = async (accessToken: string, userId: string) => {
@@ -40,6 +42,26 @@ const getUserProfile = async (accessToken: string, userId: string) => {
   }
 };
 
+const checkFollowedBy   = async (accessToken: string, followId: string) => {
+  try {
+    const followedYou = makeFetch<IsFollowingResponse>(
+      "auth",
+      `auth/is-followed-by/${followId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`profile` , "followers" ,"followees"],
+        },
+      }
+    );
+
+    const fetchFollowed = await followedYou();
+    return fetchFollowed.isFollowedBy
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
 const Profile = async ({ params }: { params: { username: string } }) => {
   const user = await assertUserAuthenticated();
@@ -49,10 +71,13 @@ const Profile = async ({ params }: { params: { username: string } }) => {
     profileUsername as string
   );
   const isFollowing = await CheckFollowing( user.accessToken.value as string, userData?.data.userId as string);
+   const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, userData?.data.userId as string);
   console.log(userData, "Aik");
   if (!userData) {
     return notFound();
   }
+
+  
 
   const profileImageSrc = "/images/blank-profile-picture.png";
 
@@ -94,7 +119,7 @@ const Profile = async ({ params }: { params: { username: string } }) => {
         </div>
 
         <div className="rounded-b-lg pb-5 -top-[70px] relative">
-          <UserInfo user={userData.data} />
+          <UserInfo user={userData.data} isFolloweBy={isFollowsYou} />
         </div>
       </div>
       {/* <div className="rounded-b-lg pb-5 -top-[90px] relative">

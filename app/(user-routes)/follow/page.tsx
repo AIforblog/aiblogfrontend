@@ -21,10 +21,9 @@ import type { SuccessResponse, ErrorResponse } from "@/types/api";
 import UserProfile from "./_components/userProfile";
 
 const FollowersPage = async () => {
-  const [followers, followees, isfollowing] = await Promise.all([
+  const [followers, followees] = await Promise.all([
     getFollowers(),
     getFollowees(),
-    isFollowing(),
   ]);
 
   const tabs = [
@@ -70,7 +69,7 @@ const FollowersPage = async () => {
           {tabs.map((tab) => (
             <TabsContent value={tab.title} key={tab.title} className="pt-4">
               <div className="flex flex-col gap-4">
-                {renderTabContent(tab.data, tab.title, isfollowing)}
+                {renderTabContent(tab.data, tab.title)}
               </div>
             </TabsContent>
           ))}
@@ -104,10 +103,9 @@ const FollowersPage = async () => {
   );
 };
 
-function renderTabContent(
+async function renderTabContent(
   data: SuccessResponse<UserProps[]> | ErrorResponse | undefined,
-  tabTitle: string,
-  isfollowing: any
+  tabTitle: string
 ) {
   if (!data) {
     return <p>Error: No data available</p>;
@@ -129,11 +127,19 @@ function renderTabContent(
     );
   }
 
-  return data.data.map((user) => (
-    // Key error here cause there isn't a verified followers endpoint yet
+  // Ensure all `isFollowing` calls are resolved for each user
+  const usersWithFollowStatus = await Promise.all(
+    data.data.map(async (user) => {
+      const isFollowingStatus = await isFollowing(user.userId); 
+      console.log(isFollowingStatus)
+      return { ...user, isFollowing: isFollowingStatus };
+    })
+  );
+
+  return usersWithFollowStatus.map((user) => (
     <Card className="flex flex-col" key={user.id}>
       <CardHeader>
-        <ProfileCard user={user} isFollowing={isfollowing} />
+        <ProfileCard user={user} isFollowing={user.isFollowing} />
       </CardHeader>
       <CardContent>
         <CardDescription className="text-neutral-700">

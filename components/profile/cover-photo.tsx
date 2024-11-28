@@ -121,7 +121,7 @@ export default function CoverPhoto({
       setIsLoading(true);
       const updateCoverImage = makeFetch<SuccessResponse<Partial<UserProps>>>(
         "general",
-        `/auth/profile/${userId}`,
+        `auth/profile/${userId}`,
         token as string,
         {
           method: "PUT",
@@ -157,7 +157,7 @@ export default function CoverPhoto({
       setIsLoading(true);
       const updateProfileImage = makeFetch<SuccessResponse<Partial<UserProps>>>(
         "general",
-        `/auth/profile/${userId}`,
+        `auth/profile/${userId}`,
         token as string,
         {
           method: "PUT",
