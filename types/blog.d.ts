@@ -55,7 +55,7 @@ export interface BlogType {
   id: string;
   title: string;
   username?: string;
-  profilePic?: string;
+  profilePic?: string | null;
   subtitle?: string;
   bio?: string;
   externalLink?: string;

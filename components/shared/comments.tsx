@@ -737,6 +737,12 @@ const CommentContent: React.FC<CommentContentProps> = ({
                 username: comment.user.username,
                 profilePic: comment.user.profile_pic,
                 name: comment.user.name,
+                userId: "",
+                followersCount: 0,
+                followingCount: 0,
+                bio: "",
+                externalLink: "",
+                coverPhoto: "",
               }}
             />
             <p className="text-xs text-gray-500">
