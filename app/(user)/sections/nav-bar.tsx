@@ -160,11 +160,17 @@ const NavBar = () => {
             >
               {!loading && (
                 <div className="flex flex-row gap-x-1 items-center">
-                  <RoundedImage
-                    size={40}
-                    src={user?.profilePic || UserData.profilePic}
-                    alt={`${UserData.username} profile pic`}
-                  />
+                  {user?.profilePic ? (
+                    <RoundedImage
+                      size={40}
+                      src={user.profilePic || UserData.profilePic}
+                      alt={`${UserData.username} profile pic`}
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
+                      {user?.username?.[0].toUpperCase()}
+                    </div>
+                  )}
 
                   <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
                 </div>
