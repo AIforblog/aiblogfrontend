@@ -18,22 +18,27 @@ const SignProfileComponent: React.FC = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const { accessToken, user } = await assertUserAuthenticated();
-        setIsAuthenticated(true);
-        setUser(user);
-        console.log(accessToken);
-      } catch (error) {
+        const authResult = await assertUserAuthenticated();
+
+        if (authResult) {
+          setIsAuthenticated(true);
+          setUser(authResult.user);
+          // Remove console.log of accessToken if not needed
+          // console.log(authResult.accessToken?.value);
+        } else {
+          setIsAuthenticated(false);
+          setUser(null);
+        }
+      } catch {
         setIsAuthenticated(false);
         setUser(null);
-
-        throw error;
       }
     };
+
     checkAuthentication();
   }, []);
 
   const handleProfileClick = () => {
-    // Implement your profile dropdown logic here
     setIsDropdownOpen(!isDropdownOpen);
   };
 

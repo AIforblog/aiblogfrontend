@@ -6,40 +6,38 @@ import { authenticatedAction } from "@/lib/safe-action";
 import { z } from "zod";
 
 export const action = authenticatedAction
-	.createServerAction()
-	.input(
-		z.object({
-			followeeId: z.string(),
-			path: z.string(),
-		}),
-	)
-	.handler(async ({ input: { followeeId, path } }) => {
-		type Success = {
-			message: string;
-		};
-		const user = await assertUserAuthenticated();
-		console.log()
-		const followUser = makeFetch<Success>(
-			"auth",
-			`auth/${path}/${followeeId}`,
-			user.accessToken.value,
-			{
-				method: "POST",
-				next: {
-               tags: ['profile' , "followers", "followees"],
-        }
-			},
-		);
-		console.log(followUser)
-		try {
-
-			return await followUser();
-
-		} catch (err) {
-			console.log(err);
-		}
-		console.log(followeeId);
-	});
+  .createServerAction()
+  .input(
+    z.object({
+      followeeId: z.string(),
+      path: z.string(),
+    })
+  )
+  .handler(async ({ input: { followeeId, path } }) => {
+    type Success = {
+      message: string;
+    };
+    const user = await assertUserAuthenticated();
+    console.log();
+    const followUser = makeFetch<Success>(
+      "auth",
+      `auth/${path}/${followeeId}`,
+      user.accessToken.value,
+      {
+        method: "POST",
+        next: {
+          tags: ["profile", "followers", "followees"],
+        },
+      }
+    );
+    console.log(followUser);
+    try {
+      return await followUser();
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(followeeId);
+  });
 
 // export const unfollowAction = authenticatedAction
 // 	.createServerAction()
@@ -66,21 +64,22 @@ export const action = authenticatedAction
 // 		console.log(followeeId);
 // 	});
 
-
 export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
-	statusCode: number;
-	message: string;
+  statusCode: number;
+  message: string;
 };
 
-
-export const CheckFollowing = async (accessToken: string, userId: string): Promise<boolean> => {
+export const CheckFollowing = async (
+  accessToken: string,
+  userId: string
+): Promise<boolean> => {
   try {
     const fetchUserProfile = makeFetch<IsFollowingResponse>(
       "auth",
       `auth/is-following/${userId}`,
       accessToken,
-       {
+      {
         next: {
           tags: [`profile-${userId}`],
         },
@@ -88,10 +87,10 @@ export const CheckFollowing = async (accessToken: string, userId: string): Promi
     );
 
     const response = await fetchUserProfile();
-    
-    return response.isFollowing; 
+
+    return response.isFollowing;
   } catch (err) {
     console.error(err);
-    return false; 
+    return false;
   }
 };

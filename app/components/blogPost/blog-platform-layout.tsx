@@ -9,7 +9,13 @@ import { Button } from "@/components/ui/button";
 import { cn, generateSlug } from "@/lib/utils";
 import type { BlogPost } from "@/types/blog";
 import { Category } from "@/types/categories";
-import { Briefcase, Home, Loader2Icon, MessageCircle, User } from "lucide-react";
+import {
+  Briefcase,
+  Home,
+  Loader2Icon,
+  MessageCircle,
+  User,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { getBlogs } from "../../../actions/getBlogs";
 
@@ -35,7 +41,7 @@ export default function BlogPlatformLayout() {
       setLoading(true);
       const response = await getBlogs(params || {});
       const blogData = response.data.results;
-      console.log(blogData)
+      console.log(blogData);
       // Store blog posts in state
       setBlogs(blogData);
       blogData.forEach((blog: BlogPost) => {
@@ -95,7 +101,9 @@ export default function BlogPlatformLayout() {
               <Loader2Icon className="animate-spin" />
             </div>
           )}
-          {categoryError && <p className="text-destructive text-sm">{categoryError}</p>}
+          {categoryError && (
+            <p className="text-destructive text-sm">{categoryError}</p>
+          )}
 
           <Button
             className={cn(
@@ -116,7 +124,9 @@ export default function BlogPlatformLayout() {
                 category.id === currentCategory?.id &&
                   "bg-black hover:bg-black/80 dark:bg-neutral-800 dark:text-neutral-200"
               )}
-              variant={category.id === currentCategory?.id ? "default" : "outline"}
+              variant={
+                category.id === currentCategory?.id ? "default" : "outline"
+              }
               size="sm"
               onClick={() => setCurrentCategory(category)}
             >
@@ -135,8 +145,15 @@ export default function BlogPlatformLayout() {
           {loading && (
             <div className="text-center">
               <div className="flex items-center justify-center min-h-screen ">
-                <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
-                  <svg className="h-20 w-20 animate-spin stroke-[#9e9e9e]" viewBox="0 0 256 256">
+                <div
+                  aria-label="Loading..."
+                  role="status"
+                  className="flex items-center space-x-2"
+                >
+                  <svg
+                    className="h-20 w-20 animate-spin stroke-[#9e9e9e]"
+                    viewBox="0 0 256 256"
+                  >
                     <line
                       x1="128"
                       y1="32"
@@ -210,12 +227,16 @@ export default function BlogPlatformLayout() {
                       stroke-width="24"
                     ></line>
                   </svg>
-                  <span className="text-4xl font-medium text-gray-500">Loading Blogs</span>
+                  <span className="text-4xl font-medium text-gray-500">
+                    Loading Blogs
+                  </span>
                 </div>
               </div>
             </div>
           )}
-          {error && <div className="text-red-500 mt-24 text-center">{error}</div>}
+          {error && (
+            <div className="text-red-500 mt-24 text-center">{error}</div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {blogs.map((blog: BlogPost) => (
@@ -229,8 +250,10 @@ export default function BlogPlatformLayout() {
                   extra_info: [], // Add an empty array as a default for extra_info
                   user: {
                     username: blog.username,
-                    profilePic: blog.profilePic || "/default-avatar.png",
-                    name: blog.firstName ? `${blog.firstName} ${blog.lastName}` : blog.username,
+                    profilePic: blog.profilePic || "",
+                    name: blog.firstName
+                      ? `${blog.firstName} ${blog.lastName}`
+                      : blog.username,
                     id: blog.userId,
                     bio: "", // Add default values
                     externalLink: "",
@@ -238,7 +261,6 @@ export default function BlogPlatformLayout() {
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
                     userId: "",
-            
                   },
                   metrics: {
                     likesCount: blog.likes,

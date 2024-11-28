@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { User } from "@/types/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Plus, LogOut, Dot } from "lucide-react";
+import { LogOut, Dot } from "lucide-react";
 import { logOutAuth } from "@/actions/userAuth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { WalletConnectButton } from "@/components/wallet/walletConnect";
+import { useWallet } from "@/context/walletContext";
 
 interface ProfileDropdownProps {
   user: User | null;
@@ -16,12 +18,16 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const route = useRouter();
   const { toast } = useToast();
+  const { disconnectWallet } = useWallet();
 
   const handleSignOut = async () => {
     setIsLoading(true);
     const { status_code, message, error } = await logOutAuth();
     if (status_code === 200) {
       console.log(message);
+
+      // Disconnect wallet
+      disconnectWallet();
 
       route.push("/auth/sign-in");
     } else {
@@ -53,7 +59,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user }) => {
       </div>
 
       <div className="space-y-2">
-        <Button
+        {/* <Button
           variant="secondary"
           className="flex items-center justify-between w-full hover:bg-gray-100 transition-colors"
         >
@@ -66,7 +72,8 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ user }) => {
             color="#FFCD00"
             className="opacity-0 group-hover:opacity-100 transition-opacity"
           />
-        </Button>
+        </Button> */}
+        <WalletConnectButton />
         <Button
           variant="secondary"
           onClick={handleSignOut}

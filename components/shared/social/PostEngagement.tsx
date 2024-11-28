@@ -25,7 +25,6 @@ export const PostEngagement = ({
   postTitle,
   postUrl,
   initialLikes,
-  initialComments,
   initialCommentsCount,
   initialShares,
   onLike,
@@ -33,17 +32,17 @@ export const PostEngagement = ({
   onShare,
 }: PostEngagementProps) => {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
-  const [currentCommentsCount, setCurrentCommentsCount] =
-    useState(initialCommentsCount);
+  // const [currentCommentsCount, setCurrentCommentsCount] =
+  //   useState(initialCommentsCount);
 
   const handleToggleComments = () => {
     setIsCommentsOpen(!isCommentsOpen);
     onComment?.();
   };
 
-  const handleCommentCountUpdate = (newCount: number) => {
-    setCurrentCommentsCount(newCount);
-  };
+  // const handleCommentCountUpdate = (newCount: number) => {
+  //   setCurrentCommentsCount(newCount);
+  // };
 
   return (
     <div className="mt-8 w-full">
@@ -81,9 +80,9 @@ export const PostEngagement = ({
           <div className="mt-4 rounded-xl p-4 w-full">
             <Comments
               postId={postId}
-              initialComments={initialComments}
-              initialCommentsCount={currentCommentsCount}
-              onCommentCountChange={handleCommentCountUpdate}
+              onCommentCountChange={(count) =>
+                console.log(`Total comments: ${count}`)
+              }
               isOpen={isCommentsOpen}
             />
           </div>
