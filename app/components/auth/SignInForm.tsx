@@ -34,6 +34,29 @@ const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const handleSuccessfulAuth = () => {
+    const returnPath = sessionStorage.getItem("authReturnPath");
+    const hadCallback = sessionStorage.getItem("authCallback");
+
+    // Clear auth-related storage
+    sessionStorage.removeItem("authReturnPath");
+    sessionStorage.removeItem("pendingAuthAction");
+    sessionStorage.removeItem("authCallback");
+
+    // If there was a callback registered, dispatch the auth success event
+    if (hadCallback === "true") {
+      window.dispatchEvent(new Event("auth-success"));
+    }
+
+    // Navigate back to the return path if it exists
+    if (returnPath) {
+      router.push(returnPath);
+    } else {
+      // Default redirect if no return path
+      router.push("/");
+    }
+  };
+
   const onSubmit = async (data: SignInParams) => {
     console.log("FUnction called");
     setIsLoading(true);
@@ -58,27 +81,15 @@ const SignInForm = () => {
       } else {
         if (response.data?.user) {
           try {
-            // Save all user data, access token, and refresh token to sessionStorage
-            sessionStorage.setItem(
-              "userData",
-              JSON.stringify(response.data.user)
-            );
-            if (response.data.accessToken) {
-              sessionStorage.setItem("accessToken", response.data.accessToken);
-            }
-            if (response.data.refreshToken) {
-              sessionStorage.setItem(
-                "refreshToken",
-                response.data.refreshToken
-              );
-            }
             console.log("Full response:", response.data);
+            window.dispatchEvent(new Event("auth-success"));
             toast({
               title: "Sign in successful",
               description: "Welcome back!",
               className:
                 "bg-green-100 text-green-800 border border-green-300 rounded-lg p-4 shadow-md",
             });
+            handleSuccessfulAuth();
             router.push("/");
           } catch (storageError) {
             console.error(
@@ -112,42 +123,6 @@ const SignInForm = () => {
       setIsLoading(false);
     }
   };
-
-  // const handleGoogleAuth = async () => {
-  //   setIsGoogleLoading(true);
-  //   try {
-  //     const { authUrl, error } = await initiateGoogleSignIn();
-
-  //     if (error) {
-  //       setError(error);
-  //       toast({
-  //         title: "Google Sign In Failed",
-  //         description: error,
-  //         variant: "destructive",
-  //         className:
-  //           "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
-  //       });
-  //       return;
-  //     }
-
-  //     if (authUrl) {
-  //       // Redirect to Google auth URL
-  //       window.location.href = authUrl;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error initiating Google sign in:", error);
-  //     setError("Failed to initiate Google sign in. Please try again.");
-  //     toast({
-  //       title: "Google Sign In Failed",
-  //       description: "An unexpected error occurred. Please try again.",
-  //       variant: "destructive",
-  //       className:
-  //         "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
-  //     });
-  //   } finally {
-  //     setIsGoogleLoading(false);
-  //   }
-  // };
 
   const handleGoogleAuth = async () => {
     console.log("handleGoogleAuth started");

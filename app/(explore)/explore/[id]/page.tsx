@@ -35,15 +35,15 @@ export default async function BlogPostPage({
         <UserProfile
           user={{
             username: post.username,
-            profilePic: "/default-avatar.png", // Add a default avatar
+            profilePic: post.profilePic || "", // Add a default avatar
             name: post.username,
             id: post.id,
             userId: "",
             followersCount: 0,
-            followingCount:0,
+            followingCount: 0,
             bio: "",
             externalLink: "",
-            coverPhoto: ""
+            coverPhoto: "",
           }}
         />
       </div>

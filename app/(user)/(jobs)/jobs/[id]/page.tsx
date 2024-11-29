@@ -12,7 +12,9 @@ const JobPage = async ({ params }: { params: { id: string } }) => {
   }
 
   if (error) {
-    return <div className="p-16 text-center text-2xl font-bold">{error.message}</div>;
+    return (
+      <div className="p-16 text-center text-2xl font-bold">{error.message}</div>
+    );
   }
 
   return (
@@ -27,7 +29,12 @@ const JobPage = async ({ params }: { params: { id: string } }) => {
               </div>
 
               {/* <Comments comments={job.comments} /> */}
-              <Comments postId={""} initialComments={[]} initialCommentsCount={0} />
+              <Comments
+                postId={job.id} // Pass the job's unique identifier
+                onCommentCountChange={(count) =>
+                  console.log(`Total comments: ${count}`)
+                }
+              />
             </div>
           </div>
 
