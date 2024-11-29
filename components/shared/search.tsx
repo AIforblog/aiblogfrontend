@@ -31,7 +31,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         value={searchTerm}
         placeholder={placeholder}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-[23rem] pl-9 text-[#171717] font-medium bg-white md:bg-[#fafafa] border-[0.8px] md:border border-[#e5e5e5] rounded-full  placeholder:font-normal placeholder:text-[#919ba7]"
+        className="w-[23rem] pl-9 text-[#171717] dark:text-neutral-100 font-medium bg-white dark:bg-transparent md:bg-[#fafafa] border-[0.8px] md:border border-[#e5e5e5] dark:border-neutral-800 rounded-full  placeholder:font-normal placeholder:text-[#919ba7] dark:placeholder:text-neutral-400"
       />
 
       {/* search icon */}
@@ -40,11 +40,11 @@ const SearchInput: React.FC<SearchInputProps> = ({
       >
         {searchTerm.trim().length > 1 ? (
           <X
-            className="h-4 w-4 text-[#919ba7] cursor-pointer"
+            className="h-4 w-4 text-[#919ba7] dark:text-neutral-400 cursor-pointer"
             onClick={() => setSearchTerm("")}
           />
         ) : (
-          <Search className="h-4 w-4 text-[#919ba7]" />
+          <Search className="h-4 w-4 text-[#919ba7] dark:text-neutral-400" />
         )}
       </div>
     </div>

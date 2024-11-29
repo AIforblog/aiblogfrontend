@@ -44,7 +44,7 @@ const ForgotPasswordForm = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md mx-auto mt-10">
-        <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+        <div className="bg-white dark:bg-neutral-800 shadow-lg rounded-3xl px-8 pt-6 pb-8 mb-4">
           <h2 className="text-2xl font-bold mb-6 text-center">
             Forgot Password?
           </h2>
@@ -65,7 +65,7 @@ const ForgotPasswordForm = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4">
+              <div className="mb-8">
                 <label
                   htmlFor="email"
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -76,11 +76,11 @@ const ForgotPasswordForm = () => {
                   {...register("email")}
                   type="email"
                   id="email"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border border-gray-300 rounded-lg  w-full py-2 px-3 h-12 placeholder:text-sm focus:ring-2 text-gray-700 focus:ring-yellow-400 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Enter your email address"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-xs italic mt-1">
+                  <p className="text-red-500 text-xs italic mt-2">
                     {errors.email.message}
                   </p>
                 )}
@@ -120,7 +120,7 @@ const ForgotPasswordForm = () => {
           <div className="text-center mt-6">
             <a
               href="/auth/sign-in"
-              className="text-blue-500 hover:text-blue-700 text-sm"
+              className="text-blue-500 hover:text-blue-700 font-medium text-sm"
             >
               Go to Login
             </a>

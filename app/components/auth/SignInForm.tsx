@@ -199,7 +199,7 @@ const SignInForm = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md">
+      <div className="bg-white dark:bg-neutral-800 p-8 rounded-3xl shadow-lg w-full max-w-md">
         <h2 className="text-sm text-gray-500 mb-2">WELCOME BACK</h2>
         <h1 className="text-2xl font-bold mb-6">Sign In to Your Account</h1>
 
@@ -243,7 +243,7 @@ const SignInForm = () => {
 
         <div className="flex items-center mb-4">
           <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="mx-4 text-sm text-[#171717]">
+          <span className="mx-4 text-sm text-[#171717] text-white/90">
             Or sign in with Facebook
           </span>
           <div className="flex-grow h-px bg-gray-300"></div>
@@ -263,11 +263,11 @@ const SignInForm = () => {
                 type="text"
                 id="email_or_username"
                 placeholder="Enter your email or username"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full px-3 py-2 h-12 placeholder:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               <Mail
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
+                size={18}
               />
             </div>
             {errors.email && (
@@ -290,14 +290,14 @@ const SignInForm = () => {
                 type={isPasswordVisible ? "text" : "password"}
                 id="password"
                 placeholder="Enter your password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full px-3 py-2 h-12 placeholder:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               <button
                 type="button"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               >
-                {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
             {errors.password && (
@@ -358,11 +358,11 @@ const SignInForm = () => {
         <div className="flex-grow mt-5 h-px bg-gray-200"></div>
         <p className="text-center text-xs mt-6 text-gray-500">
           By clicking Sign In, you agree to our{" "}
-          <a href="#" className="text-black hover:underline">
+          <a href="#" className="text-black dark:text-white/60 hover:underline">
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="text-black hover:underline">
+          <a href="#" className="text-black dark:text-white/60 hover:underline">
             Privacy Policy
           </a>
           .

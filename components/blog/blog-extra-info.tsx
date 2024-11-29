@@ -18,7 +18,7 @@ const ExtraInfoItem = ({ title, onClick }: ExtraInfoItemProps) => {
   return (
     <div
       onClick={onClick}
-      className="flex items-center justify-center gap-x-1 bg-[#ECEBFF] hover:bg-[#e7e6ff] hover:cursor-pointer p-1.5 rounded-full transition duration-300 ease-in-out"
+      className="flex items-center justify-center gap-x-1 bg-[#ECEBFF] dark:bg-transparent dark:border dark:border-neutral-800 hover:bg-[#e7e6ff] hover:cursor-pointer p-1.5 rounded-full transition duration-300 ease-in-out"
     >
       <ArrowUp className="w-3 h-3 text-[#574EFA]" />
 

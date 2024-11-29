@@ -38,6 +38,12 @@ export default async function BlogPostPage({
             profilePic: "/default-avatar.png", // Add a default avatar
             name: post.username,
             id: post.id,
+            userId: "",
+            followersCount: 0,
+            followingCount:0,
+            bio: "",
+            externalLink: "",
+            coverPhoto: ""
           }}
         />
       </div>

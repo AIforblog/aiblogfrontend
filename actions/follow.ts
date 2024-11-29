@@ -9,7 +9,7 @@ export const action = authenticatedAction
 	.createServerAction()
 	.input(
 		z.object({
-			followeeId: z.string().uuid(),
+			followeeId: z.string(),
 			path: z.string(),
 		}),
 	)
@@ -18,16 +18,23 @@ export const action = authenticatedAction
 			message: string;
 		};
 		const user = await assertUserAuthenticated();
+		console.log()
 		const followUser = makeFetch<Success>(
 			"auth",
-			`/auth/${path}/${followeeId}`,
+			`auth/${path}/${followeeId}`,
 			user.accessToken.value,
 			{
 				method: "POST",
+				next: {
+               tags: ['profile' , "followers", "followees"],
+        }
 			},
 		);
+		console.log(followUser)
 		try {
+
 			return await followUser();
+
 		} catch (err) {
 			console.log(err);
 		}
@@ -58,3 +65,33 @@ export const action = authenticatedAction
 // 		}
 // 		console.log(followeeId);
 // 	});
+
+
+export type IsFollowingResponse = {
+  isFollowing: boolean | PromiseLike<boolean>;
+	statusCode: number;
+	message: string;
+};
+
+
+export const CheckFollowing = async (accessToken: string, userId: string): Promise<boolean> => {
+  try {
+    const fetchUserProfile = makeFetch<IsFollowingResponse>(
+      "auth",
+      `auth/is-following/${userId}`,
+      accessToken,
+       {
+        next: {
+          tags: [`profile-${userId}`],
+        },
+      }
+    );
+
+    const response = await fetchUserProfile();
+    
+    return response.isFollowing; 
+  } catch (err) {
+    console.error(err);
+    return false; 
+  }
+};

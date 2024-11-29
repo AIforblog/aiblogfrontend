@@ -1,4 +1,5 @@
 export interface UserProps {
+    userId: string;
 	coverPic?: string | null;
 	id: string;
 	username: string;

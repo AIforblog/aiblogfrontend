@@ -16,7 +16,7 @@ const getUserProfile = async (accessToken: string, profileId: string) => {
   try {
     const fetchUserProfile = makeFetch<SuccessResponse<UserProps>>(
       "general",
-      `/auth/profile/${profileId}`,
+      `auth/profile/${profileId}`,
       accessToken,
       {
         next: {

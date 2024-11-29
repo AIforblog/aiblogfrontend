@@ -33,7 +33,7 @@ export const MetricsItem = ({ icon, count, onIconClick }: MetricsItemProps) => {
       onClick={onIconClick}
     >
       {icon}
-      <p className="font-medium text-[#525252] text-sm leading-none">
+      <p className="font-medium text-[#525252] dark:text-neutral-300 text-sm leading-none">
         {formatViews(count)}
       </p>
     </div>

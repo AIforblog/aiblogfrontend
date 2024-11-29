@@ -81,6 +81,9 @@ export type BlogPost = {
   userId: string;
   tags: string[];
   username: string;
+  firstName: string;
+  profilePic: string | null;
+  lastName: string;
   category: string;
   status: string;
   views: number;

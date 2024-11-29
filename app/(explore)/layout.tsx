@@ -17,9 +17,9 @@ export default function DashboardLayout({
 
       <NavBar />
 
-      <main className="w-full pt-6 mb-6 overflow-hidden maxHeight bg-[#FAFAFA] px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-4">
+      <main className="w-full pt-6 overflow-hidden maxHeight bg-[#FAFAFA] dark:bg-black/90 px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-4">
         {/* Blog */}
-        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight  md:col-span-3 col-span-4 px-6 pt-6 bg-[#F5F5F5] border border-[#E5E5E5] border-b-0 rounded-tl-xl rounded-tr-xl">
+        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight  md:col-span-3 col-span-4 bg-[#F5F5F5] border border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 
