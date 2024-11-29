@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ThumbsUp, ImageIcon, Link2Icon, SmileIcon, XIcon } from "lucide-react";
+import {
+  ThumbsUp,
+  ImageIcon,
+  Link2Icon,
+  SmileIcon,
+  XIcon,
+  Loader,
+} from "lucide-react";
 import Image from "next/image";
 import { useMinimalTiptapEditor } from "../../app/components/minimal-tiptap/hooks/use-minimal-tiptap";
 import { EditorContent } from "@tiptap/react";
@@ -28,6 +35,45 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { createComment, replyToComment, getComments } from "@/actions/socials";
+import { Comment } from "@/actions/socials";
+import { UserProfile } from "@/components/shared";
+
+// Convert backend Comment to frontend ItemComment
+const convertCommentToItemComment = (comment: Comment): ItemComment => {
+  return {
+    id: comment.id,
+    postId: comment.postId,
+    user: {
+      id: comment.userId,
+      name: comment.username,
+      profile_pic: comment.profilePic || "",
+      username: comment.username,
+    },
+    content: comment.content || "",
+    images: Array.isArray(comment.images)
+      ? comment.images.map((imageUrl) => ({
+          url: imageUrl,
+          alt: "Comment image",
+        }))
+      : [],
+    createdAt: comment.createdAt,
+    likes: 0,
+    replies: Array.isArray(comment.replies)
+      ? comment.replies.map(convertCommentToItemComment)
+      : [],
+    replyCount: Array.isArray(comment.replies) ? comment.replies.length : 0,
+  };
+};
+
+// Properly handle replies recursively
+//   if (Array.isArray(comment.replies) && comment.replies.length > 0) {
+//     convertedComment.replies = comment.replies.map(convertCommentToItemComment);
+//     convertedComment.replyCount = comment.replies.length;
+//   }
+
+//   return convertedComment;
+// };
 
 interface User {
   id: string;
@@ -37,6 +83,12 @@ interface User {
   username: string;
 }
 
+interface CommentThreadProps {
+  comment: ItemComment;
+  onReply: (commentId: string, replyComment: CommentFormData) => void;
+  depth?: number;
+}
+
 interface Image {
   url: string;
   alt: string;
@@ -44,6 +96,7 @@ interface Image {
 
 interface ItemComment {
   id: string;
+  postId?: string;
   user: User;
   content: string;
   images: Image[];
@@ -60,16 +113,23 @@ interface CommentFormData {
 
 interface CommentsProps {
   postId: string;
-  initialComments: ItemComment[];
-  initialCommentsCount: number;
   isOpen?: boolean;
   onCommentCountChange?: (count: number) => void;
 }
 
 interface CommentBoxProps {
+  postId: string;
   onAddComment: (comment: CommentFormData) => void;
   replyingTo?: string;
+  parentCommentId?: string;
 }
+
+// interface CommentListProps {
+//   comments: ItemComment[];
+//   onReply: (commentId: string, replyComment: CommentFormData) => void;
+//   depth?: number;
+//   // commentChain: string[]; // Keep for backward compatibility
+// }
 
 interface LinkDialogProps {
   isOpen: boolean;
@@ -169,115 +229,163 @@ const LinkDialog: React.FC<LinkDialogProps> = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-const UserProfile: React.FC<{ user: User }> = ({ user }) => {
-  return (
-    <div className="flex items-center">
-      <Image
-        src={user.profile_pic}
-        alt={user.name}
-        width={40}
-        height={40}
-        className="rounded-full"
-      />
-      <div className="ml-2">
-        <p className="font-semibold">{user.name}</p>
-        <p className="text-xs text-gray-500">@{user.username}</p>
-      </div>
-    </div>
-  );
-};
-
 const Comments: React.FC<CommentsProps> = ({
-  initialComments = [],
-  initialCommentsCount = 0,
+  postId,
+  isOpen = true,
   onCommentCountChange,
 }) => {
-  const [comments, setComments] = useState<ItemComment[]>(initialComments);
-  const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
+  const [comments, setComments] = useState<ItemComment[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const updateCommentCount = (newCount: number) => {
-    setCommentsCount(newCount);
-    onCommentCountChange?.(newCount);
+  const refreshComments = useCallback(async () => {
+    if (!postId) return;
+
+    try {
+      setIsLoading(true);
+      const fetchedComments = await getComments(postId);
+      const convertedComments = fetchedComments.map(
+        convertCommentToItemComment
+      );
+      setComments(convertedComments);
+      onCommentCountChange?.(convertedComments.length);
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [postId, onCommentCountChange]);
+
+  useEffect(() => {
+    if (isOpen) {
+      refreshComments();
+    }
+  }, [refreshComments, isOpen]);
+
+  const handleAddComment = async (newComment: CommentFormData) => {
+    try {
+      setIsLoading(true);
+      const base64Images = await Promise.all(
+        newComment.images.map(
+          (file) =>
+            new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      );
+
+      const optimisticComment = {
+        id: Date.now().toString(),
+        postId: postId,
+        content: newComment.content,
+        images: base64Images,
+        userId: "temp",
+        username: "You",
+        profilePic: "",
+        replies: [],
+        createdAt: new Date().toISOString(),
+      };
+
+      setComments((prev) => [
+        convertCommentToItemComment(optimisticComment),
+        ...prev,
+      ]);
+
+      await createComment(postId, newComment.content, base64Images);
+      // Refresh comments after creation
+      await refreshComments();
+    } catch (error) {
+      console.error("Failed to create comment:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAddComment = (newComment: CommentFormData) => {
-    const createdComment: ItemComment = {
-      id: Date.now().toString(),
-      user: {
-        id: "current-user-id",
-        name: "Olamide",
-        profile_pic: "/images/data-driven-blog/pic.png",
-        username: "Olams",
-      },
-      content: newComment.content,
-      images: newComment.images.map((file) => ({
-        url: URL.createObjectURL(file),
-        alt: file.name,
-      })),
-      createdAt: new Date().toISOString(),
-      likes: 0,
-      replies: [],
-      replyCount: 0,
-    };
-    setComments([createdComment, ...comments]);
-    updateCommentCount(commentsCount + 1);
-  };
-
-  const handleReply = (
-    commentChain: string[],
+  const handleReply = async (
+    parentCommentId: string,
     replyComment: CommentFormData
   ) => {
-    const updatedComments = [...comments];
-    let currentLevel = updatedComments;
-    // let currentComment;
+    try {
+      setIsLoading(true);
+      const base64Images = await Promise.all(
+        replyComment.images.map(
+          (file) =>
+            new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      );
 
-    for (let i = 0; i < commentChain.length; i++) {
-      const commentId = commentChain[i];
-      const commentIndex = currentLevel.findIndex((c) => c.id === commentId);
-      if (commentIndex !== -1) {
-        if (i === commentChain.length - 1) {
-          const newReply: ItemComment = {
-            id: Date.now().toString(),
-            user: {
-              id: "current-user-id",
-              name: "Olamide",
-              profile_pic: "/images/data-driven-blog/pic.png",
-              username: "Olams",
-            },
-            content: replyComment.content,
-            images: replyComment.images.map((file) => ({
-              url: URL.createObjectURL(file),
-              alt: file.name,
-            })),
-            createdAt: new Date().toISOString(),
-            likes: 0,
-            replies: [],
-            replyCount: 0,
-          };
-          currentLevel[commentIndex].replies.push(newReply);
-          currentLevel[commentIndex].replyCount++;
-        } else {
-          currentLevel = currentLevel[commentIndex].replies;
-        }
-      } else {
-        // Comment not found, break the loop
-        break;
-      }
+      setComments((prevComments) =>
+        prevComments.map((comment) => {
+          if (comment.id === parentCommentId) {
+            const optimisticReply = {
+              postId: postId,
+              id: Date.now().toString(),
+              content: replyComment.content,
+              images: base64Images,
+              userId: "temp",
+              username: "You",
+              profilePic: "",
+              replies: [],
+              createdAt: new Date().toISOString(),
+            };
+
+            return {
+              ...comment,
+              replies: [
+                ...comment.replies,
+                convertCommentToItemComment(optimisticReply),
+              ],
+              replyCount: comment.replyCount + 1,
+            };
+          }
+          return comment;
+        })
+      );
+
+      await replyToComment(
+        postId,
+        parentCommentId,
+        replyComment.content,
+        base64Images
+      );
+
+      // Optional: Refresh comments to ensure sync
+      await refreshComments();
+    } catch (error) {
+      console.error("Failed to create reply:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setComments(updatedComments);
-    updateCommentCount(commentsCount + 1);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="mt-4 rounded-xl p-4 w-full">
-      <CommentList
-        comments={comments}
-        onReply={handleReply}
-        commentChain={[]}
-      />
+    <div className="mt-4 rounded-xl p-4 w-full relative">
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
+          <Loader className="animate-spin text-gray-500" size={24} />
+        </div>
+      )}
+      <div className="space-y-4">
+        {comments.map((comment) => (
+          <CommentThread
+            key={comment.id}
+            comment={comment}
+            onReply={handleReply}
+            depth={0}
+          />
+        ))}
+      </div>
       <div className="bg-[#FDF9D9] mt-4 p-3">
-        <CommentBox onAddComment={handleAddComment} />
+        <CommentBox postId={postId} onAddComment={handleAddComment} />
       </div>
     </div>
   );
@@ -286,6 +394,7 @@ const Comments: React.FC<CommentsProps> = ({
 const CommentBox: React.FC<CommentBoxProps> = ({
   onAddComment,
   replyingTo,
+  parentCommentId,
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
@@ -393,7 +502,16 @@ const CommentBox: React.FC<CommentBoxProps> = ({
     if (content.trim() || images.length > 0) {
       // Strip HTML tags for plain text display
       const strippedContent = content.replace(/<[^>]*>/g, "");
-      onAddComment({ content: strippedContent, images });
+
+      // Determine whether it's a top-level comment or a reply
+      if (parentCommentId) {
+        // It's a reply
+        onAddComment?.({ content: strippedContent, images });
+      } else {
+        // It's a top-level comment
+        onAddComment?.({ content: strippedContent, images });
+      }
+
       editor.commands.clearContent();
       setImages([]);
     }
@@ -413,34 +531,14 @@ const CommentBox: React.FC<CommentBoxProps> = ({
   const handleLinkAdd = (text: string, url: string) => {
     if (!editor) return;
 
-    const { from } = editor.state.selection;
-
-    // Insert a space before the link if we're not at the start of the text
-    if (from > 0 && editor.state.doc.textBetween(from - 1, from) !== " ") {
-      editor.chain().focus().insertContent(" ").run();
-    }
-
-    // Insert the linked text
+    const { from, to } = editor.state.selection;
     editor
       .chain()
       .focus()
-      .insertContent([
-        {
-          type: "text",
-          marks: [
-            {
-              type: "link",
-              attrs: {
-                href: url,
-                target: "_blank",
-                rel: "noopener noreferrer",
-              },
-            },
-          ],
-          text: text,
-        },
-      ])
-      .insertContent(" ") // Add space after link
+      .insertContentAt(
+        { from, to },
+        `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`
+      )
       .run();
   };
   if (!editor) return null;
@@ -533,54 +631,86 @@ const CommentBox: React.FC<CommentBoxProps> = ({
   );
 };
 
-const CommentList: React.FC<{
-  comments: ItemComment[];
-  onReply: (commentChain: string[], replyComment: CommentFormData) => void;
-  depth?: number;
-  commentChain: string[];
-}> = ({ comments, onReply, depth = 0, commentChain }) => {
+const CommentThread: React.FC<CommentThreadProps> = ({
+  comment,
+  onReply,
+  depth = 0,
+}) => {
+  const [showReplies, setShowReplies] = useState(depth < 2);
+  const [isReplying, setIsReplying] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+
+  const handleReply = (replyData: CommentFormData) => {
+    onReply(comment.id, replyData);
+    setIsReplying(false);
+  };
+
   return (
-    <div className="space-y-4">
-      {comments.map((comment) => (
-        <CommentItem
-          key={comment.id}
-          comment={comment}
-          onReply={onReply}
-          depth={depth}
-          commentChain={[...commentChain, comment.id]}
+    <div className={`bg-[#FDFFFC] rounded-lg p-4 ${depth > 0 ? "ml-6" : ""}`}>
+      <CommentContent
+        comment={comment}
+        onReplyClick={() => setIsReplying(!isReplying)}
+        onImageClick={setSelectedImage}
+      />
+
+      {selectedImage && (
+        <ImageModal
+          isOpen={!!selectedImage}
+          onClose={() => setSelectedImage(null)}
+          imageUrl={selectedImage.url}
+          alt={selectedImage.alt}
         />
-      ))}
+      )}
+
+      {isReplying && (
+        <div className="mt-2">
+          <CommentBox
+            postId={comment.id}
+            onAddComment={handleReply}
+            replyingTo={comment.user.username}
+            parentCommentId={comment.id}
+          />
+        </div>
+      )}
+
+      {comment.replies?.length > 0 && (
+        <>
+          {showReplies ? (
+            <div className="mt-4">
+              {comment.replies.map((reply) => (
+                <CommentThread
+                  key={reply.id}
+                  comment={reply}
+                  onReply={onReply}
+                  depth={depth + 1}
+                />
+              ))}
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowReplies(true)}
+              className="mt-2 text-sm text-blue-500 hover:text-blue-700"
+            >
+              Show {comment.replies.length} replies
+            </button>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
-const CommentItem: React.FC<{
+interface CommentContentProps {
   comment: ItemComment;
-  onReply: (commentChain: string[], replyComment: CommentFormData) => void;
-  depth: number;
-  commentChain: string[];
-}> = ({ comment, onReply, depth, commentChain }) => {
-  const [isReplying, setIsReplying] = useState(false);
-  const [likes, setLikes] = useState(comment.likes);
-  const [showAllReplies, setShowAllReplies] = useState(depth < 2);
-  const [selectedImage, setSelectedImage] = useState<{
-    url: string;
-    alt: string;
-  } | null>(null);
+  onReplyClick: () => void;
+  onImageClick: (image: Image) => void;
+}
 
-  const handleLike = () => {
-    setLikes((prevLikes) => prevLikes + 1);
-  };
-
-  const handleReply = (replyComment: CommentFormData) => {
-    onReply(commentChain, replyComment);
-    setIsReplying(false);
-  };
-
-  const handleReplyClick = () => {
-    setIsReplying(!isReplying);
-  };
-
+const CommentContent: React.FC<CommentContentProps> = ({
+  comment,
+  onReplyClick,
+  onImageClick,
+}) => {
   const formatTimeAgo = (date: string) => {
     const now = new Date();
     const commentDate = new Date(date);
@@ -597,109 +727,69 @@ const CommentItem: React.FC<{
   };
 
   return (
-    <div className={`bg-[#FDFFFC] rounded-lg p-4  ${depth > 0 ? "ml-2" : ""}`}>
-      <div className="flex items-start space-x-3">
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <div className="">
-              <UserProfile user={comment.user} />
-              <p className="text-xs text-gray-500">
-                <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block"></span>
-                {formatTimeAgo(comment.createdAt)}
-              </p>
-            </div>
-
-            <div className="">
-              <Button
-                // onClick={followAction}
-                className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out"
-              >
-                Follow
-              </Button>
-            </div>
-          </div>
-
-          <p className="mt-2">{comment.content}</p>
-          {comment.images && comment.images.length > 0 && (
-            <div className="flex mt-2 space-x-2 overflow-x-auto">
-              {comment.images.map((image, index) => (
-                <div
-                  key={index}
-                  className="cursor-pointer"
-                  onClick={() => setSelectedImage(image)}
-                >
-                  <Image
-                    key={index}
-                    src={image.url}
-                    width={100}
-                    height={100}
-                    alt={image.alt}
-                    className="rounded"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-          {selectedImage && (
-            <ImageModal
-              isOpen={!!selectedImage}
-              onClose={() => setSelectedImage(null)}
-              imageUrl={selectedImage.url}
-              alt={selectedImage.alt}
+    <div className="flex items-start space-x-3">
+      <div className="flex-1">
+        <div className="flex items-center gap-10 justify-between">
+          <div>
+            <UserProfile
+              user={{
+                id: comment.user.id,
+                username: comment.user.username,
+                profilePic: comment.user.profile_pic,
+                name: comment.user.name,
+                userId: "",
+                followersCount: 0,
+                followingCount: 0,
+                bio: "",
+                externalLink: "",
+                coverPhoto: "",
+              }}
             />
-          )}
-          <div className="flex items-center space-x-4 mt-2">
-            <button
-              onClick={handleLike}
-              className="flex items-center text-sm text-gray-500 hover:text-gray-700"
-            >
-              <ThumbsUp className="w-4 h-4 mr-1" />
-              {likes}
-            </button>
-            <button
-              onClick={handleReplyClick}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Reply
-            </button>
-            {comment.replyCount > 0 && (
-              <span className="text-sm text-gray-500">
-                {comment.replyCount}{" "}
-                {comment.replyCount === 1 ? "reply" : "replies"}
-              </span>
-            )}
+            <p className="text-xs text-gray-500">
+              <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block"></span>
+              {formatTimeAgo(comment.createdAt)}
+            </p>
           </div>
-          {isReplying && (
-            <div className="mt-2">
-              <CommentBox
-                // onAddComment={(replyComment) =>
-                //   onReply([...commentChain, comment.id], replyComment)
-                // }
-                onAddComment={handleReply}
-                replyingTo={comment.user.name}
-              />
-            </div>
-          )}
-          {comment.replies && comment.replies.length > 0 && (
-            <>
-              {showAllReplies ? (
-                <div className="mt-4">
-                  <CommentList
-                    comments={comment.replies}
-                    onReply={onReply}
-                    depth={depth + 1}
-                    commentChain={commentChain}
-                  />
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowAllReplies(true)}
-                  className="mt-2 text-sm text-blue-500 hover:text-blue-700"
-                >
-                  Show more replies...
-                </button>
-              )}
-            </>
+        </div>
+
+        <p className="mt-2">{comment.content}</p>
+
+        {comment.images && comment.images.length > 0 && (
+          <div className="flex mt-2 space-x-2 overflow-x-auto">
+            {comment.images.map((image, index) => (
+              <div
+                key={index}
+                className="cursor-pointer"
+                onClick={() => onImageClick(image)}
+              >
+                <Image
+                  src={image.url}
+                  width={100}
+                  height={100}
+                  alt={image.alt}
+                  className="rounded"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex items-center space-x-4 mt-2">
+          <button className="flex items-center text-sm text-gray-500 hover:text-gray-700">
+            <ThumbsUp className="w-4 h-4 mr-1" />
+            {comment.likes}
+          </button>
+          <button
+            onClick={onReplyClick}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Reply
+          </button>
+          {comment.replies.length > 0 && (
+            <span className="text-sm text-gray-500">
+              {comment.replies.length}{" "}
+              {comment.replies.length === 1 ? "reply" : "replies"}
+            </span>
           )}
         </div>
       </div>

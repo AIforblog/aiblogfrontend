@@ -17,8 +17,6 @@ export const assertUserAuthenticated = async () => {
 
   try {
     const user = JSON.parse(userDataCookie.value) as User;
-
-    // Set a refresh timer for token renewal every hour if it doesn't exist
     if (typeof window !== "undefined") {
       setTokenRefreshTimer();
     }
