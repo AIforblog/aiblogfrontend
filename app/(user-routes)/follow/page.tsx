@@ -1,6 +1,5 @@
-import { TrendingTopics } from "@/app/(user)/sections";
+import { TopWriters, TrendingTopics } from "@/app/(user)/sections";
 import { SectionTitle } from "@/components/shared";
-import TaskCard from "@/components/shared/task-card";
 import ProfileCard from "@/components/shared/user-profile-card";
 import {
   Card,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { JobDummyData } from "@/data/mock/job";
+
 
 import { cn } from "@/lib/utils";
 
@@ -20,6 +19,7 @@ import type { SuccessResponse, ErrorResponse } from "@/types/api";
 
 import UserProfile from "./_components/userProfile";
 import { assertUserAuthenticated } from "@/lib/auth";
+import { Suspense } from "react";
 
 const FollowersPage = async () => {
   const user = await assertUserAuthenticated();
@@ -77,30 +77,31 @@ const FollowersPage = async () => {
           ))}
         </Tabs>
       </ScrollArea>
-      <div className="py-4 px-4 md:px-0 flex-col gap-6 h-full overflow-hidden hidden md:flex">
-        <ScrollArea className="flex-1">
-          <div className="pr-4">
-            <SectionTitle
-              title="Trending Topics"
-              className="text-neutral-600 text-xl mb-4 sticky top-0 bg-neutral-50"
-            />
-            <TrendingTopics />
-          </div>
-        </ScrollArea>
-        <ScrollArea className="flex-1">
-          <div className="pr-4">
-            <SectionTitle
-              title="Trending Jobs"
-              className="text-neutral-600 text-xl mb-4 sticky top-0 bg-neutral-50"
-            />
-            <div className="flex flex-col gap-4">
-              {JobDummyData.map((job, index) => (
-                <TaskCard key={index} job={job} />
-              ))}
+      <section className="hidden md:block col-span-1">
+            <div
+              className={`h-[88vh] grid ${
+                user.userId ? "grid-rows-2" : "grid-rows-3"
+              } gap-y-6 overflow-hidden`}
+            >
+              <section className="row-span-1 overflow-hidden">
+                <SectionTitle title="Trending Topics" />
+                 <Suspense fallback={<div>loading........</div>}> 
+                <TrendingTopics />
+                </Suspense>
+              </section>
+
+              <section
+                className={`${
+                  user ? "row-span-2" : "row-span-1"
+                }`}
+              >
+                <SectionTitle title="Top Writers" />
+                <Suspense fallback={<div>loading........</div>}> 
+                <TopWriters />
+                </Suspense>
+              </section>
             </div>
-          </div>
-        </ScrollArea>
-      </div>
+          </section>
     </main>
   );
 };
