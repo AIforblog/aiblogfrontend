@@ -22,7 +22,7 @@ const UserStatistics = () => (
   <div className=" grid grid-cols-3 relative gap-6 mt-4 bg-[#D4D4D4] p-4 rounded-xl">
     <div className="flex flex-col relative items-center text-center bg-white py-4 rounded-lg justify-center">
       <p className="text-lg font-semibold ">120k</p>
-      <p className="text-xs text-gray-500">Posts Created</p>  
+      <p className="text-xs text-gray-500">Posts Created</p>
     </div>
     <div className="flex flex-col items-center bg-white  rounded-lg justify-center py-4 text-center">
       <p className="text-lg font-semibold">850</p>
@@ -104,42 +104,40 @@ const UserProfile = () => {
                       isBlocked
                         ? "bg-[#DF3925]"
                         : isSuspended
-                        ? "bg-[#EAF03C]"
-                        : "bg-[#0E9A54]"
+                          ? "bg-[#EAF03C]"
+                          : "bg-[#0E9A54]"
                     }`}
                   >
                     {isBlocked
                       ? "Blocked"
                       : isSuspended
-                      ? "Suspended"
-                      : "Active"}
+                        ? "Suspended"
+                        : "Active"}
                   </span>
                 </div>
               </div>
-
             </div>
-            
           </div>
           <div className="flex items-start w-full  gap-4 text-sm mt-1 flex-col">
-              <p className="text-sm font-normal text-[#404040] mt-2">
-                Miracle is a business owner specializing in digital solutions
-                tailored to the tech industry. With a focus on innovation, they
-                help businesses enhance their digital.
-              </p>
-              <div className="flex gap-4">
-                <Link
-                  href="https://www.linkedin.com/"
-                  className="flex items-center text-blue-600 hover:underline"
-                >
-                  <LinkIcon className="mr-1 h-4 w-4" />
-                  LinkedIn Profile
-                </Link>
-                
-                <span className="text-muted-foreground">
-                  Joined October, 2024
-                </span>
-                </div>
-              </div>
+            <p className="text-sm font-normal text-[#404040] mt-2">
+              Miracle is a business owner specializing in digital solutions
+              tailored to the tech industry. With a focus on innovation, they
+              help businesses enhance their digital.
+            </p>
+            <div className="flex gap-4">
+              <Link
+                href="https://www.linkedin.com/"
+                className="flex items-center text-blue-600 hover:underline"
+              >
+                <LinkIcon className="mr-1 h-4 w-4" />
+                LinkedIn Profile
+              </Link>
+
+              <span className="text-muted-foreground">
+                Joined October, 2024
+              </span>
+            </div>
+          </div>
           {/* User statistics component */}
           <UserStatistics />
         </div>
@@ -151,48 +149,50 @@ const UserProfile = () => {
               Select reason for blocking/suspending user
             </label>
             <Select
-  value={selectedValue}
-  onValueChange={(value) => setSelectedValue(value)}
->
-  <SelectTrigger className="w-full border border-gray-300 rounded-sm text-start p-2 text-gray-600 flex justify-between items-center">
-    <div className="flex items-center">
-      <SelectValue placeholder="Violating Terms of Service">
-        {selectedValue}
-      </SelectValue>
-    </div>
-    <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-  </SelectTrigger>
-  <SelectContent className="rounded-sm shadow-lg bg-white border border-gray-200 mt-1">
-    <SelectItem
-      value="spam"
-      className="p-2 hover:bg-gray-100"
-      onSelect={() => setSelectedValue("Spam")}
-    >
-      Spam
-    </SelectItem>
-    <SelectItem
-      value="Harassment"
-      className="p-2 hover:bg-gray-100"
-      onSelect={() => setSelectedValue("Harassment")}
-    >
-      Harassment
-    </SelectItem>
-    <SelectItem
-      value="Inappropriate Content"
-      className="p-2 hover:bg-gray-100"
-      onSelect={() => setSelectedValue("Inappropriate Content")}
-    >
-      Inappropriate Content
-    </SelectItem>
-    <SelectItem
-      value="Violating Terms of Service"
-      className="p-2 hover:bg-gray-100"
-      onSelect={() => setSelectedValue("Violating Terms of Service")}
-    >
-      Violating Terms of Service
-    </SelectItem>
-  </SelectContent>
-</Select>
+              value={selectedValue}
+              onValueChange={(value) => setSelectedValue(value)}
+            >
+              <SelectTrigger className="w-full border border-gray-300 rounded-sm text-start p-2 text-gray-600 flex justify-between items-center">
+                <div className="flex items-center">
+                  <SelectValue placeholder="Violating Terms of Service">
+                    {selectedValue}
+                  </SelectValue>
+                </div>
+                <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+              </SelectTrigger>
+              <SelectContent className="rounded-sm shadow-lg bg-white border border-gray-200 mt-1">
+                <SelectItem
+                  value="spam"
+                  className="p-2 hover:bg-gray-100"
+                  onSelect={() => setSelectedValue("Spam")}
+                >
+                  Spam
+                </SelectItem>
+                <SelectItem
+                  value="Harassment"
+                  className="p-2 hover:bg-gray-100"
+                  onSelect={() => setSelectedValue("Harassment")}
+                >
+                  Harassment
+                </SelectItem>
+                <SelectItem
+                  value="Inappropriate Content"
+                  className="p-2 hover:bg-gray-100"
+                  onSelect={() => setSelectedValue("Inappropriate Content")}
+                >
+                  Inappropriate Content
+                </SelectItem>
+                <SelectItem
+                  value="Violating Terms of Service"
+                  className="p-2 hover:bg-gray-100"
+                  onSelect={() =>
+                    setSelectedValue("Violating Terms of Service")
+                  }
+                >
+                  Violating Terms of Service
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex gap-2 mt-2">

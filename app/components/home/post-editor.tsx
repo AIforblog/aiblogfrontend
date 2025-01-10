@@ -1,7 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import isHotkey from "is-hotkey";
-import { Ellipsis, ImageIcon, List, MapPin, Smile, Sparkles, Tag } from "lucide-react";
+import {
+  Ellipsis,
+  ImageIcon,
+  List,
+  MapPin,
+  Smile,
+  Sparkles,
+  Tag,
+} from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { Descendant, Editor, createEditor } from "slate";
 import { Editable, Slate, withReact } from "slate-react";
@@ -91,7 +99,11 @@ const PostEditor = () => {
             >
               <Smile className="w-5 h-5" />
             </button>
-            <button className="hover:bg-neutral-100 rounded p-1 -mx-1" title="Tag" aria-label="Tag">
+            <button
+              className="hover:bg-neutral-100 rounded p-1 -mx-1"
+              title="Tag"
+              aria-label="Tag"
+            >
               <Tag className="w-5 h-5" />
             </button>
             <button
@@ -106,7 +118,9 @@ const PostEditor = () => {
               title="Add GIF"
               aria-label="Add GIF"
             >
-              <span className="leading-none w-5 h-5 grid place-items-center">GIF</span>
+              <span className="leading-none w-5 h-5 grid place-items-center">
+                GIF
+              </span>
             </button>
           </div>
           <button

@@ -11,12 +11,12 @@ const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
         ref={ref}
         className={cn(
           "flex flex-wrap items-center gap-1 rounded-md border p-1",
-          className
+          className,
         )}
         {...props}
       />
     );
-  }
+  },
 );
 Toolbar.displayName = "Toolbar";
 

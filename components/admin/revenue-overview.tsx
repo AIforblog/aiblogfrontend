@@ -1,15 +1,14 @@
-'use client'
+"use client";
 
-import { Card } from '@/components/ui/card'
-import { RevenueChart } from './ui/chart'
-
+import { Card } from "@/components/ui/card";
+import { RevenueChart } from "./ui/chart";
 
 export const RevenueOverview = () => {
   const data = [
-    { name: 'Subscription Fees', value: 40000, color: '#FFB800' },
-    { name: 'Ad Revenue Categories', value: 20000, color: '#00C853' },
-    { name: 'Task Fees', value: 10000, color: '#FF4444' },
-  ]
+    { name: "Subscription Fees", value: 40000, color: "#FFB800" },
+    { name: "Ad Revenue Categories", value: 20000, color: "#00C853" },
+    { name: "Task Fees", value: 10000, color: "#FF4444" },
+  ];
 
   return (
     <Card className="p-6 space-y-4">
@@ -19,5 +18,5 @@ export const RevenueOverview = () => {
       </div>
       <RevenueChart data={data} />
     </Card>
-  )
-}
+  );
+};

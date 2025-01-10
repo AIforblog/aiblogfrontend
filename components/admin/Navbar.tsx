@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -10,8 +10,8 @@ import styles from "./Navbar.module.css";
 import Link from "next/link";
 
 const Navbar = () => {
-  const  pathname = usePathname().split("/")[2];
-  console.log(pathname,"pathname")
+  const pathname = usePathname().split("/")[2];
+  console.log(pathname, "pathname");
   return (
     <nav className="border-b border-gray-200 bg-white">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,7 +29,8 @@ const Navbar = () => {
                 href="overview"
                 className={cn(
                   "text-gray-500 hover:text-gray-900",
-                  pathname === "overview" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                  pathname === "overview" &&
+                    "text-yellow-500 border-b-2 border-yellow-400 pb-4",
                 )}
               >
                 Overview
@@ -38,7 +39,8 @@ const Navbar = () => {
                 href="user"
                 className={cn(
                   "text-gray-500 hover:text-gray-900",
-                  pathname === "user" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                  pathname === "user" &&
+                    "text-yellow-500 border-b-2 border-yellow-400 pb-4",
                 )}
               >
                 User
@@ -47,7 +49,8 @@ const Navbar = () => {
                 href="content"
                 className={cn(
                   "text-gray-500 hover:text-gray-900",
-                  pathname === "content" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                  pathname === "content" &&
+                    "text-yellow-500 border-b-2 border-yellow-400 pb-4",
                 )}
               >
                 Content
@@ -56,7 +59,8 @@ const Navbar = () => {
                 href="dashboard"
                 className={cn(
                   "text-gray-500 hover:text-gray-900",
-                  pathname === "dashboard" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                  pathname === "dashboard" &&
+                    "text-yellow-500 border-b-2 border-yellow-400 pb-4",
                 )}
               >
                 Jobs/Post
@@ -65,7 +69,8 @@ const Navbar = () => {
                 href="transactions"
                 className={cn(
                   "text-gray-500 hover:text-gray-900",
-                  pathname === "transactions" && "text-yellow-500 border-b-2 border-yellow-400 pb-4"
+                  pathname === "transactions" &&
+                    "text-yellow-500 border-b-2 border-yellow-400 pb-4",
                 )}
               >
                 Transactions

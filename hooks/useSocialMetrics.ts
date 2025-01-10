@@ -72,13 +72,13 @@ export const useSocialMetrics = ({
   const [commentsCount, setCommentsCount] = useState(0);
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [commentError, setCommentError] = useState<SocialMetricsError | null>(
-    null
+    null,
   );
 
   const [isLiked, setIsLiked] = useState(false);
   const [isLoadingReaction, setIsLoadingReaction] = useState(false);
   const [reactionError, setReactionError] = useState<SocialMetricsError | null>(
-    null
+    null,
   );
 
   // Helper function for API calls
@@ -104,7 +104,7 @@ export const useSocialMetrics = ({
             : new Error("An unknown error occurred");
         }
       },
-    [baseUrl, accessToken]
+    [baseUrl, accessToken],
   );
 
   // Fetch comments
@@ -115,7 +115,7 @@ export const useSocialMetrics = ({
 
       try {
         const response: CommentResponse = await apiCall(
-          `blog/${postId}/comments?page=${page}`
+          `blog/${postId}/comments?page=${page}`,
         );
 
         setComments(response.data.results);
@@ -130,7 +130,7 @@ export const useSocialMetrics = ({
         setIsLoadingComments(false);
       }
     },
-    [postId, apiCall]
+    [postId, apiCall],
   );
 
   // Create comment
@@ -152,7 +152,7 @@ export const useSocialMetrics = ({
           {
             method: "POST",
             body: JSON.stringify({ comment }),
-          }
+          },
         );
 
         // Update local state
@@ -169,7 +169,7 @@ export const useSocialMetrics = ({
         return null;
       }
     },
-    [postId, accessToken, apiCall]
+    [postId, accessToken, apiCall],
   );
 
   // Toggle reaction (like/unlike)

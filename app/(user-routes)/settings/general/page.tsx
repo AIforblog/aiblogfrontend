@@ -22,7 +22,7 @@ const getUserProfile = async (accessToken: string, profileId: string) => {
         next: {
           tags: [`profile-${profileId}`],
         },
-      }
+      },
     );
 
     return await fetchUserProfile();
@@ -33,7 +33,10 @@ const getUserProfile = async (accessToken: string, profileId: string) => {
 
 const General = async () => {
   const user = await assertUserAuthenticated();
-  const userData = await getUserProfile(user.accessToken.value, user.user.profileId);
+  const userData = await getUserProfile(
+    user.accessToken.value,
+    user.user.profileId,
+  );
 
   if (!userData) {
     return notFound();
@@ -46,7 +49,8 @@ const General = async () => {
       <div
         className="bg-white rounded-[16px] p-5 space-y-6"
         style={{
-          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+          boxShadow:
+            "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
         }}
       >
         <div className="border-b pb-2">
@@ -60,18 +64,22 @@ const General = async () => {
           </div>
           <div className="flex gap-2 items-center px-2 py-1">
             <div className="w-[60px] h-[60px] relative rounded-full bg-neutral-100 overflow-hidden">
-              {profilePic && <Image src={profilePic} alt="User profile photo" fill />}
+              {profilePic && (
+                <Image src={profilePic} alt="User profile photo" fill />
+              )}
             </div>
             <div className="space-y-1">
               <p className="text-sm font-bold">Profile</p>
-              <p className="text-xs">{firstName ? `${firstName} ${lastName}` : "No name"}</p>
+              <p className="text-xs">
+                {firstName ? `${firstName} ${lastName}` : "No name"}
+              </p>
             </div>
 
             <Link
               href="/profile"
               className={cn(
                 buttonVariants({ variant: "outline" }),
-                "rounded-full text-xs ml-auto border-black h-auto"
+                "rounded-full text-xs ml-auto border-black h-auto",
               )}
             >
               Edit
@@ -111,18 +119,23 @@ const General = async () => {
       <div
         className="bg-white rounded-[16px] p-5 space-y-6"
         style={{
-          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+          boxShadow:
+            "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
         }}
       >
         <div className="border-b pb-2">
-          <h2 className="text-2xl font-bold leading-[1.375]">Notification Preferences</h2>
+          <h2 className="text-2xl font-bold leading-[1.375]">
+            Notification Preferences
+          </h2>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-4">
             <div>
               <p className="font-bold">Notification Delivery</p>
-              <p className="text-sm">How Would Like to receive notification for your Post?</p>
+              <p className="text-sm">
+                How Would Like to receive notification for your Post?
+              </p>
             </div>
 
             <RadioGroup className="space-y-1" defaultValue="both">
@@ -148,10 +161,15 @@ const General = async () => {
           <div className="flex items-center">
             <div className="space-y-1">
               <p className="text-xl font-semibold leading-[1.6]">Likes</p>
-              <p className="text-sm">Notify me when someone likes my Post or Comments</p>
+              <p className="text-sm">
+                Notify me when someone likes my Post or Comments
+              </p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
 
           <div className="flex items-center">
@@ -162,25 +180,38 @@ const General = async () => {
               </p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
 
           <div className="flex items-center">
             <div className="space-y-1">
-              <p className="text-xl font-semibold leading-[1.6]">New Followers</p>
+              <p className="text-xl font-semibold leading-[1.6]">
+                New Followers
+              </p>
               <p className="text-sm">Notify me when I have new followers</p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
 
           <div className="flex items-center">
             <div className="space-y-1">
-              <p className="text-xl font-semibold leading-[1.6]">Job Completed</p>
+              <p className="text-xl font-semibold leading-[1.6]">
+                Job Completed
+              </p>
               <p className="text-sm">Notify me when Job is completed</p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
           <div className="flex items-center">
             <div className="space-y-1">
@@ -188,7 +219,10 @@ const General = async () => {
               <p className="text-sm">Notify me when someone shares my post</p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
 
           <div className="flex items-center">
@@ -199,7 +233,10 @@ const General = async () => {
               </p>
             </div>
 
-            <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+            <Switch
+              className="ml-auto"
+              style={{ "--primary": "150 81% 77%" } as CSSProperties}
+            />
           </div>
         </div>
       </div>
@@ -207,7 +244,8 @@ const General = async () => {
       <div
         className="bg-white rounded-[16px] p-5 space-y-6"
         style={{
-          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+          boxShadow:
+            "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
         }}
       >
         <div className="border-b pb-2">
@@ -216,11 +254,19 @@ const General = async () => {
 
         <div className="flex items-center">
           <div className="space-y-1">
-            <p className="text-xl font-semibold leading-[1.6]">Light and Dark mode</p>
-            <p className="text-sm"> Light mode is default Toggle to change to dark mode</p>
+            <p className="text-xl font-semibold leading-[1.6]">
+              Light and Dark mode
+            </p>
+            <p className="text-sm">
+              {" "}
+              Light mode is default Toggle to change to dark mode
+            </p>
           </div>
 
-          <Switch className="ml-auto" style={{ "--primary": "150 81% 77%" } as CSSProperties} />
+          <Switch
+            className="ml-auto"
+            style={{ "--primary": "150 81% 77%" } as CSSProperties}
+          />
         </div>
       </div>
     </div>

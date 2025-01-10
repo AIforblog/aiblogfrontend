@@ -7,12 +7,12 @@ interface CoverImageProps {
   className?: string;
 }
 
-export function CoverImage({ src, alt, className}: CoverImageProps) {
+export function CoverImage({ src, alt, className }: CoverImageProps) {
   return (
     <div
       className={cn(
         "relative w-full h-full overflow-hidden rounded-2xl",
-        className
+        className,
       )}
     >
       <Image

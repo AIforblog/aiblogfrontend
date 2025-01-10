@@ -1,4 +1,4 @@
-import { MessageSquareText,} from "lucide-react";
+import { MessageSquareText } from "lucide-react";
 import UserInfo from "@/components/profile/user-info";
 import ContentTab from "@/components/profile/content-tab";
 import makeFetch from "@/lib/helper";
@@ -14,12 +14,11 @@ import { CheckFollowing } from "@/actions/follow";
 
 import BackArrow from "../../follow/_components/back-arrow";
 
-
 export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
-	statusCode: number;
-	message: string;
-  isFollowedBy?:boolean | boolean | PromiseLike<boolean>
+  statusCode: number;
+  message: string;
+  isFollowedBy?: boolean | boolean | PromiseLike<boolean>;
 };
 
 const getUserProfile = async (accessToken: string, userId: string) => {
@@ -32,17 +31,17 @@ const getUserProfile = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     const fetchUser = await fetchUserProfile();
-    return fetchUser
+    return fetchUser;
   } catch (err) {
     console.error(err);
   }
 };
 
-const checkFollowedBy   = async (accessToken: string, followId: string) => {
+const checkFollowedBy = async (accessToken: string, followId: string) => {
   try {
     const followedYou = makeFetch<IsFollowingResponse>(
       "auth",
@@ -50,19 +49,17 @@ const checkFollowedBy   = async (accessToken: string, followId: string) => {
       accessToken,
       {
         next: {
-          tags: [`profile` , "followers" ,"followees"],
+          tags: [`profile`, "followers", "followees"],
         },
-      }
+      },
     );
 
     const fetchFollowed = await followedYou();
-    return fetchFollowed.isFollowedBy
+    return fetchFollowed.isFollowedBy;
   } catch (err) {
     console.error(err);
   }
 };
-
-
 
 const getUserBlogs = async (accessToken: string, userId: string) => {
   try {
@@ -74,11 +71,11 @@ const getUserBlogs = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     const fetchBlogs = await fetchUserBlogs();
-    return fetchBlogs
+    return fetchBlogs;
   } catch (err) {
     console.error(err);
   }
@@ -93,45 +90,46 @@ const getUserJobs = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     const fetchJobs = await fetchUserJobs();
-    return fetchJobs
+    return fetchJobs;
   } catch (err) {
     console.error(err);
   }
 };
-
 
 const Profile = async ({ params }: { params: { username: string } }) => {
   const user = await assertUserAuthenticated();
   const profileUsername = params.username;
   const userData = await getUserProfile(
     user.accessToken.value as string,
-    profileUsername as string
+    profileUsername as string,
   );
 
   const userBlogs = await getUserBlogs(
     user.accessToken.value as string,
-    userData?.data.userId as string
+    userData?.data.userId as string,
   );
-  
+
   const userJobs = await getUserJobs(
     user.accessToken.value as string,
-    userData?.data.userId as string
+    userData?.data.userId as string,
   );
 
+  const isFollowing = await CheckFollowing(
+    user.accessToken.value as string,
+    userData?.data.userId as string,
+  );
+  const isFollowsYou = await checkFollowedBy(
+    user.accessToken.value as string,
+    userData?.data.userId as string,
+  );
 
-  const isFollowing = await CheckFollowing( user.accessToken.value as string, userData?.data.userId as string);
-   const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, userData?.data.userId as string);
-
- ;
   if (!userData) {
     return notFound();
   }
-
-  
 
   const profileImageSrc = "/images/blank-profile-picture.png";
 
@@ -168,12 +166,19 @@ const Profile = async ({ params }: { params: { username: string } }) => {
 
           <div className="flex items-center gap-4">
             <MessageSquareText className="text-2xl" size={30} />
-            <FollowButton userId={userData.data.userId}  isFollowing={isFollowing}/>
+            <FollowButton
+              userId={userData.data.userId}
+              isFollowing={isFollowing}
+            />
           </div>
         </div>
 
         <div className="rounded-b-lg pb-5 -top-[70px] relative">
-          <UserInfo user={userData.data} isFolloweBy={isFollowsYou} isExternal={true} />
+          <UserInfo
+            user={userData.data}
+            isFolloweBy={isFollowsYou}
+            isExternal={true}
+          />
         </div>
       </div>
       {/* <div className="rounded-b-lg pb-5 -top-[90px] relative">
@@ -181,7 +186,12 @@ const Profile = async ({ params }: { params: { username: string } }) => {
       </div> */}
       <div className="rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-             <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results} isFollowing={isFollowing}  />
+          <ContentTab
+            blogs={userBlogs?.data?.results}
+            user={userData.data}
+            job={userJobs?.data?.results}
+            isFollowing={isFollowing}
+          />
         </div>
       </div>
     </div>

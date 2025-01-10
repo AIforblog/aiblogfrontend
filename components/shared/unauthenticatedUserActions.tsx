@@ -61,7 +61,7 @@ export const AuthRequiredModal = ({
 
     // Navigate to auth page
     router.push(
-      `/auth/${authPath}?returnUrl=${encodeURIComponent(returnPath)}`
+      `/auth/${authPath}?returnUrl=${encodeURIComponent(returnPath)}`,
     );
   };
 

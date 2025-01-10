@@ -36,7 +36,7 @@ const AsideContent = ({ className }: { className?: string }) => {
     <aside
       className={cn(
         "flex h-full w-full rounded-[16px] border bg-neutral-50 py-6 px-4 flex-col gap-6",
-        className
+        className,
       )}
       style={{
         boxShadow: "0px 10px 15px -3px #1018281A, 0px 4px 6px -4px #1018281A",
@@ -50,13 +50,17 @@ const AsideContent = ({ className }: { className?: string }) => {
           <AsideLink href={"/settings/security"}>Security Settings</AsideLink>
         </li>
         <li>
-          <AsideLink href={"/settings/web3"}>Web 3 and Wallet Settings</AsideLink>
+          <AsideLink href={"/settings/web3"}>
+            Web 3 and Wallet Settings
+          </AsideLink>
         </li>
         <li>
           <AsideLink href={"/settings/privacy"}>Privacy Settings</AsideLink>
         </li>
         <li>
-          <AsideLink href={"/settings/earning"}>Earning and Payment Settings</AsideLink>
+          <AsideLink href={"/settings/earning"}>
+            Earning and Payment Settings
+          </AsideLink>
         </li>
       </ul>
 
@@ -76,7 +80,11 @@ const AsideContent = ({ className }: { className?: string }) => {
     </aside>
   );
 };
-const AsideLink = ({ className, href, ...restProps }: ComponentProps<typeof Link>) => {
+const AsideLink = ({
+  className,
+  href,
+  ...restProps
+}: ComponentProps<typeof Link>) => {
   const pathname = usePathname();
   const isActive = pathname === href;
   return (
@@ -84,9 +92,10 @@ const AsideLink = ({ className, href, ...restProps }: ComponentProps<typeof Link
       href={href}
       className={cn(
         "p-4 block  transition-colors w-full rounded-xl text-xl leading-[1.4] font-medium",
-        isActive && "bg-[#FCF4AA] hover:bg-[#f7e867] border-r-4 border-[#BF9005]",
+        isActive &&
+          "bg-[#FCF4AA] hover:bg-[#f7e867] border-r-4 border-[#BF9005]",
         !isActive && "bg-neutral-100 hover:bg-neutral-200 border",
-        className
+        className,
       )}
       {...restProps}
     />

@@ -225,7 +225,7 @@ const Comments: React.FC<CommentsProps> = ({
 
   const handleReply = (
     commentChain: string[],
-    replyComment: CommentFormData
+    replyComment: CommentFormData,
   ) => {
     const updatedComments = [...comments];
     let currentLevel = updatedComments;
@@ -314,7 +314,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
             ];
             return users
               .filter((user) =>
-                user.username.toLowerCase().startsWith(query.toLowerCase())
+                user.username.toLowerCase().startsWith(query.toLowerCase()),
               )
               .slice(0, 5);
           },
@@ -333,7 +333,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
                 const suggestions = props.items
                   .map(
                     (item: any) =>
-                      `<div class="mention-item">${item.name} (@${item.username})</div>`
+                      `<div class="mention-item">${item.name} (@${item.username})</div>`,
                   )
                   .join("");
 
@@ -406,7 +406,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   const removeImage = (indexToRemove: number) => {
     setImages((prevImages) =>
-      prevImages.filter((_, index) => index !== indexToRemove)
+      prevImages.filter((_, index) => index !== indexToRemove),
     );
   };
 
@@ -585,7 +585,7 @@ const CommentItem: React.FC<{
     const now = new Date();
     const commentDate = new Date(date);
     const diffInSeconds = Math.floor(
-      (now.getTime() - commentDate.getTime()) / 1000
+      (now.getTime() - commentDate.getTime()) / 1000,
     );
 
     if (diffInSeconds < 60) return "Just now";

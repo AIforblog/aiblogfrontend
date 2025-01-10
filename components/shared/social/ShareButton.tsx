@@ -40,7 +40,7 @@ export const ShareButton = ({
           "bg-transparent outline-none border-none",
           "transition-all duration-300",
           isShared && "text-green-500",
-          className
+          className,
         )}
         onClick={handleShare}
       >

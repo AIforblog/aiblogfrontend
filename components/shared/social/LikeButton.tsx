@@ -32,7 +32,7 @@ export const LikeButton = ({
         "bg-transparent outline-none border-none",
         "transition-all duration-300",
         isLiked && "text-red-500",
-        className
+        className,
       )}
       onClick={handleLike}
     >

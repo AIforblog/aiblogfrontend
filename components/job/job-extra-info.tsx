@@ -92,7 +92,7 @@ const JobExtraInfo = memo<JobExtraInfoProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 export default JobExtraInfo;

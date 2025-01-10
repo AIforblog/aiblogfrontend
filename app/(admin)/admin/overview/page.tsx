@@ -1,11 +1,8 @@
-
-import OverviewPage from '@/components/admin/overview-page'
-import React from 'react'
+import OverviewPage from "@/components/admin/overview-page";
+import React from "react";
 
 const Page = () => {
-  return (
-    <OverviewPage/>
-  )
-}
+  return <OverviewPage />;
+};
 
-export default Page
+export default Page;

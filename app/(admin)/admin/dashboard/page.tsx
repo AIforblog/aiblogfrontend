@@ -1,10 +1,8 @@
-import JobPostPageComponent from '@/components/admin/job-post-page'
-import React from 'react'
+import JobPostPageComponent from "@/components/admin/job-post-page";
+import React from "react";
 
 const Page = () => {
-  return (
-    <JobPostPageComponent/>
-  )
-}
+  return <JobPostPageComponent />;
+};
 
-export default Page
+export default Page;

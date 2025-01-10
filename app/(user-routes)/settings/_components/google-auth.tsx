@@ -19,37 +19,36 @@ function GoogleAuth() {
         </div>
 
         <div className=" border rounded-lg p-4">
-        <div className="space-y-1">
-          <div className="flex sm:items-center justify-between ">
-            <p className="md:text-xl sm:text-lg text-base font-semibold leading-[1.6] text-wrap pb-2">
-              Turn on two-factor authentication
-            </p>
+          <div className="space-y-1">
+            <div className="flex sm:items-center justify-between ">
+              <p className="md:text-xl sm:text-lg text-base font-semibold leading-[1.6] text-wrap pb-2">
+                Turn on two-factor authentication
+              </p>
 
-            <Switch
-              className="ml-auto md:hidden block"
-              style={{ "--primary": "150 81% 77%" } as CSSProperties}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-1">
-          <div className="flex sm:items-center items-start justify-between sm:flex-row flex-col flex-shrink">
-            <div className="max-w-xl">
-            <p className="text-sm sm:max-w-[85%] box-border ">
-              {" "}
-              Enhance your security by setting up two-factor authentication, It
-              adds an extra  layer of security by requiring a special code each
-              time you log in
-            </p>
+              <Switch
+                className="ml-auto md:hidden block"
+                style={{ "--primary": "150 81% 77%" } as CSSProperties}
+              />
             </div>
-        
-
-            <Switch
-              className="ml-auto md:block hidden"
-              style={{ "--primary": "150 81% 77%" } as CSSProperties}
-            />
           </div>
-        </div>
+
+          <div className="space-y-1">
+            <div className="flex sm:items-center items-start justify-between sm:flex-row flex-col flex-shrink">
+              <div className="max-w-xl">
+                <p className="text-sm sm:max-w-[85%] box-border ">
+                  {" "}
+                  Enhance your security by setting up two-factor authentication,
+                  It adds an extra layer of security by requiring a special code
+                  each time you log in
+                </p>
+              </div>
+
+              <Switch
+                className="ml-auto md:block hidden"
+                style={{ "--primary": "150 81% 77%" } as CSSProperties}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

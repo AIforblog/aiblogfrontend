@@ -43,9 +43,9 @@ export const WalletConnectButton = () => {
                 {mounted && account
                   ? `${account.address.substring(
                       0,
-                      6
+                      6,
                     )}...${account.address.substring(
-                      account.address.length - 4
+                      account.address.length - 4,
                     )}`
                   : "Connect Wallet"}
               </span>

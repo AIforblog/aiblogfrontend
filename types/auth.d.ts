@@ -1,48 +1,48 @@
 export interface User {
   profileUsername: string;
-	id?: string;
-	username: string;
-	email: string;
-	avatar_url?: string;
-	profileId: string;
-	createdAt: string;
+  id?: string;
+  username: string;
+  email: string;
+  avatar_url?: string;
+  profileId: string;
+  createdAt: string;
 }
 
 export interface SignUpParams {
-	username: string;
-	email: string;
-	password: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
 export interface ErrorResponse {
-	message: string;
-	status_code?: number;
+  message: string;
+  status_code?: number;
 }
 
 export interface SignUpResponse {
-	data?: {
-		user?: User;
-		access_token?: string;
-		refresh_toke?: string;
-	};
-	error?: string;
-	status_code?: number;
+  data?: {
+    user?: User;
+    access_token?: string;
+    refresh_toke?: string;
+  };
+  error?: string;
+  status_code?: number;
 }
 
 export interface SignInParams {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 export interface SignInResponse {
-	data?: {
-		user?: User;
-		accessToken?: string;
-		refreshToken?: string;
-	};
-	error?: string;
-	status_code?: number;
-	message?: string;
+  data?: {
+    user?: User;
+    accessToken?: string;
+    refreshToken?: string;
+  };
+  error?: string;
+  status_code?: number;
+  message?: string;
 }
 
 export interface GoogleSignInResponse {
@@ -51,23 +51,23 @@ export interface GoogleSignInResponse {
 }
 
 export interface ForgotPasswordParams {
-	email: string;
+  email: string;
 }
 
 export interface ForgotPasswordResponse {
-	message?: string;
-	error?: string;
-	status_code?: number;
+  message?: string;
+  error?: string;
+  status_code?: number;
 }
 
 export interface UpdatePasswordParams {
-	newPassword: string;
-	confirmPassword: string;
-	resetToken: string;
+  newPassword: string;
+  confirmPassword: string;
+  resetToken: string;
 }
 
 export interface UpdatePasswordResponse {
-	message?: string;
-	error?: string;
-	status_code: number;
+  message?: string;
+  error?: string;
+  status_code: number;
 }

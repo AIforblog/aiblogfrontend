@@ -2,7 +2,6 @@
 import { useState, useEffect, useMemo } from "react";
 import TrendingTopicCard from "@/components/trends/trending-topic-card";
 
-
 const fetchTrendingTopics = async () => {
   const url = "https://gateway.drello.xyz/api/v1/blog/trending-topics";
 

@@ -22,7 +22,7 @@ const GoogleCallbackContent = () => {
       console.log("All URL parameters:", allParams);
       console.log(
         "All search params:",
-        Object.fromEntries(searchParams.entries())
+        Object.fromEntries(searchParams.entries()),
       );
       console.log("Authorization code:", code);
       console.log("API URL being used:", API_URL);
@@ -33,7 +33,7 @@ const GoogleCallbackContent = () => {
         console.error("Error reason:", searchParams.get("error_reason"));
         console.error(
           "Error description:",
-          searchParams.get("error_description")
+          searchParams.get("error_description"),
         );
         toast({
           title: "Authentication Failed",
@@ -49,7 +49,7 @@ const GoogleCallbackContent = () => {
       try {
         console.log(
           "Making request to callback endpoint:",
-          `${API_URL}auth/google/callback`
+          `${API_URL}auth/google/callback`,
         );
         console.log("Request params:", { code, withCredentials: true });
         const response = await axios.get(`${API_URL}auth/google/callback`, {

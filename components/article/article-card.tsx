@@ -11,6 +11,7 @@ const ArticleCard = memo<{ article: ArticleProps }>(({ article }) => {
       <CardHeader className="p-0">
         <ProfileCard user={article.user} />
       </CardHeader>
+
       <CardContent className="flex flex-col p-0 gap-y-3">
         <div className="relative block w-full rounded-xl overflow-hidden">
           <Image
@@ -24,12 +25,12 @@ const ArticleCard = memo<{ article: ArticleProps }>(({ article }) => {
 
         <div className="flex flex-col p-0 gap-y-3">
           {/* Title */}
-          <CardTitle className="text-xl font-bold leading-7 text-[#262626] dark:text-neutral-100 p-0">
+          <CardTitle className="text-md font-bold leading-7 text-[#262626] dark:text-neutral-100 p-0">
             {article.title}
           </CardTitle>
 
           {/* Description */}
-          <p className="text-base font-normal leading-6 text-[#737373] dark:text-neutral-300">
+          <p className="text-[0.85rem] font-normal leading-6 text-[#737373] dark:text-neutral-300">
             {article.description}
           </p>
         </div>

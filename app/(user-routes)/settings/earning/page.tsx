@@ -1,4 +1,3 @@
-
 const Earning = () => {
   return (
     <div className="bg-white flex justify-center items-center">

@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Home, RefreshCcw } from 'lucide-react'
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Home, RefreshCcw } from "lucide-react";
 
 export default function ProfileNotFound() {
   return (
@@ -18,19 +18,23 @@ export default function ProfileNotFound() {
           className="text-9xl font-bold text-gray-300 dark:text-gray-700 mb-4"
           initial={{ scale: 0.5, rotateY: -180 }}
           animate={{ scale: 1, rotateY: 0 }}
-          transition={{ type: 'spring', stiffness: 100, damping: 15 }}
+          transition={{ type: "spring", stiffness: 100, damping: 15 }}
         >
           404
         </motion.div>
-        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">Profile Not Found</h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">Oops! The profile you&apos;re looking for doesn&apos;t exist.</p>
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+          Profile Not Found
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
+          Oops! The profile you&apos;re looking for doesn&apos;t exist.
+        </p>
       </motion.div>
 
       <motion.div
         className="mb-8"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ delay: 0.3, type: 'spring', stiffness: 200, damping: 20 }}
+        transition={{ delay: 0.3, type: "spring", stiffness: 200, damping: 20 }}
       >
         <svg
           className="w-48 h-48"
@@ -94,5 +98,5 @@ export default function ProfileNotFound() {
         </Button>
       </motion.div>
     </div>
-  )
+  );
 }

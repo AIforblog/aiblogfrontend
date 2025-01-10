@@ -1,9 +1,7 @@
 import type { Config } from "tailwindcss";
+import TailwindCSSAnimate from "tailwindcss-animate";
 
 const config: Config = {
-
- 
-
   darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -26,8 +24,8 @@ const config: Config = {
         "cta-primary-normal": "#fdc316",
         palegoldenrod: "#f9f7b9",
         "accents-greenish": "#baf28d",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -37,11 +35,11 @@ const config: Config = {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "var(--primary)",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "var(--secondary)",
           foreground: "hsl(var(--secondary-foreground))",
         },
         muted: {
@@ -95,7 +93,7 @@ const config: Config = {
           "75%": { transform: "translateX(0)", opacity: "1" },
           "100%": { transform: "translateX(100%)", opacity: "0" },
         },
-        "shimmer": {
+        shimmer: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
@@ -104,11 +102,10 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fly-and-fade": "fly-and-fade 1.5s ease-in-out infinite",
-        "shimmer": "shimmer 1.5s infinite",
-      
+        shimmer: "shimmer 1.5s infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [TailwindCSSAnimate],
 };
 export default config;

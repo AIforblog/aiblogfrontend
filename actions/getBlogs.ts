@@ -27,7 +27,9 @@ export async function getBlogs({
       ...(category && { category }),
     });
 
-    const response = await axios.get<BlogResponse>(`${API_BASE_URL}blog?${queryParams}`);
+    const response = await axios.get<BlogResponse>(
+      `${API_BASE_URL}blog?${queryParams}`,
+    );
 
     if (!response.data || !response.data.data?.results) {
       throw new Error("Invalid blog data received");
@@ -80,7 +82,9 @@ export async function getBlogPost(postId: string) {
   const cookieStore = cookies();
 
   try {
-    const response = await axios.get<SingleBlogResponse>(`${API_BASE_URL}blog/${postId}`);
+    const response = await axios.get<SingleBlogResponse>(
+      `${API_BASE_URL}blog/${postId}`,
+    );
 
     if (!response.data || !response.data.data) {
       throw new Error("Post not found");

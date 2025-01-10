@@ -43,7 +43,7 @@ export async function middleware(request: NextRequest) {
 
     // Redirect unauthenticated users to the sign-in page
     return NextResponse.redirect(
-      new URL(authConfig.routes.signIn, request.url)
+      new URL(authConfig.routes.signIn, request.url),
     );
   }
 }

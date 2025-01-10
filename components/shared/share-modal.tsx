@@ -60,9 +60,9 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-            `📚 Just read this amazing article!\n\n${postTitle}`
+            `📚 Just read this amazing article!\n\n${postTitle}`,
           )}&url=${encodeURIComponent(postUrl)}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -73,11 +73,11 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-            postUrl
+            postUrl,
           )}&quote=${encodeURIComponent(
-            `📖 Found this interesting read: ${postTitle}`
+            `📖 Found this interesting read: ${postTitle}`,
           )}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -88,9 +88,9 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-            postUrl
+            postUrl,
           )}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -105,9 +105,9 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://www.reddit.com/submit?title=${encodeURIComponent(
-            postTitle
+            postTitle,
           )}&url=${encodeURIComponent(postUrl)}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -118,11 +118,11 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://t.me/share/url?url=${encodeURIComponent(
-            postUrl
+            postUrl,
           )}&text=${encodeURIComponent(
-            `📎 Interesting read:\n\n${postTitle}`
+            `📎 Interesting read:\n\n${postTitle}`,
           )}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -147,9 +147,9 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
-            postUrl
+            postUrl,
           )}&t=${encodeURIComponent(`Show HN: ${postTitle}`)}`,
-          "_blank"
+          "_blank",
         );
       },
     },
@@ -160,9 +160,9 @@ export const ShareModal = ({
       action: () => {
         window.open(
           `https://wa.me/?text=${encodeURIComponent(
-            `📱 Hey! Found this interesting article:\n\n${postTitle}\n\n${postUrl}`
+            `📱 Hey! Found this interesting article:\n\n${postTitle}\n\n${postUrl}`,
           )}`,
-          "_blank"
+          "_blank",
         );
       },
     },

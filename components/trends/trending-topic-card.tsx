@@ -1,6 +1,5 @@
 import AuthTopicCard from "./auth-topic-card";
 
-
 // For the layout, to check if the user is
 // authenticated and change the layout accordingly
 type TrendingTopicCardProps = {
@@ -14,17 +13,14 @@ type TrendingTopicCardProps = {
   }[];
 };
 
-
-const TrendingTopicCard = ({trendingTopics}:TrendingTopicCardProps ) => {
+const TrendingTopicCard = ({ trendingTopics }: TrendingTopicCardProps) => {
   return (
     <div className="">
-      
-        <div className="flex flex-col space-y-6 pb-12">
-          {trendingTopics.map((topics, index) => (
-            <AuthTopicCard key={index} item={topics} />
-          ))}
-        </div>
-      
+      <div className="flex flex-col space-y-6 pb-12">
+        {trendingTopics.map((topics, index) => (
+          <AuthTopicCard key={index} item={topics} />
+        ))}
+      </div>
     </div>
   );
 };

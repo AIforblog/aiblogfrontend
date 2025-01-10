@@ -11,8 +11,6 @@ import { CheckFollowing } from "@/actions/follow";
 import { assertUserAuthenticated } from "@/lib/auth";
 // import type { BlogPost } from "@/types/blog";
 
-
-
 export default async function BlogPostPage({
   params,
 }: {
@@ -22,7 +20,10 @@ export default async function BlogPostPage({
 
   const user = await assertUserAuthenticated();
 
-   const isFollowing = await CheckFollowing( user.accessToken.value as string, post?.userId as string);
+  const isFollowing = await CheckFollowing(
+    user.accessToken.value as string,
+    post?.userId as string,
+  );
   //  const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, post?.userId as string);
 
   if (!post) {
@@ -49,10 +50,10 @@ export default async function BlogPostPage({
             id: post.id,
             userId: post?.userId,
             followersCount: 0,
-            followingCount:0,
+            followingCount: 0,
             bio: "",
             externalLink: "",
-            coverPhoto: ""
+            coverPhoto: "",
           }}
           isFollowing={isFollowing}
         />
@@ -75,10 +76,7 @@ export default async function BlogPostPage({
       {post.tags && (
         <div className="flex flex-wrap p-2 bg-gray-500 gap-2">
           {post.tags?.map((tag: string) => (
-            <span
-              key={tag}
-              className=" px-2 py-1 rounded-full text-xs"
-            >
+            <span key={tag} className=" px-2 py-1 rounded-full text-xs">
               {tag}
             </span>
           ))}

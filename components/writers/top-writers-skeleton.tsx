@@ -22,8 +22,7 @@ const SkeletonTopWriterCard = () => {
         <div className="h-4 w-1/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
       </CardFooter>
     </Card>
-  )
-}
-
+  );
+};
 
 export default SkeletonTopWriterCard;

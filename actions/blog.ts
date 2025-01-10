@@ -25,7 +25,7 @@ export const postBlogAction = authenticatedAction
   .input(
     createBlogSchema.extend({
       fileWrapper: z.instanceof(FormData),
-    })
+    }),
   )
   .handler(
     async ({
@@ -60,7 +60,7 @@ export const postBlogAction = authenticatedAction
               thumbnail,
               featured: false,
             },
-          }
+          },
         )();
 
         return response; // Return response on success
@@ -68,5 +68,5 @@ export const postBlogAction = authenticatedAction
         console.error("Error in blog post action:", err);
         throw err; // Ensure the error is propagated to onError
       }
-    }
+    },
   );

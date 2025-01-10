@@ -22,10 +22,11 @@ function PasswordReset() {
       >
         <div>
           <div className="border-b pb-2 mb-4">
-            <h2 className="text-2xl font-bold leading-[1.375]">Password Reset</h2>
+            <h2 className="text-2xl font-bold leading-[1.375]">
+              Password Reset
+            </h2>
           </div>
 
-         
           {!isFormVisible && (
             <div className="password">
               <p>Password</p>

@@ -22,7 +22,7 @@ const getUserProfile = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     return await fetchUserProfile();
@@ -41,11 +41,11 @@ const getUserBlogs = async (accessToken: string, userId: string) => {
         next: {
           tags: [`blog-${userId}`],
         },
-      }
+      },
     );
 
     const fetchBlog = await fetchUserBlogs();
-    return fetchBlog
+    return fetchBlog;
   } catch (err) {
     console.error(err);
   }
@@ -60,11 +60,11 @@ const getUserJobs = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     const fetchJobs = await fetchUserJobs();
-    return fetchJobs
+    return fetchJobs;
   } catch (err) {
     console.error(err);
   }
@@ -74,13 +74,16 @@ const Profile = async () => {
   const user = await assertUserAuthenticated();
   const userData = await getUserProfile(
     user.accessToken.value as string,
-    user.userId as string
+    user.userId as string,
   );
 
-  const userBlogs = await getUserBlogs ( user.accessToken.value as string , user.userId as string)
+  const userBlogs = await getUserBlogs(
+    user.accessToken.value as string,
+    user.userId as string,
+  );
   const userJobs = await getUserJobs(
     user.accessToken.value as string,
-    userData?.data.userId as string
+    userData?.data.userId as string,
   );
 
   if (!userData) {
@@ -118,10 +121,10 @@ const Profile = async () => {
             userId={user?.userId || ""}
           />
           <Link href="/wallet">
-          <Button className="border rounded-full md:flex justify-center items-center bg-black hidden"> 
-          <WalletMinimal className="mr-2"/>
-            View wallet
-          </Button>
+            <Button className="border rounded-full md:flex justify-center items-center bg-black hidden">
+              <WalletMinimal className="mr-2" />
+              View wallet
+            </Button>
           </Link>
         </div>
 
@@ -134,7 +137,11 @@ const Profile = async () => {
       </div> */}
       <div className="rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-          <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results} />
+          <ContentTab
+            blogs={userBlogs?.data?.results}
+            user={userData.data}
+            job={userJobs?.data?.results}
+          />
         </div>
       </div>
     </div>

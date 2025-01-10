@@ -16,7 +16,7 @@ export const createBlogSchema = z.object({
     .refine((file) => file.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
     .refine(
       (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "Only .jpg, .png, and .webp formats are supported."
+      "Only .jpg, .png, and .webp formats are supported.",
     )
     .optional(),
 });

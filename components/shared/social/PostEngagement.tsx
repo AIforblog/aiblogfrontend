@@ -74,7 +74,7 @@ export const PostEngagement = ({
           "transition-all duration-300 ease-in-out",
           isCommentsOpen
             ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-4"
+            : "opacity-0 -translate-y-4",
         )}
       >
         {isCommentsOpen && (

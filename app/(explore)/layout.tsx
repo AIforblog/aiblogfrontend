@@ -34,7 +34,7 @@ export default function DashboardLayout({
             <section className="row-span-1  overflow-hidden">
               <SectionTitle title="Trending Topics" />
               <Suspense>
-              <TrendingTopics />
+                <TrendingTopics />
               </Suspense>
             </section>
 

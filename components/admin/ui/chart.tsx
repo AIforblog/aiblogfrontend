@@ -1,6 +1,18 @@
-'use client'
+"use client";
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 export const ActiveUsersChart = ({ data }: { data: any[] }) => {
   return (
@@ -10,13 +22,25 @@ export const ActiveUsersChart = ({ data }: { data: any[] }) => {
           <XAxis dataKey="name" />
           <YAxis hide />
           <Tooltip />
-          <Line type="monotone" dataKey="monthly" stroke="#ff0000" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="daily" stroke="#0088ff" strokeWidth={2} dot={false} />
+          <Line
+            type="monotone"
+            dataKey="monthly"
+            stroke="#ff0000"
+            strokeWidth={2}
+            dot={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="daily"
+            stroke="#0088ff"
+            strokeWidth={2}
+            dot={false}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
-  )
-}
+  );
+};
 
 export const RevenueChart = ({ data }: { data: any[] }) => {
   return (
@@ -34,8 +58,8 @@ export const RevenueChart = ({ data }: { data: any[] }) => {
         </BarChart>
       </ResponsiveContainer>
     </div>
-  )
-}
+  );
+};
 
 export const PostChart = ({ data }: { data: any[] }) => {
   return (
@@ -58,5 +82,5 @@ export const PostChart = ({ data }: { data: any[] }) => {
         </PieChart>
       </ResponsiveContainer>
     </div>
-  )
-}
+  );
+};

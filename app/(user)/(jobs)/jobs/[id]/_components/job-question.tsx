@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { ThumbsUp, MessageSquare, Share2, Check, ChevronLeftIcon } from "lucide-react";
+import {
+  ThumbsUp,
+  MessageSquare,
+  Share2,
+  Check,
+  ChevronLeftIcon,
+} from "lucide-react";
 import Sidebar from "./sideBarForJobQuestion";
 import JobTextEditor from "@/components/shared/textAreaForJobQuestion";
 import Button from "@/components/shared/button";
@@ -27,11 +33,13 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
       isAnswered: false,
       type: actionType === "checkbox" ? "multiple" : "open",
       options: actionType === "checkbox" ? checkboxChoices : undefined,
-    })
+    }),
   );
 
   const [questions, setQuestions] = useState<Question[]>(initialQuestions); // State for questions
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(questions[0]?.id);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
+    questions[0]?.id,
+  );
   const questionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const selectQuestion = (id: string) => {
@@ -41,8 +49,8 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
   const handleInputInteraction = (id: string) => {
     setQuestions((prevQuestions) =>
       prevQuestions.map((question) =>
-        question.id === id ? { ...question, isAnswered: true } : question
-      )
+        question.id === id ? { ...question, isAnswered: true } : question,
+      ),
     );
   };
 
@@ -54,7 +62,9 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
       }}
       className="bg-white relative rounded-xl shadow-sm border p-4 border-[#E5E5E5]"
     >
-      <h2 className="text-lg font-semibold mb-3 text-[#525252]">{question.text}</h2>
+      <h2 className="text-lg font-semibold mb-3 text-[#525252]">
+        {question.text}
+      </h2>
       {question.type === "open" ? (
         <div>
           <JobTextEditor onChange={() => handleInputInteraction(question.id)} />
@@ -71,7 +81,10 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
                 onChange={() => handleInputInteraction(question.id)} // Trigger on change
                 className="w-5 h-5 border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor={`option-${question.id}-${index}`} className="text-sm text-[#737373]">
+              <label
+                htmlFor={`option-${question.id}-${index}`}
+                className="text-sm text-[#737373]"
+              >
                 {option}
               </label>
             </div>
@@ -103,7 +116,9 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
 
         {/* Display all questions */}
         <div className="overflow-y-scroll relative custom-scroll max-h-[60vh] flex flex-col justify-between grow">
-          <div className="space-y-4">{questions.map((question) => renderQuestion(question))}</div>
+          <div className="space-y-4">
+            {questions.map((question) => renderQuestion(question))}
+          </div>
 
           <div className="flex justify-between items-center pt-4">
             <div className="flex space-x-6">
@@ -121,7 +136,8 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
               </button>
             </div>
             <Button variant="solid" color="secondary">
-              Publish <span className="pl-1 hidden md:inline">Your Answers</span>
+              Publish{" "}
+              <span className="pl-1 hidden md:inline">Your Answers</span>
             </Button>
           </div>
         </div>

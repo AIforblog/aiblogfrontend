@@ -41,7 +41,9 @@ export const fetchJobWithComments = async (id: string) => {
 
 export const fetchJobs = async ({ page }: { page: number }) => {
   try {
-    const res = await fetch(`${API_URL}jobs/?page=${page}`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}jobs/?page=${page}`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       return {

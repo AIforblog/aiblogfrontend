@@ -7,7 +7,9 @@ import { BlogPost } from "@/types/blog";
 import { User } from "@/types/auth";
 
 export default async function BlogPage() {
-  let user: { accessToken: any; userId?: string | undefined; user?: User; }, initialBlog, category;
+  let user: { accessToken: any; userId?: string | undefined; user?: User },
+    initialBlog,
+    category;
 
   try {
     user = await assertUserAuthenticated();
@@ -31,14 +33,14 @@ export default async function BlogPage() {
   // Check following status for each blog's writer
   try {
     const followStatus = await Promise.all(
-      initialBlog.map(async (blog:BlogPost) => {
+      initialBlog.map(async (blog: BlogPost) => {
         const isFollowing = await CheckFollowing(
           user.accessToken.value as string,
-          blog.userId
+          blog.userId,
         );
-        console.log(isFollowing, "hello world")
+        console.log(isFollowing, "hello world");
         return { ...blog, isFollowing };
-      })
+      }),
     );
     initialBlog = followStatus; // Update blogs with follow status
   } catch (error) {
@@ -50,10 +52,5 @@ export default async function BlogPage() {
     }));
   }
 
-  return (
-    <BlogPlatformLayout
-      initialBlog={initialBlog}
-      category={category}
-    />
-  );
+  return <BlogPlatformLayout initialBlog={initialBlog} category={category} />;
 }

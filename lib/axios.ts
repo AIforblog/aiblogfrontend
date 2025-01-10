@@ -40,7 +40,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 let refreshTokenTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -83,7 +83,7 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         console.error(
           "Token refresh failed, redirecting to sign-in:",
-          refreshError
+          refreshError,
         );
         if (typeof window !== "undefined") {
           await fetch("/api/auth/logout", { method: "POST" });
@@ -95,7 +95,7 @@ axiosInstance.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

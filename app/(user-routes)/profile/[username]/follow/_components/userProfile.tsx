@@ -1,6 +1,6 @@
-"use client"
-import { useUser } from "@/context/userProfilectx"
-import BackArrow from "./back-arrow"
+"use client";
+import { useUser } from "@/context/userProfilectx";
+import BackArrow from "./back-arrow";
 
 function UserProfile() {
   const { user, loading } = useUser();
@@ -20,7 +20,9 @@ function UserProfile() {
           <h3 className="text-neutral-900 text-[20px] mb-[-10px]">
             {`${user?.firstName || ""} ${user?.lastName || ""} `}
           </h3>
-          <small className="text-xs text-neutral-500">{user?.username || ""}</small>
+          <small className="text-xs text-neutral-500">
+            {user?.username || ""}
+          </small>
         </div>
       )}
     </div>

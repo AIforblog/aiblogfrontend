@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import { TopWriterCard } from "@/components/writers";
 import { TopWriterProps } from "@/components/writers/top-writer-card";
@@ -11,16 +11,16 @@ const TopWriters = () => {
   useEffect(() => {
     const fetchTopWriters = async () => {
       const url = "https://gateway.drello.xyz/api/v1/blog/top-writers";
-      
+
       try {
-        const response = await fetch(url, { next: { tags: ["trending-topic"] } });
+        const response = await fetch(url, {
+          next: { tags: ["trending-topic"] },
+        });
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
-        const data = await response.json()
-       
-       
-    
+        const data = await response.json();
+
         setTopWriter(data.data); // Update the state with augmented data
         setLoading(false);
       } catch (error: any) {

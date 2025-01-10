@@ -9,7 +9,9 @@ export async function getCategories() {
   const cookieStore = cookies();
 
   try {
-    const response = await axios.get<CategoriesResponse>(`${API_BASE_URL}blog/categories`);
+    const response = await axios.get<CategoriesResponse>(
+      `${API_BASE_URL}blog/categories`,
+    );
 
     if (!response.data || !response.data.data) {
       throw new Error("Invalid blog data received");

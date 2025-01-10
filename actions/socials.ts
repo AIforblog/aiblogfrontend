@@ -31,7 +31,7 @@ export const reactToPost = async (postId: string): Promise<void> => {
 export const createComment = async (
   postId: string,
   content: string,
-  images: string[] = []
+  images: string[] = [],
 ): Promise<Comment> => {
   const url = `${API_BASE_URL}blog/${postId}/comments`;
   const headers = await getAuthHeaders();
@@ -51,7 +51,7 @@ export const replyToComment = async (
   postId: string,
   commentId: string,
   content: string,
-  images: string[] = []
+  images: string[] = [],
 ): Promise<Comment> => {
   const url = `${API_BASE_URL}blog/${postId}/comments/${commentId}`;
   const headers = await getAuthHeaders();

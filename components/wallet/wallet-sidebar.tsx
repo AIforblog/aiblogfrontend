@@ -1,49 +1,47 @@
-import React from 'react';
-import { 
-  PenSquare, 
-  Briefcase, 
-  UserPlus, 
-  Trophy,
-  BookOpen
-} from 'lucide-react';
+import React from "react";
+import { PenSquare, Briefcase, UserPlus, Trophy, BookOpen } from "lucide-react";
 
 const EarningsSidebar = () => {
   const earningOptions = [
     {
       title: "Create Engaging Content",
-      description: "Post valuable content that gets liked, shared, and commented on to earn ETH based on engagement.",
+      description:
+        "Post valuable content that gets liked, shared, and commented on to earn ETH based on engagement.",
       status: "Available",
-      icon: PenSquare
+      icon: PenSquare,
     },
     {
       title: "Complete Jobs for ETH",
-      description: "Take on tasks and jobs posted by others and complete them to earn rewards in ETH.",
+      description:
+        "Take on tasks and jobs posted by others and complete them to earn rewards in ETH.",
       status: "Available",
-      icon: Briefcase
+      icon: Briefcase,
     },
     {
       title: "Create Jobs and Pay Others",
-      description: "Create your own jobs and tasks for other users to complete. Pay in ETH for each successful task.",
+      description:
+        "Create your own jobs and tasks for other users to complete. Pay in ETH for each successful task.",
       status: "Available",
-      icon: UserPlus
+      icon: UserPlus,
     },
     {
       title: "Participate in dRello Challenges",
-      description: "Join platform-wide challenges and competitions to earn rewards based on your performance.",
+      description:
+        "Join platform-wide challenges and competitions to earn rewards based on your performance.",
       status: "Coming soon",
-      icon: Trophy
+      icon: Trophy,
     },
     {
       title: "Monetize Your Blogs",
-      description: "Publish long-form content and monetize it based on views and engagement.",
+      description:
+        "Publish long-form content and monetize it based on views and engagement.",
       status: "Coming soon",
-      icon: BookOpen
-    }
+      icon: BookOpen,
+    },
   ];
 
   return (
     <div className="bg-white">
-    
       <div className="bg-yellow-50 rounded-lg p-6 text-center">
         <h1 className="text-xl font-semibold text-gray-900 mb-2">
           Ways to Earn on dRello
@@ -53,23 +51,24 @@ const EarningsSidebar = () => {
         </p>
       </div>
 
-      
       <div className="space-y-4 p-4 maxHeight overflow-scroll custom-scroll bg-white">
         {earningOptions.map((option, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="bg-white border border-gray-100 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
           >
             <div className="flex justify-between items-start gap-4">
               <div className="flex-grow">
-                <h3 className="font-medium text-gray-900 mb-1">{option.title}</h3>
+                <h3 className="font-medium text-gray-900 mb-1">
+                  {option.title}
+                </h3>
                 <p className="text-sm text-gray-600 leading-relaxed mb-2">
                   {option.description}
                 </p>
-                <span 
+                <span
                   className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-                    option.status === "Available" 
-                      ? "bg-green-100 text-green-800" 
+                    option.status === "Available"
+                      ? "bg-green-100 text-green-800"
                       : "bg-yellow-100 text-yellow-800"
                   }`}
                 >

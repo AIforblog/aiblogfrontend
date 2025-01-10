@@ -15,19 +15,25 @@ export default function Component() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle className="border-b pb-4 md:text-[24px] md:leading-[34px]">Wallet Status</CardTitle>
+            <CardTitle className="border-b pb-4 md:text-[24px] md:leading-[34px]">
+              Wallet Status
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <p>Not Connected</p>
-              <Button className="rounded-full border border-black bg-transparent hover:bg-transparent  text-black">Connect Wallet</Button>
+              <Button className="rounded-full border border-black bg-transparent hover:bg-transparent  text-black">
+                Connect Wallet
+              </Button>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="border-b pb-4 md:text-[24px] md:leading-[34px]">Wallet Connection Status</CardTitle>
+            <CardTitle className="border-b pb-4 md:text-[24px] md:leading-[34px]">
+              Wallet Connection Status
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="">
@@ -42,13 +48,12 @@ export default function Component() {
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Copy className="h-4 w-4" />
                       </Button>
-                          <div className="h-2 w-2 rounded-full bg-destructive" />
+                      <div className="h-2 w-2 rounded-full bg-destructive" />
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {wallet.status}
                     </p>
                   </div>
-              
                 </div>
               ))}
             </div>

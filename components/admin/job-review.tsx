@@ -1,7 +1,7 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -9,31 +9,31 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table";
 
 const jobReviewData = [
   {
-    title: 'Follow Horizon Tech on Twitter',
-    instruction: 'Follow @HorizonTech',
-    date: 'Oct 27, 2024',
-    points: '50 points',
-    status: 'Pending',
+    title: "Follow Horizon Tech on Twitter",
+    instruction: "Follow @HorizonTech",
+    date: "Oct 27, 2024",
+    points: "50 points",
+    status: "Pending",
   },
   {
     title: "Subscribe to ByteWorks' Youtube",
-    instruction: 'Subscribe @ByteWorks',
-    date: 'Oct 26, 2024',
-    points: '75 points',
-    status: 'Pending',
+    instruction: "Subscribe @ByteWorks",
+    date: "Oct 26, 2024",
+    points: "75 points",
+    status: "Pending",
   },
   {
-    title: 'Share Product Link',
+    title: "Share Product Link",
     instruction: "Share FinEdge Solutions' link",
-    date: 'Oct 25, 2024',
-    points: '30 points',
-    status: 'Pending',
+    date: "Oct 25, 2024",
+    points: "30 points",
+    status: "Pending",
   },
-]
+];
 
 export function JobReview() {
   return (
@@ -78,5 +78,5 @@ export function JobReview() {
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

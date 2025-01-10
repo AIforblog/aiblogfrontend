@@ -17,7 +17,12 @@ const Comments = ({ comments }: CommentsProps) => {
       {comments.length > 0 && null}
       <div className="border border-neutral-200 bg-[#FDF9D9] rounded-xl p-2 sm:p-4 flex gap-3 items-start">
         <div className="hidden sm:block w-10 h-10 relative md:w-12 md:h-12 shrink-0">
-          <Image fill src={imgProfile} alt="" className="rounded-full object-center" />
+          <Image
+            fill
+            src={imgProfile}
+            alt=""
+            className="rounded-full object-center"
+          />
         </div>
         <CommentBox />
       </div>
@@ -64,7 +69,10 @@ const CommentBox = () => {
           ></textarea>
 
           <div className="absolute right-4 top-4 flex gap-6 peer-focus:hidden transition-opacity group-hover/comment-label:!flex py-1 px-2 bg-white">
-            <button className="p-1 -m-1 hover:bg-neutral-50 rounded-sm" aria-label="Add link">
+            <button
+              className="p-1 -m-1 hover:bg-neutral-50 rounded-sm"
+              aria-label="Add link"
+            >
               <Link2Icon className="w-5 h-5 text-neutral-500" />
             </button>
             <label
@@ -80,7 +88,10 @@ const CommentBox = () => {
                 accept="image/*"
               />
             </label>
-            <button className="p-1 -m-1 hover:bg-neutral-50 rounded-sm" aria-label="Add link">
+            <button
+              className="p-1 -m-1 hover:bg-neutral-50 rounded-sm"
+              aria-label="Add link"
+            >
               <SmileIcon className="w-5 h-5 text-neutral-500" />
             </button>
           </div>
@@ -99,7 +110,12 @@ const CommentBox = () => {
                 >
                   <XIcon className="w-4 h-4" />
                 </button>
-                <Image src={url} fill alt="" className="object-cover object-center rounded" />
+                <Image
+                  src={url}
+                  fill
+                  alt=""
+                  className="object-cover object-center rounded"
+                />
               </div>
             ))}
           </div>

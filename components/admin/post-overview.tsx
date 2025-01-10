@@ -1,15 +1,14 @@
-'use client'
+"use client";
 
-import { Card } from '@/components/ui/card'
-import { PostChart } from './ui/chart'
-
+import { Card } from "@/components/ui/card";
+import { PostChart } from "./ui/chart";
 
 export const PostOverview = () => {
   const data = [
-    { name: 'Text', value: 37.5, color: '#8B5CF6' },
-    { name: 'Image', value: 28.1, color: '#EF4444' },
-    { name: 'Tasks', value: 18.8, color: '#60A5FA' }
-  ]
+    { name: "Text", value: 37.5, color: "#8B5CF6" },
+    { name: "Image", value: 28.1, color: "#EF4444" },
+    { name: "Tasks", value: 18.8, color: "#60A5FA" },
+  ];
 
   return (
     <Card className="p-6">
@@ -31,5 +30,5 @@ export const PostOverview = () => {
       <PostChart data={data} />
       <div className="text-sm text-green-500 mt-4">+12% from last month</div>
     </Card>
-  )
-}
+  );
+};

@@ -45,7 +45,7 @@ const SignInForm = () => {
         setError(
           typeof response.error === "string"
             ? response.error
-            : JSON.stringify(response.error)
+            : JSON.stringify(response.error),
         );
         console.log("Error state");
         toast({
@@ -61,7 +61,7 @@ const SignInForm = () => {
             // Save all user data, access token, and refresh token to sessionStorage
             sessionStorage.setItem(
               "userData",
-              JSON.stringify(response.data.user)
+              JSON.stringify(response.data.user),
             );
             if (response.data.accessToken) {
               sessionStorage.setItem("accessToken", response.data.accessToken);
@@ -69,7 +69,7 @@ const SignInForm = () => {
             if (response.data.refreshToken) {
               sessionStorage.setItem(
                 "refreshToken",
-                response.data.refreshToken
+                response.data.refreshToken,
               );
             }
             console.log("Full response:", response.data);
@@ -83,7 +83,7 @@ const SignInForm = () => {
           } catch (storageError) {
             console.error(
               "Failed to save data to sessionStorage:",
-              storageError
+              storageError,
             );
             toast({
               title: "Sign in partially successful",
@@ -198,8 +198,8 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white dark:bg-neutral-800 p-8 rounded-3xl shadow-lg w-full max-w-md">
+    <div className="flex justify-center items-center min-h-screen bg-primary">
+      <div className="dark:bg-secondary bg-white shadow-lg text-black dark:text-white p-8 max-md:px-4 rounded-3xl w-full max-w-md mx-4">
         <h2 className="text-sm text-gray-500 mb-2">WELCOME BACK</h2>
         <h1 className="text-2xl font-bold mb-6">Sign In to Your Account</h1>
 

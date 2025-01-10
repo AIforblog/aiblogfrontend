@@ -27,7 +27,8 @@ const Aside = () => {
 
       <div className="space-y-3">
         <h3 className="text-2xl font-medium">
-          {UserData.username}&apos;s - <span className="text-neutral-500">articles</span>
+          {UserData.username}&apos;s -{" "}
+          <span className="text-neutral-500">articles</span>
         </h3>
         {ArticleData.slice(0, 3).map((article) => (
           <FeaturedArticleCard article={article} key={article.title} />

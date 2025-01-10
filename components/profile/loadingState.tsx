@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React from "react";
 
 const LoadingModal = ({ message = "Loading...", isOpen = false }) => {
   if (!isOpen) return null; // Only render the modal if isOpen is true

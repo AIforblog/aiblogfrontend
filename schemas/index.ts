@@ -27,7 +27,7 @@ export const updatePasswordSchema = z
       .min(8, "Password must be at least 8 characters")
       .regex(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
+        "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
       ),
     confirmPassword: z.string(),
   })
@@ -44,5 +44,5 @@ export const passwordSchema = z
   .regex(/\d/, "Password must contain at least one number.")
   .regex(
     /[!@#$%^&*]/,
-    "Password must contain at least one special character (!@#$%^&*)."
+    "Password must contain at least one special character (!@#$%^&*).",
   );

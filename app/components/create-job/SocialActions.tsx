@@ -48,7 +48,9 @@ const SocialActions: React.FC = () => {
   return (
     <Card className="bg-white shadow-none border border-[#e5e5e5] p-4 rounded-2xl">
       <CardTitle className="p-0 mb-3 md:mb-6">
-        <h3 className="text-base font-normal text-[#404040]">Input Your Socials</h3>
+        <h3 className="text-base font-normal text-[#404040]">
+          Input Your Socials
+        </h3>
       </CardTitle>
 
       <CardContent className="p-0">
@@ -96,7 +98,9 @@ const SocialActions: React.FC = () => {
                   onClick={() => toggleDropdown(index)}
                   className="w-full flex-1 rounded-xl flex items-center justify-between h-10 md:h-12"
                 >
-                  <p className="font-normal text-base text-[#a3a3a3]">Select action</p>
+                  <p className="font-normal text-base text-[#a3a3a3]">
+                    Select action
+                  </p>
                   <ChevronDown className="font-normal w-5 h-5 text-[#a3a3a3]" />
                 </Button>
                 {errors.socialActions?.[index]?.actions ? (
@@ -122,7 +126,7 @@ const SocialActions: React.FC = () => {
                                 onChange(
                                   value.includes(action)
                                     ? value.filter((v) => v !== action)
-                                    : [...value, action]
+                                    : [...value, action],
                                 )
                               }
                               onBlur={onBlur}
@@ -152,10 +156,14 @@ const SocialActions: React.FC = () => {
                         key={action}
                         className="flex items-center gap-1 px-2 py-1 bg-[#F5F5F5] rounded-full  cursor-default"
                       >
-                        <p className="text-xs md:text-sm font-normal text-[#404040]">{action}</p>
+                        <p className="text-xs md:text-sm font-normal text-[#404040]">
+                          {action}
+                        </p>
                         <X
                           className="h-3 w-3 font-normal text-[#404040] inline cursor-pointer"
-                          onClick={() => onChange(actions.filter((v) => v !== action))}
+                          onClick={() =>
+                            onChange(actions.filter((v) => v !== action))
+                          }
                         />
                       </div>
                     ))}

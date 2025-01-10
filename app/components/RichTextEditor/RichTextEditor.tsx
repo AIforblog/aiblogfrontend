@@ -97,21 +97,21 @@ export const RichTextEditor = () => {
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
-      <Toolbar className='mx-20'>
-        <MarkButton format='bold' icon={<Bold />} />
-        <MarkButton format='italic' icon={<Italic />} />
-        <MarkButton format='underline' icon={<Underline />} />
-        <MarkButton format='code' icon={<Code />} />
-        <BlockButton format='heading-one' icon={<Heading1 />} />
-        <BlockButton format='heading-two' icon={<Heading2 />} />
-        <BlockButton format='heading-three' icon={<Heading3 />} />
-        <BlockButton format='block-quote' icon={<Quote />} />
-        <BlockButton format='numbered-list' icon={<ListOrdered />} />
-        <BlockButton format='bulleted-list' icon={<List />} />
-        <BlockButton format='left' icon={<AlignLeft />} />
-        <BlockButton format='center' icon={<AlignCenter />} />
-        <BlockButton format='right' icon={<AlignRight />} />
-        <BlockButton format='justify' icon={<AlignJustify />} />
+      <Toolbar className="mx-20">
+        <MarkButton format="bold" icon={<Bold />} />
+        <MarkButton format="italic" icon={<Italic />} />
+        <MarkButton format="underline" icon={<Underline />} />
+        <MarkButton format="code" icon={<Code />} />
+        <BlockButton format="heading-one" icon={<Heading1 />} />
+        <BlockButton format="heading-two" icon={<Heading2 />} />
+        <BlockButton format="heading-three" icon={<Heading3 />} />
+        <BlockButton format="block-quote" icon={<Quote />} />
+        <BlockButton format="numbered-list" icon={<ListOrdered />} />
+        <BlockButton format="bulleted-list" icon={<List />} />
+        <BlockButton format="left" icon={<AlignLeft />} />
+        <BlockButton format="center" icon={<AlignCenter />} />
+        <BlockButton format="right" icon={<AlignRight />} />
+        <BlockButton format="justify" icon={<AlignJustify />} />
         <LinkButton />
         <InsertImageButton />
         <InsertVideoButton />
@@ -120,10 +120,10 @@ export const RichTextEditor = () => {
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder='enter some rich text here'
+        placeholder="enter some rich text here"
         spellCheck
         autoFocus
-        className='bg-gray-200 py-10 mx-20'
+        className="bg-gray-200 py-10 mx-20"
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event as any)) {
@@ -190,7 +190,7 @@ const isBlockActive = (editor: Editor, format: string) => {
       at: Editor.unhangRange(editor, selection),
       match: (n) =>
         !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
-    })
+    }),
   );
 
   return !!match;
@@ -253,11 +253,11 @@ const Element = ({ attributes, children, element }: any) => {
         </a>
       );
     case "image":
-      return <Image src={element.url} alt={element.alt} {...attributes}/>;
+      return <Image src={element.url} alt={element.alt} {...attributes} />;
     case "video":
       return (
         <video controls {...attributes}>
-          <source src={element.url} type='video/mp4' />
+          <source src={element.url} type="video/mp4" />
           {children}
         </video>
       );
@@ -305,7 +305,7 @@ const BlockButton = ({ format, icon }: any) => {
   return (
     <Button
       variant={isBlockActive(editor, format) ? "secondary" : "ghost"}
-      size='icon'
+      size="icon"
       onClick={(event) => {
         event.preventDefault();
         toggleBlock(editor, format);
@@ -321,7 +321,7 @@ const MarkButton = ({ format, icon }: any) => {
   return (
     <Button
       variant={isMarkActive(editor, format) ? "secondary" : "ghost"}
-      size='icon'
+      size="icon"
       onClick={(event) => {
         event.preventDefault();
         toggleMark(editor, format);
@@ -446,8 +446,8 @@ const InsertTableButton = () => {
 
   return (
     <Button
-      variant='ghost'
-      size='icon'
+      variant="ghost"
+      size="icon"
       onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         insertTable();

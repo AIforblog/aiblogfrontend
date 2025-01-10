@@ -319,8 +319,8 @@ const OtpVerificationPage = () => {
               {resendLoading
                 ? "Sending..."
                 : countdown > 0
-                ? `request a new code (${countdown}s)`
-                : "request a new code"}
+                  ? `request a new code (${countdown}s)`
+                  : "request a new code"}
             </a>
           </span>
         </p>

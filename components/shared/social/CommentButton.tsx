@@ -20,7 +20,7 @@ export const CommentButton = ({
       className={cn(
         "bg-transparent outline-none border-none",
         "transition-all duration-300",
-        className
+        className,
       )}
       onClick={onClick}
     >

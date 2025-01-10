@@ -29,18 +29,18 @@ jobs:
           action_output_file: ".env"
           NEXT_PUBLIC_AUTH_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_AUTH_API_BASE_URL }}
           NEXT_PUBLIC_BLOG_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_BLOG_API_BASE_URL }}
-          NEXT_PUBLIC_BLOG_URL: ${{ secrets.NEXT_PUBLIC_BLOG_URL }}         
+          NEXT_PUBLIC_BLOG_URL: ${{ secrets.NEXT_PUBLIC_BLOG_URL }}
           NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID }}
           NEXT_PUBLIC_USER_AUTH_URL: ${{ secrets.NEXT_PUBLIC_USER_AUTH_URL }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}          
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"    
+          node-version: "20"
 
       - name: Install dependencies and build
         run: |

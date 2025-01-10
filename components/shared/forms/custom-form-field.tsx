@@ -142,7 +142,7 @@ const RenderField: React.FC<RenderFieldProps> = ({ field, props }) => {
               selected={field.value ? new Date(field.value) : null}
               {...field}
               placeholderText={placeholder}
-              dateFormat={dateFormat ?? "MM/dd/yyyy"}  
+              dateFormat={dateFormat ?? "MM/dd/yyyy"}
               wrapperClassName="date-picker"
               showPopperArrow={false}
               withPortal

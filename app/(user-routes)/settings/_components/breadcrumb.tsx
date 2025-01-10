@@ -20,7 +20,9 @@ export const Breadcrumb = () => {
           <>
             <BreadcrumbItem>
               {index < paths.length - 1 ? (
-                <BreadcrumbLink href={`/${paths.filter((_, i) => i <= index).join("/")}`}>
+                <BreadcrumbLink
+                  href={`/${paths.filter((_, i) => i <= index).join("/")}`}
+                >
                   {titleCase(path)}
                 </BreadcrumbLink>
               ) : (

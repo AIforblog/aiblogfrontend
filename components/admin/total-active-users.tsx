@@ -1,18 +1,17 @@
-'use client'
+"use client";
 
-import { Card } from '@/components/ui/card'
-import { ActiveUsersChart } from './ui/chart'
-
+import { Card } from "@/components/ui/card";
+import { ActiveUsersChart } from "./ui/chart";
 
 export const TotalActiveUsers = () => {
   const data = [
-    { name: '100', monthly: 8000, daily: 600 },
-    { name: '50', monthly: 7500, daily: 550 },
-    { name: '1000', monthly: 9000, daily: 650 },
-    { name: '50', monthly: 7000, daily: 500 },
-    { name: '2000', monthly: 9500, daily: 700 },
-    { name: '2000', monthly: 9800, daily: 750 },
-  ]
+    { name: "100", monthly: 8000, daily: 600 },
+    { name: "50", monthly: 7500, daily: 550 },
+    { name: "1000", monthly: 9000, daily: 650 },
+    { name: "50", monthly: 7000, daily: 500 },
+    { name: "2000", monthly: 9500, daily: 700 },
+    { name: "2000", monthly: 9800, daily: 750 },
+  ];
 
   return (
     <Card className="p-6 space-y-4">
@@ -35,5 +34,5 @@ export const TotalActiveUsers = () => {
       </div>
       <ActiveUsersChart data={data} />
     </Card>
-  )
-}
+  );
+};

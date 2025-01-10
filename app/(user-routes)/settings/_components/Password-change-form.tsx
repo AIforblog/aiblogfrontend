@@ -9,8 +9,7 @@ import Button from "@/components/shared/button";
 // Zod schema for validation
 const passwordSchema = z
   .object({
-    currentPassword: z
-      .string(),
+    currentPassword: z.string(),
     newPassword: z
       .string()
       .min(8, "Password must be at least 8 characters")
@@ -18,8 +17,7 @@ const passwordSchema = z
       .regex(/[a-z]/, "Password must contain at least one lowercase letter")
       .regex(/\d/, "Password must contain at least one number")
       .regex(/[\W_]/, "Password must contain at least one special character"),
-    confirmPassword: z
-      .string(),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
@@ -62,7 +60,6 @@ const PasswordChangeForm = ({ onCancel }: { onCancel: () => void }) => {
     resolver: zodResolver(passwordSchema),
   });
 
-  
   const newPassword = watch("newPassword");
 
   React.useEffect(() => {
@@ -92,7 +89,7 @@ const PasswordChangeForm = ({ onCancel }: { onCancel: () => void }) => {
 
   const onSubmit = (data: PasswordFormData) => {
     console.log("Password changed", data);
-    onCancel(); 
+    onCancel();
   };
 
   return (
@@ -153,8 +150,8 @@ const PasswordChangeForm = ({ onCancel }: { onCancel: () => void }) => {
                 {strength === 5
                   ? "Strong password!"
                   : strength >= 3
-                  ? "Moderate password."
-                  : "Weak password."}
+                    ? "Moderate password."
+                    : "Weak password."}
               </p>
               {strength < 5 && (
                 <ul className="list-disc pl-5 text-sm">
@@ -162,10 +159,14 @@ const PasswordChangeForm = ({ onCancel }: { onCancel: () => void }) => {
                     <li className="text-red-500">Add a special character</li>
                   )}
                   {!conditions.uppercase && (
-                    <li className="text-red-500">Use at least one uppercase letter</li>
+                    <li className="text-red-500">
+                      Use at least one uppercase letter
+                    </li>
                   )}
                   {!conditions.lowercase && (
-                    <li className="text-red-500">Use at least one lowercase letter</li>
+                    <li className="text-red-500">
+                      Use at least one lowercase letter
+                    </li>
                   )}
                   {!conditions.number && (
                     <li className="text-red-500">Add at least one number</li>
@@ -204,7 +205,7 @@ const PasswordChangeForm = ({ onCancel }: { onCancel: () => void }) => {
       <div className="flex justify-between lg:justify-end mt-4 gap-5">
         <Button
           variant={"outline"}
-          onClick={onCancel} 
+          onClick={onCancel}
           className="w-full sm:w-auto rounded-full text-xs border-black h-auto"
         >
           Cancel

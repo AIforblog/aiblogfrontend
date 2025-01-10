@@ -21,7 +21,7 @@ function SubTopicCard({ topic, num_posts }: RelatedTopics): JSX.Element {
   return (
     <div className="flex justify-between gap-x-3">
       <div className="flex-1 gap-1">
-        <h2 className="w-fit text-[#171717] dark:text-neutral-200 hover:text-[#525252] dark:hover:text-neutral-300 font-semibold text-base hover:cursor-pointer transition duration-300 ease-in-out">
+        <h2 className="w-fit text-[#171717] dark:text-neutral-200 hover:text-[#525252] dark:hover:text-neutral-300 font-semibold text-[0.9rem] hover:cursor-pointer transition duration-300 ease-in-out">
           {topic}
         </h2>
         <p className="w-fit text-[#525252] dark:text-neutral-400 font-normal text-sm hover:cursor-pointer">
@@ -42,7 +42,7 @@ const AuthTopicCard = memo<{ item: AuthTopicCard }>(({ item }) => {
     <Card className="w-full p-3 flex flex-col gap-y-[0.9rem] border rounded-xl bg-transparent shadow-none border-[#E5E5E5] dark:border-neutral-800">
       <CardHeader className="p-0">
         <div className="flex flex-row items-center gap-x-[6px]">
-          <h2 className="text-base text-[#525252] dark:text-neutral-100 font-semibold capitalize">
+          <h2 className="text-[0.95rem] text-[#525252] dark:text-neutral-100 font-semibold capitalize">
             {item.topic}
           </h2>
           <div className="w-[6px] h-[6px] rounded-full bg-[#a3a3a3]" />

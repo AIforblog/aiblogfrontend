@@ -82,7 +82,7 @@ export default function WalletDashboard() {
 
   const displayAddress = walletAddress
     ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(
-        walletAddress.length - 4
+        walletAddress.length - 4,
       )}`
     : "Not Connected";
 

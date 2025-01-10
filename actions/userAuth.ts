@@ -22,7 +22,7 @@ import { redirect } from "next/navigation";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const signupAuth = async (
-  params: SignUpParams
+  params: SignUpParams,
 ): Promise<SignUpResponse> => {
   try {
     const response = await axios.post(`${API_URL}auth/register`, params);
@@ -44,7 +44,7 @@ export const signupAuth = async (
 };
 
 export const signInAuth = async (
-  params: SignInParams
+  params: SignInParams,
 ): Promise<SignInResponse> => {
   const payload = {
     email: params.email,
@@ -63,7 +63,7 @@ export const signInAuth = async (
       setSecureCookie(
         cookieStore,
         authConfig.userDataKey,
-        JSON.stringify(user)
+        JSON.stringify(user),
       );
 
       // Return the full response data
@@ -120,7 +120,7 @@ export const signOutAuth = async (): Promise<{
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     if (response.status === 200) {
@@ -333,7 +333,7 @@ export const handleGoogleCallback = async (code: string) => {
 };
 
 export const forgotPasswordAuth = async (
-  params: ForgotPasswordParams
+  params: ForgotPasswordParams,
 ): Promise<ForgotPasswordResponse> => {
   try {
     const response = await axios.post(`${API_URL}auth/password/forgot`, params);
@@ -358,7 +358,7 @@ export const forgotPasswordAuth = async (
 };
 
 export const updatePasswordAuth = async (
-  params: UpdatePasswordParams
+  params: UpdatePasswordParams,
 ): Promise<UpdatePasswordResponse> => {
   try {
     const response = await axios.post(`${API_URL}auth/password/reset`, params);

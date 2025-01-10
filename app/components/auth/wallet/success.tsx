@@ -27,15 +27,17 @@ export default function Success() {
             Welcome to the winning team!
           </CardDescription>
         </div>
-        <Link href="/wallet"><Button className="rounded-xl text-2xl text-text-color bg-cta-primary-normal hover:text-white py-6 flex gap-3 items-center">
-          LFG !!!
-          <Image
-            width={32}
-            alt="Redirecting animation"
-            src={"/arrow-fatlines-right.svg"}
-            height={32}
-          />
-        </Button></Link>
+        <Link href="/wallet">
+          <Button className="rounded-xl text-2xl text-text-color bg-cta-primary-normal hover:text-white py-6 flex gap-3 items-center">
+            LFG !!!
+            <Image
+              width={32}
+              alt="Redirecting animation"
+              src={"/arrow-fatlines-right.svg"}
+              height={32}
+            />
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

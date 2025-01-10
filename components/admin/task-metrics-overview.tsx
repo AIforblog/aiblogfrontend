@@ -1,6 +1,6 @@
-import { TrendingDown, TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function TaskMetricsOverview() {
   return (
@@ -19,9 +19,7 @@ export function TaskMetricsOverview() {
             </div>
             <div className="mt-2">
               <div className="text-2xl font-bold">Total: 150</div>
-              <div className="text-xs text-muted-foreground">
-                Updated Daily
-              </div>
+              <div className="text-xs text-muted-foreground">Updated Daily</div>
             </div>
           </div>
           <div>
@@ -31,7 +29,7 @@ export function TaskMetricsOverview() {
                 Number of Reported Posts
               </div>
             </div>
-            <div  className="mt-2">
+            <div className="mt-2">
               <div className="text-2xl font-bold">Total: 5</div>
               <div className="text-xs text-muted-foreground">
                 Reviewed every 24 hours
@@ -41,5 +39,5 @@ export function TaskMetricsOverview() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

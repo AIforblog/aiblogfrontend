@@ -52,8 +52,16 @@ export default function JobTextEditor({ onChange }: JobTextEditorProps) {
             { icon: Bold, label: "Bold", command: "bold" },
             { icon: Italic, label: "Italic", command: "italic" },
             { icon: Underline, label: "Underline", command: "underline" },
-            { icon: List, label: "Bullet List", command: "insertUnorderedList" },
-            { icon: ListOrdered, label: "Numbered List", command: "insertOrderedList" },
+            {
+              icon: List,
+              label: "Bullet List",
+              command: "insertUnorderedList",
+            },
+            {
+              icon: ListOrdered,
+              label: "Numbered List",
+              command: "insertOrderedList",
+            },
             { icon: Link, label: "Insert Link", command: "createLink" },
           ].map((item, index) => (
             <button

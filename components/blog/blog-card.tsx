@@ -36,7 +36,7 @@ const BlogCard = memo<MainBloyType>(
             .map((item) => (typeof item === "string" ? item : item.text))
             .join(" ")
         : blog.content
-      )?.replace(/<[^>]+>/g, "")
+      )?.replace(/<[^>]+>/g, ""),
     );
     const previewText =
       rawText.length > 100 ? `${rawText.slice(0, 200)}...` : rawText;
@@ -71,44 +71,48 @@ const BlogCard = memo<MainBloyType>(
     };
 
     return (
-      <Link href={`/explore/${blog.id}`}>
+      <Link href={`/explore/${blog.id}`} suppressHydrationWarning>
         <Card
-          className={`w-full  flex flex-col gap-y-3 border-none justify-between ${
-            hasBackground ? "bg-white" : "bg-transparent"
-          } ${hasBackground ? "mb-0" : "mb-6"}
-       ${hasBackground ? "p-4" : "p-0"} ${
-            hasShadow ? "bg-white" : "shadow-none"
-          } rounded-xl`}
+          className={`w-full flex flex-col gap-y-3 justify-between ${
+            hasBackground
+              ? "bg-secondary"
+              : "bg-transparent border border-[#E5E5E5] dark:border-neutral-800"
+          } ${hasBackground ? "mb-4" : "mb-4"}
+       ${hasBackground ? "p-4" : "p-4"} ${
+         hasShadow ? "bg-white" : "shadow-none"
+       } rounded-xl`}
         >
           <CardHeader className="p-0 ">
             <UserProfile user={blog.user} isFollowing={isFollowing} />
           </CardHeader>
 
           <CardContent
-            className="flex flex-col p-0 gap-y-3 relative  justify-stretch grow  cursor-pointer "
+            className="flex flex-col p-0 gap-y-3 relative justify-stretch grow  cursor-pointer !mt-2"
             // onClick={handleClick}
           >
-            <CardTitle className="text-xl font-semibold h-[20%] min-h-[50px] overflow-hidden capitalize leading-7 text-[#262626] dark:text-neutral-100">
+            <CardTitle className="text-[1.2rem] font-semibold overflow-hidden capitalize leading-7 text-[#262626] dark:text-neutral-100">
               {blog.title}
             </CardTitle>
 
             {/* Description */}
-            <CardDescription className="text-base font-normal  overflow-hidden line-clamp-[3] min-h-[100px] relative leading-6 text-[#737373] dark:text-neutral-300">
+            <CardDescription className="text-[0.85rem] !mt-1 font-normal overflow-hidden line-clamp-[3] relative leading-6 text-[#737373] dark:text-neutral-300">
               {previewText}
             </CardDescription>
 
-            <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] md:max-h-[300px] md:min-h-[300px] bg-white rounded-xl overflow-hidden">
-              <Image
-                src={blog.image || "/default-blog-image.jpg"}
-                alt={`${blog.title} blog image`}
-                width={1000}
-                height={1000}
-                className="rounded-lg object-cover relative w-full h-full"
-              />
-            </div>
+            {blog.image && (
+              <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] md:max-h-[300px] md:min-h-[300px] overflow-hidden">
+                <Image
+                  src={blog.image}
+                  alt={`${blog.title} blog image`}
+                  width={1000}
+                  height={1000}
+                  className="object-cover relative w-full h-full"
+                />
+              </div>
+            )}
           </CardContent>
 
-          <CardFooter className="p-0 flex flex-row items-center justify-between">
+          <CardFooter className="p-0 flex flex-row items-center justify-between !mt-6">
             <PostMetrics
               item={{
                 ...blog.metrics,
@@ -125,7 +129,7 @@ const BlogCard = memo<MainBloyType>(
         </Card>
       </Link>
     );
-  }
+  },
 );
 
 export default BlogCard;

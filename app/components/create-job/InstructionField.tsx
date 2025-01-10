@@ -1,12 +1,22 @@
 "use client";
 
 import { RefAttributes, ForwardRefExoticComponent } from "react";
-import { Bold, Italic, Underline, List, ListOrdered, Link, LucideProps } from "lucide-react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  Link,
+  LucideProps,
+} from "lucide-react";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 interface IconProps {
-  Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+  Icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
   label: string;
   command: string;
 }
@@ -24,7 +34,10 @@ interface InstructionFieldProps {
   text: string;
   onChange: (value: string) => void;
 }
-export default function InstructionField({ text, onChange }: InstructionFieldProps) {
+export default function InstructionField({
+  text,
+  onChange,
+}: InstructionFieldProps) {
   const formatText = (command: string) => {
     const textarea = document.querySelector("textarea");
     if (!textarea) return;
@@ -59,13 +72,17 @@ export default function InstructionField({ text, onChange }: InstructionFieldPro
         formattedText = selectedText;
     }
 
-    const newText = text.substring(0, start) + formattedText + text.substring(end);
+    const newText =
+      text.substring(0, start) + formattedText + text.substring(end);
     onChange(newText);
 
     // Update the cursor position after text is formatted
     setTimeout(() => {
       textarea.focus();
-      textarea.setSelectionRange(start + formattedText.length, start + formattedText.length);
+      textarea.setSelectionRange(
+        start + formattedText.length,
+        start + formattedText.length,
+      );
     }, 0);
   };
 

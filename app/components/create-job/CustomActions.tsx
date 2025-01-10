@@ -49,7 +49,11 @@ const CustomActions: React.FC = () => {
 
     switch (type) {
       case "checkbox":
-        update(index, { ...customAction, actionType: type, checkboxChoices: [""] });
+        update(index, {
+          ...customAction,
+          actionType: type,
+          checkboxChoices: [""],
+        });
         return;
       case "link":
         update(index, { ...customAction, actionType: type, link: "" });
@@ -67,7 +71,10 @@ const CustomActions: React.FC = () => {
     const customAction = customActions[index];
     if (customAction.actionType !== "checkbox") return;
 
-    update(index, { ...customAction, checkboxChoices: [...customAction.checkboxChoices, ""] });
+    update(index, {
+      ...customAction,
+      checkboxChoices: [...customAction.checkboxChoices, ""],
+    });
   };
 
   const removeCheckboxOption = (itemIndex: number, optionIndex: number) => {
@@ -91,7 +98,9 @@ const CustomActions: React.FC = () => {
       case "link":
         return <LinkIcon className="h-4 w-4 font-normal text-[#303030]" />;
       default:
-        return <SquareDashedMousePointer className="h-4 w-4 font-normal text-[#303030]" />;
+        return (
+          <SquareDashedMousePointer className="h-4 w-4 font-normal text-[#303030]" />
+        );
     }
   };
 
@@ -128,7 +137,11 @@ const CustomActions: React.FC = () => {
               </div>
             ))}
             <div className="flex align-items gap-2">
-              <Button variant={"ghost"} type="button" onClick={() => addCheckboxOption(index)}>
+              <Button
+                variant={"ghost"}
+                type="button"
+                onClick={() => addCheckboxOption(index)}
+              >
                 Add option
               </Button>
             </div>
@@ -137,7 +150,9 @@ const CustomActions: React.FC = () => {
       case "text":
         return (
           <Controller
-            render={({ field }) => <Textarea placeholder="Enter your answer here" {...field} />}
+            render={({ field }) => (
+              <Textarea placeholder="Enter your answer here" {...field} />
+            )}
             control={control}
             name={`customActions.${index}.answer`}
           />
@@ -152,9 +167,12 @@ const CustomActions: React.FC = () => {
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <Upload className="w-10 h-10 mb-3 text-gray-400" />
                 <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">Click to upload</span> or drag and drop
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
                 </p>
-                <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px, 10Mb)</p>
+                <p className="text-xs text-gray-500">
+                  SVG, PNG, JPG or GIF (MAX. 800x400px, 10Mb)
+                </p>
               </div>
               <Input id="dropzone-file" type="file" className="hidden" />
             </Label>
@@ -179,7 +197,11 @@ const CustomActions: React.FC = () => {
           </div>
         );
       default:
-        return <p className="text-sm font-normal text-[#737373]">Please select an option type</p>;
+        return (
+          <p className="text-sm font-normal text-[#737373]">
+            Please select an option type
+          </p>
+        );
     }
   };
 
@@ -276,7 +298,11 @@ const CustomActions: React.FC = () => {
             className="mr-auto flex items-center border-none justify-between font-normal text-sm md:text-base text-[#262626] gap-x-2"
           >
             <PlusCircleIcon size={22} className="text-foreground" />
-            {customActions.length > 0 ? <span>Add more</span> : <span>Add</span>}
+            {customActions.length > 0 ? (
+              <span>Add more</span>
+            ) : (
+              <span>Add</span>
+            )}
           </Button>
           <Type className="w-4 h-4 font-normal text-[#737373] hover:text-black/30 transition-all duration-300 ease-in-out cursor-pointer" />
           <Copy

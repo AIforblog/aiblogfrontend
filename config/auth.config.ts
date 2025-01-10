@@ -87,7 +87,7 @@ export const setSecureCookie = (
   cookieStore: any,
   key: string,
   value: string,
-  options = {}
+  options = {},
 ) => {
   cookieStore.set(key, value, {
     ...authConfig.COOKIE_OPTIONS,

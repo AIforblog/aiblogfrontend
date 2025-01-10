@@ -25,4 +25,11 @@ const JobData: APIJobType = {
   profilePic: "",
 };
 
-export const JobDummyData = [JobData, JobData, JobData, JobData, JobData, JobData];
+export const JobDummyData = [
+  JobData,
+  JobData,
+  JobData,
+  JobData,
+  JobData,
+  JobData,
+];

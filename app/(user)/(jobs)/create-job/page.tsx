@@ -21,7 +21,13 @@ import { ArrowLeft, Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Control, Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 
 interface StepsHeaderProps {
   title: string;
@@ -109,7 +115,10 @@ export default function CreateJob() {
       toast({ title: "Job created successfully." });
       router.push(`/jobs/${jobData.id}`);
     } catch {
-      toast({ title: "An unexpected error occured. Please try again", variant: "destructive" });
+      toast({
+        title: "An unexpected error occured. Please try again",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -132,7 +141,9 @@ export default function CreateJob() {
                 </span>
               )}
 
-              <span className="text-base text-[#78C4FF] font-medium ml-auto">Drafts</span>
+              <span className="text-base text-[#78C4FF] font-medium ml-auto">
+                Drafts
+              </span>
             </div>
 
             {/* Card Title */}
@@ -150,13 +161,20 @@ export default function CreateJob() {
               } `}
             >
               <form onSubmit={form.handleSubmit(handleCreateJob)} id="form">
-                {currentStep === 1 && <JobDetailsStep control={form.control} nextStep={nextStep} />}
-
-                {currentStep === 2 && (
-                  <RewardsAndCriteriaStep control={form.control} nextStep={nextStep} />
+                {currentStep === 1 && (
+                  <JobDetailsStep control={form.control} nextStep={nextStep} />
                 )}
 
-                {currentStep === 3 && <ReviewStep control={form.control} nextStep={nextStep} />}
+                {currentStep === 2 && (
+                  <RewardsAndCriteriaStep
+                    control={form.control}
+                    nextStep={nextStep}
+                  />
+                )}
+
+                {currentStep === 3 && (
+                  <ReviewStep control={form.control} nextStep={nextStep} />
+                )}
               </form>
             </CardContent>
 
@@ -201,7 +219,9 @@ export default function CreateJob() {
                         <span className="sr-only">Loading</span>
                       </div>
                     ) : (
-                      <span className="font-normal text-[#262626] text-center">Publish Job</span>
+                      <span className="font-normal text-[#262626] text-center">
+                        Publish Job
+                      </span>
                     )}
                   </Button>
                 ) : (
@@ -212,7 +232,9 @@ export default function CreateJob() {
                     color="secondary"
                     className="md:px-10 w-full md:w-fit"
                   >
-                    <span className="font-normal text-[#262626] text-center">Next</span>
+                    <span className="font-normal text-[#262626] text-center">
+                      Next
+                    </span>
                   </Button>
                 )}
               </div>
@@ -230,7 +252,12 @@ export default function CreateJob() {
           </div>
           <CardContent>
             <div className="flex justify-center mt-[7rem]">
-              <Image src="/images/draft.png" width={120} height={94} alt="draft" />
+              <Image
+                src="/images/draft.png"
+                width={120}
+                height={94}
+                alt="draft"
+              />
             </div>
             <div>
               <p className="text-sm text-center mt-2 text-[#737373]">
@@ -251,8 +278,12 @@ const StepsHeader: React.FC<StepsHeaderComponentProps> = ({ currentStep }) => {
 
   return (
     <div className="mb-4 md:mb-8">
-      <h2 className="text-xl md:text-2xl font-bold text-[#171717] leading-none">{title}</h2>
-      <p className="text-sm md:text-base font-normal text-[#404040] mt-1.5">{description}</p>
+      <h2 className="text-xl md:text-2xl font-bold text-[#171717] leading-none">
+        {title}
+      </h2>
+      <p className="text-sm md:text-base font-normal text-[#404040] mt-1.5">
+        {description}
+      </p>
     </div>
   );
 };
@@ -337,7 +368,9 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
       >
         {EngagementLevels.map(({ option, value }, key) => (
           <SelectItem key={key} value={value}>
-            <p className="font-normal text-sm md:text-base text-[#404040]">{option}</p>
+            <p className="font-normal text-sm md:text-base text-[#404040]">
+              {option}
+            </p>
           </SelectItem>
         ))}
       </CustomFormField>
@@ -353,11 +386,20 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
     getValues,
   } = useFormContext<JobFormSchema>();
 
-  const [customActions, socialActions] = [getValues("customActions"), getValues("socialActions")];
+  const [customActions, socialActions] = [
+    getValues("customActions"),
+    getValues("socialActions"),
+  ];
   const initialActiveForm =
-    customActions.length > 0 ? "custom" : socialActions.length > 0 ? "social" : null;
+    customActions.length > 0
+      ? "custom"
+      : socialActions.length > 0
+        ? "social"
+        : null;
 
-  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(initialActiveForm);
+  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(
+    initialActiveForm,
+  );
 
   const toggleForm = (formType: "social" | "custom") => {
     setActiveForm(activeForm === formType ? null : formType);
@@ -369,7 +411,10 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
         <div>
           <Controller
             render={({ field }) => (
-              <InstructionField text={field.value || ""} onChange={field.onChange} />
+              <InstructionField
+                text={field.value || ""}
+                onChange={field.onChange}
+              />
             )}
             control={control}
             name="instructionField"
@@ -410,7 +455,7 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
                 type="button"
                 className={cn(
                   "bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out",
-                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
                 )}
               >
                 <div className="flex items-center gap-x-1 md:gap-x-2">
@@ -435,7 +480,7 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
                 disabled={activeForm === "custom"}
                 className={cn(
                   "bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out",
-                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
                 )}
               >
                 <div className="flex items-center gap-x-1 md:gap-x-2">

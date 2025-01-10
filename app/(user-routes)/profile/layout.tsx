@@ -1,11 +1,6 @@
 import { SectionTitle } from "@/components/shared";
 import "../../globals.css";
-import {
-  NavBar,
-  TopWriters,
-  TrendingTopics,
-} from "@/app/(user)/sections";
-
+import { NavBar, TopWriters, TrendingTopics } from "@/app/(user)/sections";
 
 // For the grid, to check if the user is
 // authenticated and change the layout accordingly

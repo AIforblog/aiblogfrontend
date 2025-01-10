@@ -13,14 +13,13 @@ export interface TopWriterProps {
   title: string;
   comments_count: number;
   likes_count: number;
-  firstName:string;
+  firstName: string;
   lastName: string;
-  profile_pic:string;
-  username:string;
+  profile_pic: string;
+  username: string;
 }
 
 const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
-  // console.log("yiygug" , item)
   const metrics = {
     commentsCount: item.comments_count,
     likesCount: item.likes_count,
@@ -30,16 +29,17 @@ const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
     firstName: item.firstName,
     lastName: item.lastName,
     profilePic: item.profile_pic,
-    username:item.username,
+    username: item.username,
     userId: item.userId,
   };
-  console.log(profile, "itemssjuugug");
   return (
     <Card className="w-full p-3 flex flex-col gap-y-[0.9rem] border rounded-xl bg-transparent shadow-none border-[#E5E5E5] dark:border-neutral-800">
       <CardHeader className="p-0">
-  {// @ts-expect-error: Reason for ignoring
-  <UserProfile user={profile} />}
-</CardHeader>
+        {
+          // @ts-expect-error: Reason for ignoring
+          <UserProfile user={profile} />
+        }
+      </CardHeader>
 
       <CardContent className="p-0">
         <h2 className="text-base dark:text-neutral-200 font-semibold capitalize w-[96%] line-clamp-2">

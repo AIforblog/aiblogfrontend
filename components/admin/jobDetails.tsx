@@ -193,8 +193,8 @@ export function JobDetails() {
                       item.status === "approved"
                         ? "text-green-500"
                         : item.status === "pending"
-                        ? "text-yellow-500"
-                        : "text-red-500"
+                          ? "text-yellow-500"
+                          : "text-red-500"
                     }
                   >
                     {item.status.charAt(0).toUpperCase() + item.status.slice(1)}

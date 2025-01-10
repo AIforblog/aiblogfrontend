@@ -9,7 +9,9 @@ interface JobsProps {
   searchParams: { page?: string };
 }
 const Jobs = async ({ searchParams }: JobsProps) => {
-  const { data, error } = await fetchJobs({ page: Number(searchParams.page || 1) });
+  const { data, error } = await fetchJobs({
+    page: Number(searchParams.page || 1),
+  });
 
   if (error) {
     return <p>{error.message}</p>;
@@ -31,7 +33,8 @@ const Jobs = async ({ searchParams }: JobsProps) => {
           aria-label="Previous page"
           className={cn(
             "p-1.5 bg-cta-primary-normal hover:bg-cta-primary-normal/80 rounded-full",
-            !prev && "bg-cta-primary-normal/30 hover:bg-cta-primary-normal/30 cursor-not-allowed"
+            !prev &&
+              "bg-cta-primary-normal/30 hover:bg-cta-primary-normal/30 cursor-not-allowed",
           )}
         >
           <ChevronLeftIcon size={20} />
@@ -45,7 +48,8 @@ const Jobs = async ({ searchParams }: JobsProps) => {
           aria-label="Next page"
           className={cn(
             "p-1.5 bg-cta-primary-normal hover:bg-cta-primary-normal/80 rounded-full",
-            !next && "bg-cta-primary-normal/30 hover:bg-cta-primary-normal/30 cursor-not-allowed"
+            !next &&
+              "bg-cta-primary-normal/30 hover:bg-cta-primary-normal/30 cursor-not-allowed",
           )}
         >
           <ChevronRightIcon size={20} />

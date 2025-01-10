@@ -24,13 +24,18 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             </div>
             <div className="flex items-center gap-4">
               <div className="md:hidden h-8">
-                <Aside sidebarContainer={sidebarContainerRef.current || undefined} />
+                <Aside
+                  sidebarContainer={sidebarContainerRef.current || undefined}
+                />
               </div>
               <Breadcrumb />
             </div>
           </header>
           <div className="relative grow">
-            <div className="absolute inset-0 flex gap-8" ref={sidebarContainerRef}>
+            <div
+              className="absolute inset-0 flex gap-8"
+              ref={sidebarContainerRef}
+            >
               <div className="hidden md:block w-[400px] max-w-[40%] h-full overflow-y-auto custom-scroll">
                 <Aside />
               </div>

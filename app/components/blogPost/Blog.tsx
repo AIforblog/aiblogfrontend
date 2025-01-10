@@ -1,8 +1,6 @@
-
-import React from 'react'
-import { BlogDummyData } from '@/data/mock/blog';
-import { BlogCard } from '@/components/blog';
-
+import React from "react";
+import { BlogDummyData } from "@/data/mock/blog";
+import { BlogCard } from "@/components/blog";
 
 const Blog = () => {
   return (
@@ -14,7 +12,7 @@ const Blog = () => {
         </>
       ))}
     </div>
-  )
-}
+  );
+};
 
 export default Blog;

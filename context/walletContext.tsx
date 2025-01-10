@@ -1,4 +1,4 @@
-"use client"
+"use client";
 // context/WalletContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";

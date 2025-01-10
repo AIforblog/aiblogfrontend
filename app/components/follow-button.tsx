@@ -1,6 +1,6 @@
 "use client";
 
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { useServerAction } from "zsa-react";
@@ -8,14 +8,12 @@ import { revalidateTagServer } from "@/actions/common";
 import { action } from "@/actions/follow";
 import { cn } from "@/lib/utils";
 
-
-
 interface FollowButtonProps {
   userId: string;
-  isFollowing?: boolean
+  isFollowing?: boolean;
 }
 
-const FollowButton: React.FC<FollowButtonProps> = ({ userId ,  isFollowing }) => {
+const FollowButton: React.FC<FollowButtonProps> = ({ userId, isFollowing }) => {
   const [following, setFollowing] = useState<boolean | undefined>(isFollowing);
   const { execute, isPending } = useServerAction(action, {
     onError({ err }) {
@@ -25,7 +23,6 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId ,  isFollowing }) =>
       console.log("Action was successful");
     },
   });
-
 
   const handleFollowAction = async (path: "follow" | "unfollow") => {
     const [data, err] = await execute({
@@ -51,13 +48,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId ,  isFollowing }) =>
         handleFollowAction(following ? "unfollow" : "follow");
       }}
     >
-      
       <Button
         className={cn(
-          "font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4",
-          following
-            ? "text-[#FAFAFA] dark:text-black"
-            : " dark:text-black"
+          "font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4 text-[0.8rem] text-white dark:text-black bg-black dark:bg-white",
         )}
         disabled={isPending}
       >

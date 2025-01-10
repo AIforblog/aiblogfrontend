@@ -12,7 +12,7 @@ export const getUserProfile = async (accessToken: string, userId: string) => {
         next: {
           tags: [`profile-${userId}`],
         },
-      }
+      },
     );
 
     return await fetchUserProfile();

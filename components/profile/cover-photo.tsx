@@ -43,7 +43,7 @@ export default function CoverPhoto({
   const [isEditingCover, setIsEditingCover] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [selectedCoverImage, setSelectedCoverImage] = useState<string | null>(
-    null
+    null,
   );
   const [selectedProfileImage, setSelectedProfileImage] = useState<
     string | null
@@ -128,7 +128,7 @@ export default function CoverPhoto({
           body: {
             coverPic: selectedCoverImage,
           },
-        }
+        },
       );
 
       const res = await updateCoverImage();
@@ -137,14 +137,14 @@ export default function CoverPhoto({
         toast.success("Profile updated successfully!");
         closeCoverOverlay();
       } else if ((res.statusCode = 413)) {
-		setSelectedCoverImage("")
+        setSelectedCoverImage("");
         toast.error("Image should not be larger than 2MB");
       } else {
-		setSelectedCoverImage("")
+        setSelectedCoverImage("");
         toast.error(res.message);
       }
     } catch (error: any) {
-		setSelectedCoverImage("");
+      setSelectedCoverImage("");
       console.error("Error updating profile:", error);
       toast.error("Error Occurred:", error?.response?.data?.message);
     } finally {
@@ -164,7 +164,7 @@ export default function CoverPhoto({
           body: {
             profilePic: selectedProfileImage,
           },
-        }
+        },
       );
 
       const res = await updateProfileImage();

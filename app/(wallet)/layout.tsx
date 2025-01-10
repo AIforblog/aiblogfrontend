@@ -19,7 +19,7 @@ export default function RootLayout({
 
         <div>
           {/* header */}
-        <EarningsSidebar />
+          <EarningsSidebar />
         </div>
       </div>
     </>
