@@ -27,12 +27,14 @@ import { useEffect, useState } from "react";
 import MobileNav from "./mobile-nav";
 import Image from "next/image";
 import LogoDark from "@/public/assets/icons/logo-dark.svg";
+import LogoLight from "@/public/assets/icons/logo-light.svg";
 import { useUser } from "@/context/userProfilectx";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { logOutAuth } from "@/actions/userAuth";
 import { WalletConnectButton } from "@/components/wallet/walletConnect";
 import { useWallet } from "@/context/walletContext";
+import { useTheme } from "next-themes";
 
 interface NavLinksProps {
   routeName: string;
@@ -52,7 +54,8 @@ const NavBar = () => {
   const { toast } = useToast();
   const { disconnectWallet } = useWallet();
   const { user, loading } = useUser();
-  console.log(user);
+  const { theme } = useTheme();
+
   useEffect(() => {
     setActiveLink(window.location.pathname);
   }, []);
@@ -99,9 +102,13 @@ const NavBar = () => {
           <div className="flex flex-row items-center gap-x-16 mr-auto">
             {/* Logo */}
 
-            <a href="/">
-              <Image src={LogoDark} alt="Drello" className="w-16" />
-            </a>
+            <Link href="/">
+              {theme === "light" ? (
+                <Image src={LogoDark} alt="Drello" className="w-16" />
+              ) : (
+                <Image src={LogoLight} alt="Drello" className="w-16" />
+              )}
+            </Link>
 
             {/* Nav links */}
             <nav className="max-[768px]:hidden">

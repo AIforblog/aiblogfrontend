@@ -18,13 +18,15 @@ export default function DashboardLayout({
 
       <NavBar />
 
-      <main className="w-full pt-6 overflow-hidden maxHeight bg-[#FAFAFA] dark:bg-black/90 px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-4">
+      <main className="w-[1200px] mx-auto pt-6 overflow-hidden maxHeight bg-[inherit] gap-6 grid grid-cols-4 max-[1250px]:w-[initial] max-[1250px]:mx-4 max-[768px]:mx-0">
         {/* Blog */}
-        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight  md:col-span-3 col-span-4  border border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
+
+        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight md:col-span-3 col-span-4 border border-[#E5E5E5] dark:border-neutral-800 max-[768px]:border-none mb-4 text-black dark:text-white">
           {children}
         </section>
 
         {/* Trending topics | Top writers */}
+
         <section className="col-span-1 hidden md:block">
           <div
             className={`h-[88vh] grid ${
