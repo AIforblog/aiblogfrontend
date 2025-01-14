@@ -113,6 +113,10 @@ body {
 /* max height (Entire screen height - header height) */
 .maxHeight {
   max-height: calc(100vh - 5rem);
+
+  @media only screen and (max-width: 768px) {
+    max-height: calc(100dvh - 10rem);
+  }
 }
 
 /** Height of each section ( for the scrollbar to function well ) */

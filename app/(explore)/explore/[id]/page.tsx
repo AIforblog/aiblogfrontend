@@ -9,6 +9,7 @@ import { PostEngagement } from "@/components/shared/social/PostEngagement";
 import { fetchBlogPost } from "@/hooks/useBlogPost";
 import { CheckFollowing } from "@/actions/follow";
 import { assertUserAuthenticated } from "@/lib/auth";
+import { titleCase, timeSince } from "@/lib/utils";
 // import type { BlogPost } from "@/types/blog";
 
 export default async function BlogPostPage({
@@ -22,7 +23,7 @@ export default async function BlogPostPage({
 
   const isFollowing = await CheckFollowing(
     user.accessToken.value as string,
-    post?.userId as string,
+    post?.userId as string
   );
   //  const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, post?.userId as string);
 
@@ -38,14 +39,17 @@ export default async function BlogPostPage({
       : "";
 
   return (
-    <article className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+    <article className="px-12 py-8 max-md:px-4">
+      <h1 className="text-xl font-semibold opacity-90">
+        {titleCase(post.title)}
+      </h1>
+      <span className="text-[0.78rem] opacity-65">{timeSince(post.publishedAt)}</span>
 
-      <div className="flex items-center mb-6 border-b-6 border-dashed border-gray pb-4">
+      <div className="flex items-center mt-4 mb-6 pb-4">
         <UserProfile
           user={{
             username: post.username,
-            profilePic: "/default-avatar.png", // Add a default avatar
+            profilePic: "/default-profile-avatar.webp", // Add a default avatar
             name: post.username,
             id: post.id,
             userId: post?.userId,
@@ -59,7 +63,11 @@ export default async function BlogPostPage({
         />
       </div>
 
-      <div className="border-b-2 border-dashed"></div>
+      {/* Separator */}
+
+      <hr />
+
+      {/* Post thumbnail */}
 
       <Image
         src={post.thumbnail}
@@ -69,14 +77,19 @@ export default async function BlogPostPage({
         className="w-full h-auto mt-6 mb-6 rounded-lg"
       />
 
-      <div className="prose max-w-none mb-8">
+      <div className="prose max-w-none mb-8 text-sm">
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
+
+      {/* Post tags */}
 
       {post.tags && (
         <div className="flex flex-wrap p-2 bg-gray-500 gap-2">
           {post.tags?.map((tag: string) => (
-            <span key={tag} className=" px-2 py-1 rounded-full text-xs">
+            <span
+              key={tag}
+              className=" px-4 py-2 rounded-full text-xs bg-yellow-200 text-black"
+            >
               {tag}
             </span>
           ))}
