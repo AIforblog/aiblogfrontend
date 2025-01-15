@@ -28,8 +28,6 @@ export default function BlogPlatformLayout({
     fetchBlogs({ category: currentCategory?.name });
   }, [currentCategory?.name]);
 
-  console.log(category, "erth");
-
   const fetchBlogs = async (params?: { category?: string; page?: number }) => {
     try {
       const response = await getBlogs(params || {});

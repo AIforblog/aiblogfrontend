@@ -36,7 +36,7 @@ const BlogCard = memo<MainBloyType>(
             .map((item) => (typeof item === "string" ? item : item.text))
             .join(" ")
         : blog.content
-      )?.replace(/<[^>]+>/g, ""),
+      )?.replace(/<[^>]+>/g, "")
     );
     const previewText =
       rawText.length > 100 ? `${rawText.slice(0, 200)}...` : rawText;
@@ -79,8 +79,8 @@ const BlogCard = memo<MainBloyType>(
               : "bg-transparent border border-[#E5E5E5] dark:border-neutral-800"
           } ${hasBackground ? "mb-4" : "mb-4"}
        ${hasBackground ? "p-4" : "p-4"} ${
-         hasShadow ? "bg-white" : "shadow-none"
-       } rounded-xl`}
+            hasShadow ? "bg-white" : "shadow-none"
+          } rounded-xl`}
         >
           <CardHeader className="p-0 ">
             <UserProfile user={blog.user} isFollowing={isFollowing} />
@@ -95,11 +95,14 @@ const BlogCard = memo<MainBloyType>(
             </CardTitle>
 
             {/* Description */}
+
             <CardDescription className="text-[0.85rem] !mt-1 font-normal overflow-hidden line-clamp-[3] relative leading-6 text-[#737373] dark:text-neutral-300">
               {previewText}
             </CardDescription>
 
-            {blog.image && (
+            {/* Blog image */}
+
+            {blog.image ? (
               <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] md:max-h-[300px] md:min-h-[300px] overflow-hidden">
                 <Image
                   src={blog.image}
@@ -109,6 +112,8 @@ const BlogCard = memo<MainBloyType>(
                   className="object-cover relative w-full h-full"
                 />
               </div>
+            ) : (
+              <div className="thumbnail"></div>
             )}
           </CardContent>
 
@@ -129,7 +134,7 @@ const BlogCard = memo<MainBloyType>(
         </Card>
       </Link>
     );
-  },
+  }
 );
 
 export default BlogCard;

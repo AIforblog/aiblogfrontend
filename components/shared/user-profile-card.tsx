@@ -24,22 +24,16 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     console.log("Application for job successful!");
   };
   const { user: loggedinUser, loading } = useUser();
-  console.log(loggedinUser?.userId, "loggedinUser?.userId");
-  console.log(user?.userId, "user?.userId");
+
   return (
     <div className={cn("flex items-center justify-between gap-6", className)}>
       <div className="w-full flex gap-2 items-center">
-        {user?.profilePic ? (
-          <RoundedImage
-            size={40}
-            src={user.profilePic}
-            alt={`${user.username} profile pic`}
-          />
-        ) : (
-          <div className="bg-yellow-500 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">
-            {user?.username?.[0].toUpperCase()}
-          </div>
-        )}
+        <RoundedImage
+          size={40}
+          src={user.profilePic || "/default-profile-avatar.webp"}
+          alt={`${user.username} profile pic`}
+        />
+
         <div className="flex-1 gap-y-1">
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
             {user?.name ||

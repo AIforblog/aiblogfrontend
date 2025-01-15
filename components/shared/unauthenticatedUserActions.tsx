@@ -5,16 +5,17 @@ import { useRouter } from "next/navigation";
 
 export const UnauthenticatedBanner: React.FC = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-black text-white p-4 px-7 z-50 flex items-center justify-between">
+    <div className="fixed bottom-0 left-0 w-full bg-secondary p-4 px-7 z-50 flex items-center justify-between">
       <div className="flex-grow mr-4">
-        <p className="text-sm">
+        <p className="text-[0.8rem]">
           Join our community to unlock full features and connect with others!
         </p>
       </div>
       <div className="flex space-x-3">
-        <Button asChild variant="outline" className="text-black" size="sm">
+        <Button asChild variant="default" className="bg-inherit" size="sm">
           <Link href="/auth/sign-in">Sign In</Link>
         </Button>
+
         <Button
           asChild
           variant="default"
@@ -87,7 +88,7 @@ export const AuthRequiredModal = ({
   }, [onAuthenticated]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+    <div className="fixed inset-0 bg-secondary backdrop-blur-sm flex items-center justify-center z-[100] p-4">
       <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Authentication Required</h2>
