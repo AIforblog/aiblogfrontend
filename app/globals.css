@@ -39,6 +39,8 @@
     --ring: 0 0% 3.9%;
 
     --radius: 0.5rem;
+    --thumbnail-accent-1: rgba(0, 0, 0, 0.15);
+    --thumbnail-accent-2: rgba(0, 0, 0, 0.1);
   }
 
   .dark {
@@ -69,6 +71,8 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
+    --thumbnail-accent-1: rgba(255, 255, 255, 0.2);
+    --thumbnail-accent-2: rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -183,4 +187,52 @@ body {
 .loading-message {
   font-size: 16px;
   color: #333;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 300px;
+  background: (135deg, #f4d03f, #f4d03f 50%, var(--accent, #000000) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: white;
+  overflow: hidden;
+}
+
+.thumbnail::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(
+    circle,
+    var(--thumbnail-accent-1),
+    transparent 70%
+  );
+  top: -50%;
+  left: -50%;
+  animation: spin 10s linear infinite;
+}
+
+.thumbnail::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: var(--thumbnail-accent-2);
+  border-radius: 50%;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
