@@ -124,7 +124,7 @@ const PostEditor = () => {
             </button>
           </div>
           <button
-            disabled
+            
             className="bg-[#FDC316] leading-none py-3 px-3.5 max-w-[104px] w-full rounded-[10px] disabled:opacity-30"
           >
             Publish
