@@ -35,13 +35,13 @@ const PostEditor = () => {
   ];
 
   return (
-    <div className="py-5 px-3.5 rounded-[10px] bg-neutral-50">
+    <div className="py-5 px-3.5 rounded-[10px]">
       <Slate editor={editor} initialValue={initialValue}>
         <div className="flex gap-2.5 items-center mb-2.5">
           <input
             type="text"
             placeholder="Title"
-            className="leading-[1.3] w-full text-xl font-bold placeholder:text-[#A3A3A3] bg-transparent focus-visible:outline-none"
+            className="leading-[1.3] bg-transparent w-full text-xl font-bold focus-visible:outline-none"
           />
           <button className="text-[#B47AEA] hover:text-[#9542e4] leading-[1.4] text-sm">
             Drafts
@@ -59,7 +59,7 @@ const PostEditor = () => {
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           placeholder="Write your content"
-          className="h-[110px] focus-visible:outline-none placeholder:text-[#A3A3A3] leading-[1.4] text-sm mb-5"
+          className="h-[110px] focus-visible:outline-none text-black dark:text-white  leading-[1.4] text-sm mb-5"
           spellCheck
           autoFocus
           onKeyDown={(event) => {
@@ -73,9 +73,9 @@ const PostEditor = () => {
           }}
         />
         <div className="flex justify-between text-sm leading-[1.4]">
-          <Button className="rounded-[24px] py-2.5 px-3.5 flex gap-2 items-center">
+          <Button className="rounded-[24px] py-2.5 bg-black dark:bg-white text-white dark:text-black  px-3.5 flex gap-2 items-center">
             <Sparkles className="fill-white w-[18px] h-[18px]" />
-            <span>Write with AI</span>
+            <span>Paste AI Link</span>
           </Button>
           <div className="flex items-center gap-[18px] py-2">
             <button
@@ -124,7 +124,7 @@ const PostEditor = () => {
             </button>
           </div>
           <button
-            disabled
+            
             className="bg-[#FDC316] leading-none py-3 px-3.5 max-w-[104px] w-full rounded-[10px] disabled:opacity-30"
           >
             Publish

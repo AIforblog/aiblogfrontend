@@ -53,6 +53,8 @@ const CreatePost = () => {
     }
 
     form.reset();
+    console.log("values", values);
+    console.log("formData", formData);
   };
 
   return (

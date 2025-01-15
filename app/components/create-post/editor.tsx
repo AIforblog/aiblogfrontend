@@ -53,7 +53,6 @@ export default function PostEditor({ form }: PostConfigProps) {
                 editable={true}
                 editorClassName="!focus:outline-none px-5 py-4 h-full"
                 onChange={field.onChange}
-                value={"Content that is very loong"}
               />
             </FormControl>
             <FormMessage />

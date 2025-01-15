@@ -8,6 +8,7 @@ import { getBlogs } from "../../../actions/getBlogs";
 import { BlogPost } from "@/types/blog";
 import { User } from "@/types/auth";
 import Link from "next/link";
+import PostEditor from "@/app/components/home/post-editor";
 
 const Home = async () => {
   let user: { accessToken: any; userId?: string | undefined; user?: User },
@@ -51,7 +52,10 @@ const Home = async () => {
   }
 
   return (
+
     <div className="containerHeight overflow-scroll custom-scroll">
+      <PostEditor />
+       
       {initialBlog.map((blog: BlogPost) => (
         <Link href={`/explore/${blog.id}`} key={blog.id}>
           <BlogCard
