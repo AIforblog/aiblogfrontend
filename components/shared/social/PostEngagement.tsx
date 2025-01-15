@@ -46,7 +46,7 @@ export const PostEngagement = ({
   };
 
   return (
-    <div className="mt-8 w-full">
+    <div className="mt-4 w-full">
       <div className="flex items-center space-x-4 mb-4">
         <div className="transform transition-all duration-200 hover:scale-105">
           <LikeButton initialLikes={initialLikes} onLike={onLike} />
