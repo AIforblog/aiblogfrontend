@@ -11,7 +11,7 @@ export const action = authenticatedAction
     z.object({
       followeeId: z.string(),
       path: z.string(),
-    }),
+    })
   )
   .handler(async ({ input: { followeeId, path } }) => {
     type Success = {
@@ -28,7 +28,7 @@ export const action = authenticatedAction
         next: {
           tags: ["profile", "followers", "followees"],
         },
-      },
+      }
     );
 
     try {
@@ -37,31 +37,6 @@ export const action = authenticatedAction
       console.log(err);
     }
   });
-
-// export const unfollowAction = authenticatedAction
-// 	.createServerAction()
-// 	.input(
-// 		z.object({
-// 			followeeId: z.string().uuid(),
-// 		}),
-// 	)
-// 	.handler(async ({ input: { followeeId } }) => {
-// 		const user = await assertUserAuthenticated();
-// 		const followUser = makeFetch(
-// 			"auth",
-// 			`/auth/follow/${followeeId}`,
-// 			user.accessToken.value,
-// 			{
-// 				method: "POST",
-// 			},
-// 		);
-// 		try {
-// 			return await followUser();
-// 		} catch (err) {
-// 			console.log(err);
-// 		}
-// 		console.log(followeeId);
-// 	});
 
 export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
@@ -72,7 +47,7 @@ export type IsFollowingResponse = {
 
 export const CheckFollowing = async (
   accessToken: string,
-  userId: string,
+  userId: string
 ): Promise<boolean> => {
   try {
     const fetchUserProfile = makeFetch<IsFollowingResponse>(
@@ -83,7 +58,7 @@ export const CheckFollowing = async (
         next: {
           tags: [`profile-${userId}`],
         },
-      },
+      }
     );
 
     const response = await fetchUserProfile();
@@ -97,7 +72,7 @@ export const CheckFollowing = async (
 
 export const checkFollowedBy = async (
   accessToken: string,
-  followId: string,
+  followId: string
 ) => {
   try {
     const followedYou = makeFetch<IsFollowingResponse>(
@@ -108,7 +83,7 @@ export const checkFollowedBy = async (
         next: {
           tags: [`profile`, "followers", "followees"],
         },
-      },
+      }
     );
 
     const fetchFollowed = await followedYou();
