@@ -12,6 +12,7 @@ const handleRequest = async <T>(url: string, config = {}): Promise<T> => {
     const response = await axios(url, config);
     return response.data;
   } catch (error) {
+    
     throw new Error(`Request failed: ${(error as Error).message}`);
   }
 };
@@ -42,7 +43,7 @@ export const createComment = async (
       ...headers,
       "Content-Type": "application/json",
     },
-    data: { content, images },
+    data: { content, images }
   });
 };
 

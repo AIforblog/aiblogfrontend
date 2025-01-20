@@ -28,6 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {createComment} from "@/actions/socials"
 
 interface User {
   id: string;
@@ -188,6 +189,7 @@ const UserProfile: React.FC<{ user: User }> = ({ user }) => {
 };
 
 const Comments: React.FC<CommentsProps> = ({
+  postId,
   initialComments = [],
   initialCommentsCount = 0,
   onCommentCountChange,
@@ -200,28 +202,44 @@ const Comments: React.FC<CommentsProps> = ({
     onCommentCountChange?.(newCount);
   };
 
-  const handleAddComment = (newComment: CommentFormData) => {
-    const createdComment: ItemComment = {
-      id: Date.now().toString(),
-      user: {
-        id: "current-user-id",
-        name: "Olamide",
-        profile_pic: "/images/data-driven-blog/pic.png",
-        username: "Olams",
-      },
-      content: newComment.content,
-      images: newComment.images.map((file) => ({
-        url: URL.createObjectURL(file),
-        alt: file.name,
-      })),
-      createdAt: new Date().toISOString(),
-      likes: 0,
-      replies: [],
-      replyCount: 0,
-    };
-    setComments([createdComment, ...comments]);
-    updateCommentCount(commentsCount + 1);
+  const handleAddComment = ({content, images }: CommentFormData) => {
+    // const createdComment: ItemComment = {
+    //   id: Date.now().toString(),
+    //   user: {
+    //     id: "current-user-id",
+    //     name: "Olamide",
+    //     profile_pic: "/images/data-driven-blog/pic.png",
+    //     username: "Olams",
+    //   },
+    //   content: newComment.content,
+    //   images: newComment.images.map((file) => ({
+    //     url: URL.createObjectURL(file),
+    //     alt: file.name,
+    //   })),
+    //   createdAt: new Date().toISOString(),
+    //   likes: 0,
+    //   replies: [],
+    //   replyCount: 0,
+    // };
+
+    
+    // updateCommentCount(commentsCount + 1);
+    
+    
+    try{
+      makeComment(postId, content, images.map(file => URL.createObjectURL(file)))
+    }catch(error){
+      console.log(error)
+    }
   };
+  
+  const makeComment = async (  postId: string,
+    content: string,
+    images: string[] = []) => {
+      const comment  = await createComment(postId, content, images)
+      //setComments([createdComment, ...comments]);
+    console.log(comment)
+  }
 
   const handleReply = (
     commentChain: string[],
@@ -276,7 +294,7 @@ const Comments: React.FC<CommentsProps> = ({
         onReply={handleReply}
         commentChain={[]}
       />
-      <div className="bg-[#FDF9D9] mt-4 p-3">
+      <div className="bg-[#FDF9D9] mt-4 p-3 text-black">
         <CommentBox onAddComment={handleAddComment} />
       </div>
     </div>
