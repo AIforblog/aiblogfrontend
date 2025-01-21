@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Environment variables
+.env
+.env.local
+.env.*
+!.env.sample
+
+# Hardhat files
+cache
+artifacts
+typechain-types
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Contract deployment addresses (except examples)
+/contracts/addresses/*
+!/contracts/addresses/example.ts
+
+# Build output
+dist

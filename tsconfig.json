@@ -27,6 +27,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.js"
-  ],
+, "web3/hardhat.config.js",
+    "web3/scripts"
+],
   "exclude": ["node_modules"]
 }
