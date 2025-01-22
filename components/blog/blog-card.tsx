@@ -102,7 +102,7 @@ const BlogCard = memo<MainBloyType>(
 
             {/* Blog image */}
 
-            {blog.image ? (
+            {blog.image && (
               <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] md:max-h-[300px] md:min-h-[300px] overflow-hidden">
                 <Image
                   src={blog.image}
@@ -112,8 +112,6 @@ const BlogCard = memo<MainBloyType>(
                   className="object-cover relative w-full h-full"
                 />
               </div>
-            ) : (
-              <div className="thumbnail"></div>
             )}
           </CardContent>
 

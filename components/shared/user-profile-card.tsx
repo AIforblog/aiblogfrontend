@@ -5,6 +5,7 @@ import { RoundedImage } from "./rounded-image";
 import { UserProps } from "@/types/user";
 import FollowButton from "@/app/components/follow-button";
 import { useUser } from "@/context/userProfilectx";
+import Link from "next/link";
 
 interface ProfileCardProps {
   user: UserProps;
@@ -27,6 +28,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   return (
     <div className={cn("flex items-center justify-between gap-6", className)}>
+       <Link href="/profile/[username]" as={`/profile/${user.username}`}>
       <div className="w-full flex gap-2 items-center">
         <RoundedImage
           size={40}
@@ -35,6 +37,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         />
 
         <div className="flex-1 gap-y-1">
+          
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
             {user?.name ||
               `${user?.firstName || user.username}  ${user?.lastName || ""}`}
@@ -53,7 +56,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             </p>
           </div>
         </div>
+        
       </div>
+      </Link>
 
       {/* Render follow/unfollow button */}
       <div>
