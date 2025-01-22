@@ -10,6 +10,8 @@ import { fetchBlogPost } from "@/hooks/useBlogPost";
 import { CheckFollowing } from "@/actions/follow";
 import { assertUserAuthenticated } from "@/lib/auth";
 import { titleCase, timeSince } from "@/lib/utils";
+import { getComments } from "@/actions/socials";
+
 // import type { BlogPost } from "@/types/blog";
 
 export default async function BlogPostPage({
@@ -18,7 +20,9 @@ export default async function BlogPostPage({
   params: { id: string };
 }) {
   const post = await fetchBlogPost(params.id);
-
+  const comments = await getComments(params.id);
+  console.log(comments);
+  
   const user = await assertUserAuthenticated();
 
   const isFollowing = await CheckFollowing(
@@ -101,9 +105,10 @@ export default async function BlogPostPage({
         postTitle={post.title}
         postUrl={postUrl}
         initialLikes={post.likes}
-        initialComments={[]} // You'll need to implement comments fetching
+        initialComments={comments} // You'll need to implement comments fetching
         initialCommentsCount={post.comments}
         initialShares={0}
+        isFollowing={isFollowing}
       />
     </article>
   );

@@ -18,6 +18,7 @@ interface PostEngagementProps {
   onLike?: () => void;
   onComment?: () => void;
   onShare?: () => void;
+  isFollowing?: boolean;
 }
 
 export const PostEngagement = ({
@@ -31,6 +32,7 @@ export const PostEngagement = ({
   onLike,
   onComment,
   onShare,
+  isFollowing
 }: PostEngagementProps) => {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [currentCommentsCount, setCurrentCommentsCount] =
@@ -85,6 +87,7 @@ export const PostEngagement = ({
               initialCommentsCount={currentCommentsCount}
               onCommentCountChange={handleCommentCountUpdate}
               isOpen={isCommentsOpen}
+              isFollowing={isFollowing}
             />
           </div>
         )}
