@@ -1,8 +1,8 @@
 // app/actions/socials.ts
 "use server";
 import axios from "axios";
-import { cookies } from "next/headers";
 import { getAuthHeaders } from "@/lib/auth";
+import { ItemComment } from "@/types/comment";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,6 +12,7 @@ const handleRequest = async <T>(url: string, config = {}): Promise<T> => {
     const response = await axios(url, config);
     return response.data;
   } catch (error) {
+    
     throw new Error(`Request failed: ${(error as Error).message}`);
   }
 };
@@ -42,7 +43,7 @@ export const createComment = async (
       ...headers,
       "Content-Type": "application/json",
     },
-    data: { content, images },
+    data: { content, images }
   });
 };
 
@@ -67,41 +68,20 @@ export const replyToComment = async (
 };
 
 // Get comments for a post with caching
-export const getComments = async (postId: string): Promise<Comment[]> => {
-  const cookieStore = cookies();
-  const cachedComments = cookieStore.get(`comments-${postId}`);
-
-  if (cachedComments) {
-    try {
-      const parsedComments = JSON.parse(cachedComments.value);
-      return parsedComments;
-    } catch (parseError) {
-      console.error("Error parsing cached comments data:", parseError);
-    }
-  }
-
+export const getComments = async (postId: string): Promise<ItemComment[]> => {
+  console.log(postId);
   const url = `${API_BASE_URL}blog/${postId}/comments`;
   const headers = await getAuthHeaders();
 
   try {
-    const response = await handleRequest<{ data: Comment[] }>(url, {
+    const response = await handleRequest<{ data:ItemComment[] }>(url, {
       method: "GET",
       headers,
     });
-
-    // Cache the comments
-    cookieStore.set(`comments-${postId}`, JSON.stringify(response.data), {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: 3600, // 1-hour expiration
-    });
+    console.log(response.data);
 
     return response.data;
   } catch (error) {
-    if (cachedComments) {
-      return JSON.parse(cachedComments.value);
-    }
     throw error;
   }
 };

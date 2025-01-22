@@ -28,30 +28,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {createComment} from "@/actions/socials"
+import { ItemComment, User } from "@/types/api";
+import FollowButton from "@/app/components/follow-button";
+import { useUser } from "@/context/userProfilectx";
 
-interface User {
-  id: string;
-  name: string;
-  avatar?: string;
-  profile_pic: string;
-  username: string;
-}
-
-interface Image {
-  url: string;
-  alt: string;
-}
-
-interface ItemComment {
-  id: string;
-  user: User;
-  content: string;
-  images: Image[];
-  createdAt: string;
-  likes: number;
-  replies: ItemComment[];
-  replyCount: number;
-}
 
 interface CommentFormData {
   content: string;
@@ -64,11 +45,13 @@ interface CommentsProps {
   initialCommentsCount: number;
   isOpen?: boolean;
   onCommentCountChange?: (count: number) => void;
+  isFollowing?: boolean;
 }
 
 interface CommentBoxProps {
   onAddComment: (comment: CommentFormData) => void;
   replyingTo?: string;
+  
 }
 
 interface LinkDialogProps {
@@ -169,11 +152,11 @@ const LinkDialog: React.FC<LinkDialogProps> = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-const UserProfile: React.FC<{ user: User }> = ({ user }) => {
+export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   return (
     <div className="flex items-center">
       <Image
-        src={user.profile_pic}
+        src={user?.profile_pic}
         alt={user.name}
         width={40}
         height={40}
@@ -188,9 +171,11 @@ const UserProfile: React.FC<{ user: User }> = ({ user }) => {
 };
 
 const Comments: React.FC<CommentsProps> = ({
+  postId,
   initialComments = [],
   initialCommentsCount = 0,
   onCommentCountChange,
+  isFollowing,
 }) => {
   const [comments, setComments] = useState<ItemComment[]>(initialComments);
   const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
@@ -200,28 +185,44 @@ const Comments: React.FC<CommentsProps> = ({
     onCommentCountChange?.(newCount);
   };
 
-  const handleAddComment = (newComment: CommentFormData) => {
-    const createdComment: ItemComment = {
-      id: Date.now().toString(),
-      user: {
-        id: "current-user-id",
-        name: "Olamide",
-        profile_pic: "/images/data-driven-blog/pic.png",
-        username: "Olams",
-      },
-      content: newComment.content,
-      images: newComment.images.map((file) => ({
-        url: URL.createObjectURL(file),
-        alt: file.name,
-      })),
-      createdAt: new Date().toISOString(),
-      likes: 0,
-      replies: [],
-      replyCount: 0,
-    };
-    setComments([createdComment, ...comments]);
-    updateCommentCount(commentsCount + 1);
+  const handleAddComment = ({content, images }: CommentFormData) => {
+    // const createdComment: ItemComment = {
+    //   id: Date.now().toString(),
+    //   user: {
+    //     id: "current-user-id",
+    //     name: "Olamide",
+    //     profile_pic: "/images/data-driven-blog/pic.png",
+    //     username: "Olams",
+    //   },
+    //   content: newComment.content,
+    //   images: newComment.images.map((file) => ({
+    //     url: URL.createObjectURL(file),
+    //     alt: file.name,
+    //   })),
+    //   createdAt: new Date().toISOString(),
+    //   likes: 0,
+    //   replies: [],
+    //   replyCount: 0,
+    // };
+
+    
+    // updateCommentCount(commentsCount + 1);
+    
+    
+    try{
+      makeComment(postId, content, images.map(file => URL.createObjectURL(file)))
+    }catch(error){
+      console.log(error)
+    }
   };
+  
+  const makeComment = async (  postId: string,
+    content: string,
+    images: string[] = []) => {
+      const comment  = await createComment(postId, content, images)
+      //setComments([createdComment, ...comments]);
+    console.log(comment)
+  }
 
   const handleReply = (
     commentChain: string[],
@@ -275,8 +276,9 @@ const Comments: React.FC<CommentsProps> = ({
         comments={comments}
         onReply={handleReply}
         commentChain={[]}
+        isFollowing={isFollowing}
       />
-      <div className="bg-[#FDF9D9] mt-4 p-3">
+      <div className="bg-[#FDF9D9] mt-4 p-3 text-black">
         <CommentBox onAddComment={handleAddComment} />
       </div>
     </div>
@@ -286,6 +288,7 @@ const Comments: React.FC<CommentsProps> = ({
 const CommentBox: React.FC<CommentBoxProps> = ({
   onAddComment,
   replyingTo,
+
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
@@ -447,7 +450,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="w-full mb-4">
-      <div className="border border-neutral-200 rounded overflow-hidden bg-white">
+      <div className="border border-neutral-200 rounded overflow-hidden bg-red-800">
         <div className="p-4">
           <EditorContent editor={editor} />
 
@@ -517,8 +520,8 @@ const CommentBox: React.FC<CommentBoxProps> = ({
               </Popover>
             </div>
 
-            <Button type="submit" variant="secondary">
-              {replyingTo ? "Reply" : "Comment"}
+            <Button type="submit" variant="secondary" className="text-white">
+              {replyingTo ? "Reply" : "Send"}
             </Button>
           </div>
           <LinkDialog
@@ -538,7 +541,8 @@ const CommentList: React.FC<{
   onReply: (commentChain: string[], replyComment: CommentFormData) => void;
   depth?: number;
   commentChain: string[];
-}> = ({ comments, onReply, depth = 0, commentChain }) => {
+  isFollowing?: boolean;
+}> = ({ comments, onReply, depth = 0, commentChain, isFollowing }) => {
   return (
     <div className="space-y-4">
       {comments.map((comment) => (
@@ -548,6 +552,7 @@ const CommentList: React.FC<{
           onReply={onReply}
           depth={depth}
           commentChain={[...commentChain, comment.id]}
+          isFollowing={isFollowing}
         />
       ))}
     </div>
@@ -559,7 +564,8 @@ const CommentItem: React.FC<{
   onReply: (commentChain: string[], replyComment: CommentFormData) => void;
   depth: number;
   commentChain: string[];
-}> = ({ comment, onReply, depth, commentChain }) => {
+  isFollowing?: boolean;
+}> = ({ comment, onReply, depth, commentChain, isFollowing }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [likes, setLikes] = useState(comment.likes);
   const [showAllReplies, setShowAllReplies] = useState(depth < 2);
@@ -567,7 +573,7 @@ const CommentItem: React.FC<{
     url: string;
     alt: string;
   } | null>(null);
-
+  const { user } = useUser();
   const handleLike = () => {
     setLikes((prevLikes) => prevLikes + 1);
   };
@@ -597,12 +603,12 @@ const CommentItem: React.FC<{
   };
 
   return (
-    <div className={`bg-[#FDFFFC] rounded-lg p-4  ${depth > 0 ? "ml-2" : ""}`}>
+    <div className={`bg-[#D4D4D4] rounded-lg p-4 dark:bg-neutral-800 ${depth > 0 ? "ml-2" : ""}`}>
       <div className="flex items-start space-x-3">
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div className="">
-              <UserProfile user={comment.user} />
+              {/* <UserProfile user={comment.user} /> */}
               <p className="text-xs text-gray-500">
                 <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block"></span>
                 {formatTimeAgo(comment.createdAt)}
@@ -610,16 +616,11 @@ const CommentItem: React.FC<{
             </div>
 
             <div className="">
-              <Button
-                // onClick={followAction}
-                className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out"
-              >
-                Follow
-              </Button>
+              <FollowButton userId={user?.userId as string} isFollowing={isFollowing}/>
             </div>
           </div>
 
-          <p className="mt-2">{comment.content}</p>
+          <p className="mt-2  text-[#4F4F4F] dark:bg-neutral-800 dark:text-white">{comment.content}</p>
           {comment.images && comment.images.length > 0 && (
             <div className="flex mt-2 space-x-2 overflow-x-auto">
               {comment.images.map((image, index) => (
