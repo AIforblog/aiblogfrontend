@@ -8,7 +8,9 @@
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
     "deploy:base": "hardhat run scripts/deploy.ts --network base",
     "generate-types": "typechain --target ethers-v6 --out-dir contracts/generated './contracts/abis/*.json'",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

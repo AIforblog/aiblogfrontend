@@ -25,3 +25,11 @@ pnpm-debug.log*
 
 # Build output
 dist
+
+# Web3 specific
+web3/node_modules
+web3/.pnpm-store
+web3/cache
+web3/artifacts
+web3/typechain-types
+web3/dist
