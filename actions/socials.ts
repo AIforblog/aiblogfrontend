@@ -12,7 +12,6 @@ const handleRequest = async <T>(url: string, config = {}): Promise<T> => {
     const response = await axios(url, config);
     return response.data;
   } catch (error) {
-    
     throw new Error(`Request failed: ${(error as Error).message}`);
   }
 };
@@ -32,7 +31,7 @@ export const reactToPost = async (postId: string): Promise<void> => {
 export const createComment = async (
   postId: string,
   content: string,
-  images: string[] = [],
+  images: string[] = []
 ): Promise<Comment> => {
   const url = `${API_BASE_URL}blog/${postId}/comments`;
   const headers = await getAuthHeaders();
@@ -43,7 +42,7 @@ export const createComment = async (
       ...headers,
       "Content-Type": "application/json",
     },
-    data: { content, images }
+    data: { content, images },
   });
 };
 
@@ -52,7 +51,7 @@ export const replyToComment = async (
   postId: string,
   commentId: string,
   content: string,
-  images: string[] = [],
+  images: string[] = []
 ): Promise<Comment> => {
   const url = `${API_BASE_URL}blog/${postId}/comments/${commentId}`;
   const headers = await getAuthHeaders();
@@ -68,19 +67,51 @@ export const replyToComment = async (
 };
 
 // Get comments for a post with caching
+
 export const getComments = async (postId: string): Promise<ItemComment[]> => {
   console.log(postId);
   const url = `${API_BASE_URL}blog/${postId}/comments`;
   const headers = await getAuthHeaders();
 
   try {
-    const response = await handleRequest<{ data:ItemComment[] }>(url, {
+    const response = await handleRequest<{ data: ICommentApiData[] }>(url, {
       method: "GET",
       headers,
     });
+
+const parsedData :ItemComment[] = response.data.map(
+  ({
+    id,
+    content,
+    userId,
+    username,
+    profilePic,
+    images,
+    createdAt,
+    replies
+  }) => ({
+    id,
+    content,
+    images,
+    createdAt,
+    likes: 0,
+    replies,
+    replyCount: replies.length,
+    user: {
+      id: userId,
+      name: username,
+      username,
+      profile_pic: profilePic,
+     
+    }
+  })
+);
+
+console.log(parsedData)
+
     console.log(response.data);
 
-    return response.data;
+    return parsedData;
   } catch (error) {
     throw error;
   }
@@ -97,4 +128,15 @@ export interface Comment {
   images: string[];
   createdAt: string;
   replies: Comment[];
+}
+interface ICommentApiData {
+  id: string;
+  content: string;
+  userId: string;
+  username: string;
+  profilePic: string | null;
+  postId: string;
+  images: string[];
+  createdAt: string;
+  replies: any[];
 }

@@ -28,16 +28,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {createComment} from "@/actions/socials"
+import {createComment, replyToComment} from "@/actions/socials"
 import { ItemComment, User } from "@/types/api";
 import FollowButton from "@/app/components/follow-button";
 import { useUser } from "@/context/userProfilectx";
+import { RoundedImage } from "@/components/shared";
 
 
 interface CommentFormData {
   content: string;
   images: File[];
 }
+
 
 interface CommentsProps {
   postId: string;
@@ -156,7 +158,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   return (
     <div className="flex items-center">
       <Image
-        src={user?.profile_pic}
+        src={user?.profile_pic || "/default-profile-avatar.webp"}
         alt={user.name}
         width={40}
         height={40}
@@ -169,8 +171,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
     </div>
   );
 };
-
-const Comments: React.FC<CommentsProps> = ({
+ const Comments: React.FC<CommentsProps> = ({
   postId,
   initialComments = [],
   initialCommentsCount = 0,
@@ -179,6 +180,7 @@ const Comments: React.FC<CommentsProps> = ({
 }) => {
   const [comments, setComments] = useState<ItemComment[]>(initialComments);
   const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
+  const { user, loading } = useUser();
 
   const updateCommentCount = (newCount: number) => {
     setCommentsCount(newCount);
@@ -206,7 +208,7 @@ const Comments: React.FC<CommentsProps> = ({
     // };
 
     
-    // updateCommentCount(commentsCount + 1);
+    updateCommentCount(commentsCount + 1);
     
     
     try{
@@ -224,50 +226,54 @@ const Comments: React.FC<CommentsProps> = ({
     console.log(comment)
   }
 
-  const handleReply = (
+  const handleReply = async  (
     commentChain: string[],
     replyComment: CommentFormData,
   ) => {
-    const updatedComments = [...comments];
-    let currentLevel = updatedComments;
-    // let currentComment;
+    // const updatedComments = [...comments];
+    // let currentLevel = updatedComments;
+    // // let currentComment;
 
-    for (let i = 0; i < commentChain.length; i++) {
-      const commentId = commentChain[i];
-      const commentIndex = currentLevel.findIndex((c) => c.id === commentId);
-      if (commentIndex !== -1) {
-        if (i === commentChain.length - 1) {
-          const newReply: ItemComment = {
-            id: Date.now().toString(),
-            user: {
-              id: "current-user-id",
-              name: "Olamide",
-              profile_pic: "/images/data-driven-blog/pic.png",
-              username: "Olams",
-            },
-            content: replyComment.content,
-            images: replyComment.images.map((file) => ({
-              url: URL.createObjectURL(file),
-              alt: file.name,
-            })),
-            createdAt: new Date().toISOString(),
-            likes: 0,
-            replies: [],
-            replyCount: 0,
-          };
-          currentLevel[commentIndex].replies.push(newReply);
-          currentLevel[commentIndex].replyCount++;
-        } else {
-          currentLevel = currentLevel[commentIndex].replies;
-        }
-      } else {
-        // Comment not found, break the loop
-        break;
-      }
+    // for (let i = 0; i < commentChain.length; i++) {
+    //   const commentId = commentChain[i];
+    //   const commentIndex = currentLevel.findIndex((c) => c.id === commentId);
+    //   if (commentIndex !== -1) {
+    //     if (i === commentChain.length - 1) {
+    //       const newReply: ItemComment = {
+    //         id: Date.now().toString(),
+    //         user: {
+    //           id: "current-user-id",
+    //           name: "Olamide",
+    //           profile_pic: "/images/data-driven-blog/pic.png",
+    //           username: "Olams",
+    //         },
+    //         content: replyComment.content,
+    //         images: [],
+    //         createdAt: new Date().toISOString(),
+    //         likes: 0,
+    //         replies: [],
+    //         replyCount: 0,
+    //       };
+    //       currentLevel[commentIndex].replies.push(newReply);
+    //       currentLevel[commentIndex].replyCount++;
+    //     } else {
+    //       currentLevel = currentLevel[commentIndex].replies;
+    //     }
+    //   } else {
+    //     // Comment not found, break the loop
+    //     break;
+    //   }
+    // }
+
+    // setComments(updatedComments);
+    // updateCommentCount(commentsCount + 1);
+    try{
+      // const res = await replyToComment()
+      console.log(commentChain, replyComment, postId)
+    }catch(err){
+      console.log(err)
+
     }
-
-    setComments(updatedComments);
-    updateCommentCount(commentsCount + 1);
   };
 
   return (
@@ -278,7 +284,19 @@ const Comments: React.FC<CommentsProps> = ({
         commentChain={[]}
         isFollowing={isFollowing}
       />
-      <div className="bg-[#FDF9D9] mt-4 p-3 text-black">
+      <div className="bg-[#FDF9D9] mt-4 p-3 text-black flex gap-4 items-start">
+        <div>
+
+      {!loading && (
+          <RoundedImage
+            src={user?.profilePic || "/default-profile-avatar.webp"}
+            alt="profile picture"
+            size={40}
+            className="rounded-full"
+          />
+      )}
+        </div>
+      
         <CommentBox onAddComment={handleAddComment} />
       </div>
     </div>
@@ -450,7 +468,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="w-full mb-4">
-      <div className="border border-neutral-200 rounded overflow-hidden bg-red-800">
+      <div className="border border-neutral-200 rounded overflow-hidden bg-white">
         <div className="p-4">
           <EditorContent editor={editor} />
 
@@ -569,10 +587,7 @@ const CommentItem: React.FC<{
   const [isReplying, setIsReplying] = useState(false);
   const [likes, setLikes] = useState(comment.likes);
   const [showAllReplies, setShowAllReplies] = useState(depth < 2);
-  const [selectedImage, setSelectedImage] = useState<{
-    url: string;
-    alt: string;
-  } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { user } = useUser();
   const handleLike = () => {
     setLikes((prevLikes) => prevLikes + 1);
@@ -608,7 +623,7 @@ const CommentItem: React.FC<{
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div className="">
-              {/* <UserProfile user={comment.user} /> */}
+              <UserProfile user={comment.user} />
               <p className="text-xs text-gray-500">
                 <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block"></span>
                 {formatTimeAgo(comment.createdAt)}
@@ -631,10 +646,10 @@ const CommentItem: React.FC<{
                 >
                   <Image
                     key={index}
-                    src={image.url}
+                    src={image}
                     width={100}
                     height={100}
-                    alt={image.alt}
+                    alt="alt"
                     className="rounded"
                   />
                 </div>
@@ -645,8 +660,8 @@ const CommentItem: React.FC<{
             <ImageModal
               isOpen={!!selectedImage}
               onClose={() => setSelectedImage(null)}
-              imageUrl={selectedImage.url}
-              alt={selectedImage.alt}
+              imageUrl={selectedImage}
+              alt="selected image"
             />
           )}
           <div className="flex items-center space-x-4 mt-2">

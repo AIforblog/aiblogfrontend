@@ -4,7 +4,7 @@ export interface User {
   id: string;
   name: string;
   avatar?: string;
-  profile_pic: string;
+  profile_pic: string | null;
   username: string;
 }
 
@@ -12,7 +12,7 @@ interface ItemComment {
   id: string;
   user: User;
   content: string;
-  images: Image[];
+  images: string[];
   createdAt: string;
   likes: number;
   replies: ItemComment[];
