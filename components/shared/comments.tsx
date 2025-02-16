@@ -33,6 +33,7 @@ import { ItemComment, User } from "@/types/api";
 import FollowButton from "@/app/components/follow-button";
 import { useUser } from "@/context/userProfilectx";
 import { RoundedImage } from "@/components/shared";
+// import { set } from "date-fns";
 
 
 interface CommentFormData {
@@ -185,6 +186,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   const updateCommentCount = (newCount: number) => {
     setCommentsCount(newCount);
     onCommentCountChange?.(newCount);
+    console.log(setComments);
   };
 
   const handleAddComment = ({content, images }: CommentFormData) => {
@@ -224,6 +226,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
       const comment  = await createComment(postId, content, images)
       //setComments([createdComment, ...comments]);
     console.log(comment)
+    console.log(replyToComment)
   }
 
   const handleReply = async  (
