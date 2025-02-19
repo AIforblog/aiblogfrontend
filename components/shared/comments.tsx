@@ -33,6 +33,7 @@ import { ItemComment, User } from "@/types/api";
 import FollowButton from "@/app/components/follow-button";
 import { useUser } from "@/context/userProfilectx";
 import { RoundedImage } from "@/components/shared";
+import { useCommentsContext } from "@/context/commentsContext"
 // import { set } from "date-fns";
 
 
@@ -179,6 +180,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   onCommentCountChange,
   isFollowing,
 }) => {
+  const {comments:commentsContext ,setComments: setCommentsOnContext } = useCommentsContext()
   const [comments, setComments] = useState<ItemComment[]>(initialComments);
   const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
   const { user, loading } = useUser();
@@ -190,28 +192,25 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   };
 
   const handleAddComment = ({content, images }: CommentFormData) => {
-    // const createdComment: ItemComment = {
-    //   id: Date.now().toString(),
-    //   user: {
-    //     id: "current-user-id",
-    //     name: "Olamide",
-    //     profile_pic: "/images/data-driven-blog/pic.png",
-    //     username: "Olams",
-    //   },
-    //   content: newComment.content,
-    //   images: newComment.images.map((file) => ({
-    //     url: URL.createObjectURL(file),
-    //     alt: file.name,
-    //   })),
-    //   createdAt: new Date().toISOString(),
-    //   likes: 0,
-    //   replies: [],
-    //   replyCount: 0,
-    // };
+    const createdComment: ItemComment = {
+      id: Date.now().toString(),
+      content: content,
+      user: {
+        id: user?.userId ? user?.userId : "",
+        name: user?.name ? user?.name : "",
+        profile_pic: user?.profilePic ? user?.profilePic :"/default-profile-avatar.webp",
+        username: user?.username ? user?.username : "",
+      },
+      images: images.map((file) => URL.createObjectURL(file)),
+      createdAt: new Date().toISOString(),
+      likes: 0,
+      replies: [],
+      replyCount: 0,
+    };
 
-    
+    setCommentsOnContext([...comments, createdComment])
     updateCommentCount(commentsCount + 1);
-    
+  console.log([...comments, createdComment])    
     
     try{
       makeComment(postId, content, images.map(file => URL.createObjectURL(file)))
@@ -282,7 +281,7 @@ export const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   return (
     <div className="mt-4 rounded-xl p-4 w-full">
       <CommentList
-        comments={comments}
+        comments={commentsContext ?? []}
         onReply={handleReply}
         commentChain={[]}
         isFollowing={isFollowing}
@@ -563,10 +562,13 @@ const CommentList: React.FC<{
   depth?: number;
   commentChain: string[];
   isFollowing?: boolean;
-}> = ({ comments, onReply, depth = 0, commentChain, isFollowing }) => {
+}> = ({ comments:propedComment, onReply, depth = 0, commentChain, isFollowing }) => {
+
+  console.log(propedComment)
+  const {comments} = useCommentsContext()
   return (
     <div className="space-y-4">
-      {comments.map((comment) => (
+      {comments && comments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
@@ -627,8 +629,8 @@ const CommentItem: React.FC<{
           <div className="flex items-center justify-between">
             <div className="">
               <UserProfile user={comment.user} />
-              <p className="text-xs text-gray-500">
-                <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block"></span>
+              <p className="text-xs text-gray-500 ml-10 ">
+                <span className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-2 inline-block "></span>
                 {formatTimeAgo(comment.createdAt)}
               </p>
             </div>
