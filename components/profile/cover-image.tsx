@@ -26,3 +26,4 @@ export function CoverImage({ src, alt, className }: CoverImageProps) {
     </div>
   );
 }
+

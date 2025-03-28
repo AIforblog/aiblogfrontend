@@ -95,7 +95,7 @@ export const signInAuth = async (
       status_code: 500,
     };
   }
-};
+};  
 
 export const signOutAuth = async (): Promise<{
   status_code: number;
